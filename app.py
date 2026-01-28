@@ -11,13 +11,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
-# Chave secreta segura
-app.secret_key = os.getenv("SECRET_KEY", "minha-chave-secreta-super-segura")
+# Chave secreta (em produção, use uma variável de ambiente)
+app.secret_key = os.getenv("SECRET_KEY", "chave-secreta-desenvolvimento-vinculo")
 
+# Configuração do Banco de Dados
 os.makedirs("instance", exist_ok=True)
 DB_PATH = os.path.join("instance", "database.db")
 
-# --- Banco de Dados ---
+# =========================
+# DB helpers
+# =========================
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -38,8 +41,8 @@ def add_column_if_missing(conn, table, column_def, column_name):
 
 def init_db():
     conn = get_db_connection()
-    
-    # Usuários
+
+    # Tabela de Usuários
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,7 +54,7 @@ def init_db():
     """)
     add_column_if_missing(conn, "users", "family_id TEXT", "family_id")
 
-    # Pets
+    # Tabela de Pets
     conn.execute("""
         CREATE TABLE IF NOT EXISTS pets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,8 +69,8 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
-    
-    # Adicionando colunas novas se não existirem
+
+    # Migrações (Garante que colunas novas existam em bancos antigos)
     cols = [
         ("user_id INTEGER", "user_id"), ("tutor TEXT", "tutor"),
         ("resp1_tipo TEXT", "resp1_tipo"), ("resp1_nome TEXT", "resp1_nome"),
@@ -85,25 +88,52 @@ def init_db():
     for col_def, col_name in cols:
         add_column_if_missing(conn, "pets", col_def, col_name)
 
-    # Tabelas auxiliares
-    conn.execute("""CREATE TABLE IF NOT EXISTS registros (id INTEGER PRIMARY KEY AUTOINCREMENT, pet_id INTEGER, data TEXT, nota TEXT, humor TEXT, categoria TEXT, personalidade_hoje TEXT, latindo INTEGER DEFAULT 0, mordeu_carteiro INTEGER DEFAULT 0, FOREIGN KEY (pet_id) REFERENCES pets (id))""")
+    # Tabela de Registros (Diário)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS registros (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pet_id INTEGER, data TEXT, nota TEXT, humor TEXT,
+            categoria TEXT, personalidade_hoje TEXT,
+            latindo INTEGER DEFAULT 0, mordeu_carteiro INTEGER DEFAULT 0,
+            FOREIGN KEY (pet_id) REFERENCES pets (id)
+        )
+    """)
     add_column_if_missing(conn, "registros", "categoria TEXT", "categoria")
     add_column_if_missing(conn, "registros", "personalidade_hoje TEXT", "personalidade_hoje")
     add_column_if_missing(conn, "registros", "latindo INTEGER DEFAULT 0", "latindo")
     add_column_if_missing(conn, "registros", "mordeu_carteiro INTEGER DEFAULT 0", "mordeu_carteiro")
 
-    conn.execute("""CREATE TABLE IF NOT EXISTS agenda (id INTEGER PRIMARY KEY AUTOINCREMENT, pet_id INTEGER, tarefa TEXT, data_prevista TEXT, concluida INTEGER DEFAULT 0, created_at TEXT, FOREIGN KEY (pet_id) REFERENCES pets (id))""")
+    # Tabela de Agenda
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS agenda (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pet_id INTEGER, tarefa TEXT, data_prevista TEXT,
+            concluida INTEGER DEFAULT 0, created_at TEXT,
+            FOREIGN KEY (pet_id) REFERENCES pets (id)
+        )
+    """)
     add_column_if_missing(conn, "agenda", "created_at TEXT", "created_at")
 
-    conn.execute("""CREATE TABLE IF NOT EXISTS eventos (id INTEGER PRIMARY KEY AUTOINCREMENT, pet_id INTEGER, tipo TEXT, data_evento TEXT, detalhes TEXT, criado_em TEXT, FOREIGN KEY (pet_id) REFERENCES pets (id))""")
+    # Tabela de Eventos
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS eventos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pet_id INTEGER, tipo TEXT, data_evento TEXT,
+            detalhes TEXT, criado_em TEXT,
+            FOREIGN KEY (pet_id) REFERENCES pets (id)
+        )
+    """)
     add_column_if_missing(conn, "eventos", "criado_em TEXT", "criado_em")
 
     conn.commit()
     conn.close()
 
+# Inicializa o banco ao rodar
 init_db()
 
-# --- Funções Auxiliares ---
+# =========================
+# Auth & Helpers
+# =========================
 def gerar_codigo_familia():
     chars = string.ascii_uppercase + string.digits
     return ''.join(random.choices(chars, k=6))
@@ -117,116 +147,211 @@ def login_required(view):
         return view(*args, **kwargs)
     return wrapped
 
-def current_user_id(): return session.get("user_id")
+def current_user_id():
+    return session.get("user_id")
 
 def fetch_pet_or_404(conn, pet_id):
     user_id = current_user_id()
+    # Verifica família
     user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
+    
     if not user or not user["family_id"]:
-        pet = conn.execute("SELECT * FROM pets WHERE id = ? AND user_id = ?", (pet_id, user_id)).fetchone()
+        # Se não tem família, busca só pelo ID
+        query = "SELECT * FROM pets WHERE id = ? AND user_id = ?"
+        params = (pet_id, user_id)
     else:
-        membros = conn.execute("SELECT id FROM users WHERE family_id = ?", (user["family_id"],)).fetchall()
-        ids = [str(m["id"]) for m in membros]
-        pet = conn.execute(f"SELECT * FROM pets WHERE id = ? AND user_id IN ({','.join(ids)})", (pet_id,)).fetchone()
-    if not pet: abort(404)
+        # Se tem família, busca pets de todos os membros
+        fam_members = conn.execute("SELECT id FROM users WHERE family_id = ?", (user["family_id"],)).fetchall()
+        ids = [str(m["id"]) for m in fam_members]
+        query = f"SELECT * FROM pets WHERE id = ? AND user_id IN ({','.join(ids)})"
+        params = (pet_id,)
+
+    pet = conn.execute(query, params).fetchone()
+    if not pet:
+        abort(404)
     return pet
 
 def get_responsaveis(pet_row):
     parts = []
-    t1, n1 = (pet_row["resp1_tipo"] or ""), (pet_row["resp1_nome"] or "")
-    t2, n2 = (pet_row["resp2_tipo"] or ""), (pet_row["resp2_nome"] or "")
+    t1 = (pet_row["resp1_tipo"] or "").strip()
+    n1 = (pet_row["resp1_nome"] or "").strip()
+    t2 = (pet_row["resp2_tipo"] or "").strip()
+    n2 = (pet_row["resp2_nome"] or "").strip()
+
     if t1 and n1: parts.append(f"{t1}: {n1}")
     if t2 and n2: parts.append(f"{t2}: {n2}")
-    if not parts and pet_row["tutor"]: parts.append(f"Tutor: {pet_row['tutor']}")
+    if not parts and (pet_row["tutor"] or "").strip():
+        parts.append(f"Tutor: {pet_row['tutor'].strip()}")
     return parts
 
-# --- Rotas ---
+# Utils
+CURIOSIDADES = {
+    "gato": ["Gatos bebem pouca água; fontes ajudam.", "Ronronar nem sempre é alegria.", "Arranhar é instinto."],
+    "cão": ["Passeios cheios de cheiros cansam mais.", "Mudança de apetite? Anote.", "Roer acalma a ansiedade."],
+    "outro": ["Animais exóticos escondem dor.", "Rotina fixa reduz estresse.", "Enriquecimento ambiental é vital."]
+}
+def pick_curiosidade(especie):
+    e = (especie or "").lower()
+    if "gat" in e: pool = CURIOSIDADES["gato"]
+    elif any(x in e for x in ["cã", "cao", "dog"]): pool = CURIOSIDADES["cão"]
+    else: pool = CURIOSIDADES["outro"]
+    return random.choice(pool)
+
+def compute_wellbeing_summary(registros):
+    now = datetime.now()
+    cutoff = now - timedelta(days=7)
+    counts = {}
+    total = 0
+    for r in registros:
+        try:
+            dt = datetime.strptime(r["data"], "%d/%m/%Y %H:%M")
+            if dt >= cutoff:
+                total += 1
+                h = (r["humor"] or "Neutro").strip()
+                counts[h] = counts.get(h, 0) + 1
+        except: continue
+    
+    top_humor, top_count = None, 0
+    for k, v in counts.items():
+        if v > top_count: top_humor, top_count = k, v
+    return {"total_7d": total, "top_humor": top_humor, "top_count": top_count}
+
+# =========================
+# ROTAS DE AUTENTICAÇÃO
+# =========================
+
 @app.route("/signup", methods=("GET", "POST"))
 def signup():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
         code = request.form.get("invite_code", "").strip().upper()
-        
+
         conn = get_db_connection()
-        if conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone():
+        try:
+            # Verifica se já existe
+            if conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone():
+                flash("E-mail já cadastrado. Tente fazer login.", "warning")
+                return redirect(url_for("login"))
+
+            # Lógica da Família
+            family_id = None
+            if code:
+                fam = conn.execute("SELECT family_id FROM users WHERE family_id = ?", (code,)).fetchone()
+                if fam:
+                    family_id = fam["family_id"]
+                    flash(f"Oba! Você entrou na família {code}!", "success")
+                else:
+                    flash("Código não encontrado. Criamos uma nova família para você.", "info")
+                    family_id = gerar_codigo_familia()
+            else:
+                family_id = gerar_codigo_familia()
+
+            # Cria usuário
+            pw_hash = generate_password_hash(password)
+            created_at = datetime.now().strftime("%d/%m/%Y %H:%M")
+            conn.execute("INSERT INTO users (email, password_hash, created_at, family_id) VALUES (?, ?, ?, ?)", 
+                         (email, pw_hash, created_at, family_id))
+            conn.commit()
+
+            # Loga automaticamente
+            user = conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
+            session["user_id"] = user["id"]
+            flash("Conta criada com sucesso!", "success")
+            return redirect(url_for("index"))
+        finally:
             conn.close()
-            flash("E-mail já existe.", "warning")
-            return redirect(url_for("login"))
-        
-        fam_id = gerar_codigo_familia()
-        if code:
-            fam = conn.execute("SELECT family_id FROM users WHERE family_id=?", (code,)).fetchone()
-            if fam: fam_id = fam["family_id"]
-        
-        conn.execute("INSERT INTO users (email, password_hash, created_at, family_id) VALUES (?, ?, ?, ?)",
-                     (email, generate_password_hash(password), datetime.now().strftime("%d/%m"), fam_id))
-        conn.commit()
-        user = conn.execute("SELECT id FROM users WHERE email=?", (email,)).fetchone()
-        conn.close()
-        session["user_id"] = user["id"]
-        return redirect(url_for("index"))
+
     return render_template("signup.html")
 
 @app.route("/login", methods=("GET", "POST"))
 def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
-        pw = request.form.get("password", "")
+        password = request.form.get("password", "")
+
         conn = get_db_connection()
-        user = conn.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+        user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         
-        if not user or not check_password_hash(user["password_hash"], pw):
+        if not user or not check_password_hash(user["password_hash"], password):
             conn.close()
-            flash("Dados incorretos.", "error")
+            flash("E-mail ou senha incorretos.", "error")
             return redirect(url_for("login"))
-        
-        if not user["family_id"]: # Autocura
-            conn.execute("UPDATE users SET family_id=? WHERE id=?", (gerar_codigo_familia(), user["id"]))
+
+        # Autocura (para usuários antigos sem família)
+        if not user["family_id"]:
+            new_code = gerar_codigo_familia()
+            conn.execute("UPDATE users SET family_id = ? WHERE id = ?", (new_code, user["id"]))
             conn.commit()
-            
+        
         conn.close()
         session["user_id"] = user["id"]
         return redirect(url_for("index"))
+
     return render_template("login.html")
 
 @app.route("/logout")
 def logout():
     session.clear()
+    flash("Saiu com segurança.", "info")
     return redirect(url_for("login"))
+
+# =========================
+# ROTAS DO APP
+# =========================
 
 @app.route("/")
 @login_required
 def index():
     conn = get_db_connection()
-    user = conn.execute("SELECT family_id FROM users WHERE id=?", (current_user_id(),)).fetchone()
+    user_id = current_user_id()
+    user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
+    
     pets = []
-    my_code = user["family_id"] if user else ""
+    my_code = "ERRO"
     
-    if my_code:
-        membros = conn.execute("SELECT id FROM users WHERE family_id=?", (my_code,)).fetchall()
-        ids = [str(m["id"]) for m in membros]
-        pets = conn.execute(f"SELECT * FROM pets WHERE user_id IN ({','.join(ids)}) ORDER BY id DESC").fetchall()
-    
+    if user:
+        my_code = user["family_id"]
+        if my_code:
+            members = conn.execute("SELECT id FROM users WHERE family_id = ?", (my_code,)).fetchall()
+            ids = [str(m["id"]) for m in members]
+            # Busca pets de toda a família
+            query = f"SELECT * FROM pets WHERE user_id IN ({','.join(ids)}) ORDER BY id DESC"
+            pets = conn.execute(query).fetchall()
+        else:
+            pets = conn.execute("SELECT * FROM pets WHERE user_id = ?", (user_id,)).fetchall()
+
     conn.close()
-    return render_template("index.html", pets=pets, my_code=my_code, curiosidade_home="Pets enriquecem a alma.")
+    especie = pets[0]["especie"] if pets else "outro"
+    return render_template("index.html", pets=pets, curiosidade_home=pick_curiosidade(especie), my_code=my_code)
+
+@app.route("/curiosidades")
+@login_required
+def curiosidades():
+    return render_template("curiosidades.html", curiosidades=CURIOSIDADES)
 
 @app.route("/cadastrar", methods=("GET", "POST"))
 @login_required
 def cadastrar():
     if request.method == "POST":
         f = request.form
+        if not f.get("nome"):
+            flash("O nome é obrigatório!", "error")
+            return render_template("cadastro.html")
+
         conn = get_db_connection()
         conn.execute("""
             INSERT INTO pets (
-                user_id, nome, especie, nascimento, obs, 
-                resp1_tipo, resp1_nome, resp2_tipo, resp2_nome,
-                musica_preferida, vet_preferido, motivo_nome,
+                user_id, nome, especie, nascimento, obs, tutor,
+                resp1_tipo, resp1_nome, resp2_tipo, resp2_nome, 
+                musica_preferida, vet_preferido, motivo_nome, 
                 alimentos_preferidos, alimentos_proibidos,
                 quase_chamou, como_conhecemos, atividade_preferida
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             current_user_id(), f.get("nome"), f.get("especie"), f.get("nascimento"), f.get("obs"),
+            f.get("resp1_nome"), # Legado
             f.get("resp1_tipo"), f.get("resp1_nome"), f.get("resp2_tipo"), f.get("resp2_nome"),
             f.get("musica_preferida"), f.get("vet_preferido"), f.get("motivo_nome"),
             f.get("alimentos_preferidos"), f.get("alimentos_proibidos"),
@@ -234,7 +359,9 @@ def cadastrar():
         ))
         conn.commit()
         conn.close()
+        flash("Pet cadastrado com sucesso!", "success")
         return redirect(url_for("index"))
+
     return render_template("cadastro.html")
 
 @app.route("/pet/<int:pet_id>/editar", methods=("GET", "POST"))
@@ -242,10 +369,12 @@ def cadastrar():
 def editar_pet(pet_id):
     conn = get_db_connection()
     pet = fetch_pet_or_404(conn, pet_id)
+
     if request.method == "POST":
         f = request.form
         conn.execute("""
-            UPDATE pets SET nome=?, especie=?, nascimento=?, obs=?,
+            UPDATE pets SET 
+            nome=?, especie=?, nascimento=?, obs=?,
             resp1_tipo=?, resp1_nome=?, resp2_tipo=?, resp2_nome=?,
             musica_preferida=?, vet_preferido=?, motivo_nome=?,
             alimentos_preferidos=?, alimentos_proibidos=?,
@@ -261,28 +390,80 @@ def editar_pet(pet_id):
         ))
         conn.commit()
         conn.close()
+        flash("Dados atualizados!", "success")
         return redirect(url_for("detalhes_pet", pet_id=pet_id))
+    
     conn.close()
-    return render_template("cadastro.html", pet=pet, edit_mode=True)
+    return render_template("cadastro.html", pet=pet, edit_mode=True) 
 
-# Demais rotas (detalhes, anotar, etc) podem ser copiadas da versão anterior ou mantidas
-# Apenas certifique-se de importar e rodar o app.
 @app.route("/pet/<int:pet_id>")
 @login_required
 def detalhes_pet(pet_id):
     conn = get_db_connection()
     pet = fetch_pet_or_404(conn, pet_id)
-    registros = conn.execute("SELECT * FROM registros WHERE pet_id=? ORDER BY id DESC", (pet_id,)).fetchall()
-    eventos = conn.execute("SELECT * FROM eventos WHERE pet_id=? ORDER BY id DESC", (pet_id,)).fetchall()
+    registros = conn.execute("SELECT * FROM registros WHERE pet_id = ? ORDER BY id DESC", (pet_id,)).fetchall()
+    agenda = conn.execute("SELECT * FROM agenda WHERE pet_id = ? AND concluida = 0 ORDER BY data_prevista ASC", (pet_id,)).fetchall()
+    eventos = conn.execute("SELECT * FROM eventos WHERE pet_id = ? ORDER BY id DESC", (pet_id,)).fetchall()
     conn.close()
-    return render_template("detalhes.html", pet=pet, registros=registros, eventos=eventos, summary={}, responsaveis=get_responsaveis(pet), agenda_pend=[])
 
-@app.route("/curiosidades")
-def curiosidades(): return render_template("curiosidades.html", curiosidades={})
+    return render_template("detalhes.html", pet=pet, registros=registros, agenda_pend=agenda, eventos=eventos,
+                           summary=compute_wellbeing_summary(registros), curiosidade=pick_curiosidade(pet["especie"]),
+                           responsaveis=get_responsaveis(pet))
+
+# ✅ ROTA DE DIÁRIO CORRIGIDA
+@app.route("/pet/<int:pet_id>/anotar", methods=("POST",))
+@login_required
+def anotar(pet_id):
+    f = request.form
+    conn = get_db_connection()
+    # Verifica se o pet existe e pertence ao usuário
+    fetch_pet_or_404(conn, pet_id)
+    
+    if f.get("nota"):
+        conn.execute("""INSERT INTO registros (pet_id, data, nota, humor, categoria, personalidade_hoje, latindo, mordeu_carteiro)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                     (pet_id, datetime.now().strftime("%d/%m/%Y %H:%M"), f.get("nota"), f.get("humor"), 
+                      f.get("categoria"), f.get("personalidade_hoje"), 
+                      1 if f.get("latindo") else 0, 1 if f.get("mordeu_carteiro") else 0))
+        conn.commit()
+        flash("Diário atualizado!", "success")
+    
+    conn.close()
+    return redirect(url_for("detalhes_pet", pet_id=pet_id))
+
 @app.route("/pet/<int:pet_id>/eventos")
-def eventos_pet(pet_id): return redirect(url_for("detalhes_pet", pet_id=pet_id))
+@login_required
+def eventos_pet(pet_id):
+    conn = get_db_connection()
+    pet = fetch_pet_or_404(conn, pet_id)
+    eventos = conn.execute("SELECT * FROM eventos WHERE pet_id = ? ORDER BY id DESC", (pet_id,)).fetchall()
+    conn.close()
+    return render_template("eventos.html", pet=pet, eventos=eventos)
+
 @app.route("/pet/<int:pet_id>/modo-vet")
-def modo_vet(pet_id): return redirect(url_for("detalhes_pet", pet_id=pet_id))
+@login_required
+def modo_vet(pet_id):
+    conn = get_db_connection()
+    pet = fetch_pet_or_404(conn, pet_id)
+    registros = conn.execute("SELECT * FROM registros WHERE pet_id = ? ORDER BY id DESC LIMIT 20", (pet_id,)).fetchall()
+    eventos = conn.execute("SELECT * FROM eventos WHERE pet_id = ? ORDER BY id DESC LIMIT 15", (pet_id,)).fetchall()
+    conn.close()
+    return render_template("modo_vet.html", pet=pet, registros=registros, eventos=eventos,
+                           summary=compute_wellbeing_summary(registros), 
+                           frase_extra=random.choice(["Tudo em ordem?", "Histórico ajuda muito."]),
+                           responsaveis=get_responsaveis(pet))
+
+# Rotas auxiliares de exclusão e agenda (mantidas para compatibilidade)
+@app.route("/agenda/<int:agenda_id>/done", methods=("POST",))
+@login_required
+def agenda_done(agenda_id):
+    # (Logica simplificada para manter o código limpo, mas funcional)
+    conn = get_db_connection()
+    conn.execute("UPDATE agenda SET concluida = 1 WHERE id = ?", (agenda_id,))
+    conn.commit()
+    conn.close()
+    return redirect(request.referrer or url_for('index'))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+    port = int(os.getenv("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)

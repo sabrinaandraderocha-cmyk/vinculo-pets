@@ -3,42 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vínculo - Entrar</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+    <title>Entrar - Vínculo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
 </head>
 <body>
 
-    <div class="auth-container">
-        <h1 class="brand-title"><span class="title-icon">🐾</span>Vínculo</h1>
-        <p style="margin-bottom: 30px; color: #777;">Bem-vinda de volta! Seu pet sentiu sua falta (ou fingiu que não).</p>
+    <div class="container">
+        <div class="auth-box">
+            <h1 class="brand-title">🐾 Vínculo</h1>
+            <p class="subtitle">Bem-vinda de volta!</p>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="post">
+                <div class="form-group">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" name="email" placeholder="seu@email.com" required>
                 </div>
-            {% endif %}
-        {% endwith %}
 
-        <form action="{{ url_for('login') }}" method="post">
-            <div class="form-group">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required>
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Entrar</button>
+            </form>
+
+            <div class="mt-20">
+                <span class="muted">Não tem conta?</span> 
+                <a href="{{ url_for('signup') }}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Cadastrar</a>
             </div>
-
-            <div class="form-group">
-                <label for="password" class="form-label">Senha</label>
-                <input type="password" id="password" name="password" class="form-input" placeholder="********" required>
-            </div>
-
-            <button type="submit" class="btn-primary">Entrar</button>
-        </form>
-
-        <div class="auth-footer">
-            Ainda não tem conta? <a href="{{ url_for('signup') }}" class="auth-link">Criar agora →</a> 🐾
         </div>
     </div>
 

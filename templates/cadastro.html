@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro Pet - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6">
 </head>
 <body>
 <div class="container">
     <nav class="top-nav">
         <a href="/" class="logo-text">⬅ Voltar</a>
-        <span style="font-weight:bold; color:#888;">Novo Pet</span>
+        <span style="font-weight:bold; color:#888;">{% if edit_mode %}Editar Pet{% else %}Novo Pet{% endif %}</span>
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -24,32 +24,57 @@
     {% endwith %}
 
     <div class="auth-container" style="max-width: 100%; text-align: left;">
-        <h2 style="text-align: center; margin-bottom: 25px;">Quem é o novo membro? 🐶🐱</h2>
+        <h2 style="text-align: center; margin-bottom: 25px;">
+            {% if edit_mode %}Atualizando o Perfil 💅{% else %}Quem é o novo membro? 🐶🐱{% endif %}
+        </h2>
 
         <form method="post">
             <div class="form-group">
                 <label class="form-label">Nome do Pet</label>
-                <input type="text" name="nome" placeholder="Ex: Thor, Luna..." required>
+                <input type="text" name="nome" value="{{ pet.nome if pet else '' }}" placeholder="Ex: Thor, Luna, Paçoca..." required>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group">
                     <label class="form-label">Espécie</label>
                     <select name="especie">
-                        <option value="Cão">Cão 🐶</option>
-                        <option value="Gato">Gato 🐱</option>
-                        <option value="Outro">Outro 🐹</option>
+                        <option value="Cão" {% if pet and pet.especie == 'Cão' %}selected{% endif %}>Cão 🐶</option>
+                        <option value="Gato" {% if pet and pet.especie == 'Gato' %}selected{% endif %}>Gato 🐱</option>
+                        <option value="Outro" {% if pet and pet.especie == 'Outro' %}selected{% endif %}>Outro 🐹</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Nascimento (aprox)</label>
-                    <input type="text" name="nascimento" placeholder="Ex: 10/2023">
+                    <input type="text" name="nascimento" value="{{ pet.nascimento if pet else '' }}" placeholder="Ex: 10/2023">
                 </div>
             </div>
 
+            <hr style="border:0; border-top: 2px dashed #eee; margin: 30px 0;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--accent);">📜 Identidade & Histórias (Humor)</h3>
+
             <div class="form-group">
-                <label class="form-label">Observações / Personalidade</label>
-                <textarea name="obs" placeholder="Ex: Ama dormir no sofá, tem medo de chuva..."></textarea>
+                <label class="form-label">Por que escolheu esse nome?</label>
+                <input type="text" name="motivo_nome" value="{{ pet.motivo_nome if pet else '' }}" placeholder="Ex: Tem cara de quem apronta ou foi homenagem?">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Ele(a) quase se chamou...</label>
+                <input type="text" name="quase_chamou" value="{{ pet.quase_chamou if pet else '' }}" placeholder="Ex: Rex, Godzila, Fifi (ainda bem que não foi!)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Como nos conhecemos (O Encontro)</label>
+                <textarea name="como_conhecemos" placeholder="Ex: Amor à primeira vista, resgate dramático ou ele invadiu minha casa por comida?">{{ pet.como_conhecemos if pet else '' }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Atividade preferida (Hobby)</label>
+                <input type="text" name="atividade_preferida" value="{{ pet.atividade_preferida if pet else '' }}" placeholder="Ex: Dormir 20h por dia, latir pro vento, julgar a família...">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Observações Gerais</label>
+                <textarea name="obs" placeholder="Outros detalhes importantes (ou fofocas sobre ele)...">{{ pet.obs if pet else '' }}</textarea>
             </div>
 
             <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
@@ -57,20 +82,20 @@
 
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 15px;">
                 <select name="resp1_tipo">
-                    <option value="Tutor">Tutor</option>
-                    <option value="Mãe">Mamãe</option>
-                    <option value="Pai">Papai</option>
+                    <option value="Tutor" {% if pet and pet.resp1_tipo == 'Tutor' %}selected{% endif %}>Tutor</option>
+                    <option value="Mãe" {% if pet and pet.resp1_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
+                    <option value="Pai" {% if pet and pet.resp1_tipo == 'Pai' %}selected{% endif %}>Papai</option>
                 </select>
-                <input type="text" name="resp1_nome" placeholder="Nome (Ex: Sabrina)">
+                <input type="text" name="resp1_nome" value="{{ pet.resp1_nome if pet else '' }}" placeholder="Nome (Ex: Sabrina)">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
                 <select name="resp2_tipo">
-                    <option value="Tutor">Tutor</option>
-                    <option value="Pai">Papai</option>
-                    <option value="Mãe">Mamãe</option>
+                    <option value="Tutor" {% if pet and pet.resp2_tipo == 'Tutor' %}selected{% endif %}>Tutor</option>
+                    <option value="Pai" {% if pet and pet.resp2_tipo == 'Pai' %}selected{% endif %}>Papai</option>
+                    <option value="Mãe" {% if pet and pet.resp2_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
                 </select>
-                <input type="text" name="resp2_nome" placeholder="Nome do parceiro(a)">
+                <input type="text" name="resp2_nome" value="{{ pet.resp2_nome if pet else '' }}" placeholder="Nome do parceiro(a)">
             </div>
 
             <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
@@ -78,21 +103,23 @@
 
             <div class="form-group">
                 <label class="form-label">Música Preferida</label>
-                <input type="text" name="musica_preferida" placeholder="Ex: MPB, Piano clássico...">
+                <input type="text" name="musica_preferida" value="{{ pet.musica_preferida if pet else '' }}" placeholder="Ex: MPB, Piano clássico, Funk...">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group">
                     <label class="form-label" style="color: var(--secondary);">Comidas Preferidas</label>
-                    <textarea name="alimentos_preferidos" placeholder="Sachê, frango..." style="height: 100px;"></textarea>
+                    <textarea name="alimentos_preferidos" style="height: 100px;">{{ pet.alimentos_preferidos if pet else '' }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="color: #c0392b;">🚫 PROIBIDOS (Alergias)</label>
-                    <textarea name="alimentos_proibidos" placeholder="Chocolate, uva..." style="height: 100px; border-color: #fadbd8; background: #fff5f5;"></textarea>
+                    <label class="form-label" style="color: #c0392b;">🚫 PROIBIDOS</label>
+                    <textarea name="alimentos_proibidos" style="height: 100px; border-color: #fadbd8; background: #fff5f5;">{{ pet.alimentos_proibidos if pet else '' }}</textarea>
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary" style="margin-top: 20px;">Salvar Cadastro ✨</button>
+            <button type="submit" class="btn-primary" style="margin-top: 20px;">
+                {% if edit_mode %}Salvar Alterações ✨{% else %}Cadastrar Pet ✨{% endif %}
+            </button>
         </form>
     </div>
 </div>

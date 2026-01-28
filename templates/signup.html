@@ -2,41 +2,55 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Vínculo • Criar conta</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta - Vínculo</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* Estilo extra só para o cadastro ficar bonitinho centralizado */
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #fdfbf7; font-family: sans-serif; }
+    .auth-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 400px; width: 100%; }
+    input { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+    .btn-primary { width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .btn-primary:hover { background: #1a252f; }
+    .code-input { text-transform: uppercase; letter-spacing: 3px; text-align: center; border: 2px dashed #bbb; background: #f9f9f9; }
+    .alert { padding: 10px; margin-bottom: 15px; border-radius: 6px; font-size: 0.9em; }
+    .alert-error { background: #f8d7da; color: #721c24; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🐾 Vínculo</h1>
-      <p>Registrar é cuidar.</p>
-    </header>
 
-    <div class="pet-card">
-      <h2 style="margin-top:0;">Criar conta</h2>
-      <p style="color:#6b7280; margin-top:-6px;">
-        Prometo: aqui não tem julgamento. Só cuidado organizado.
-      </p>
+  <div class="auth-box">
+    <h1 style="text-align:center; margin-top:0;">🐾 Criar Conta</h1>
+    <p style="text-align:center; color:#666; margin-bottom:25px;">Comece a organizar o amor pelo seu pet.</p>
 
-      {% if error %}
-        <div class="registro" style="border-left-color:#991b1b;">
-          <strong>Ops:</strong> {{ error }}
-        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
       {% endif %}
+    {% endwith %}
 
-      <form method="post">
-        <input type="email" name="email" placeholder="Seu e-mail" required>
-        <input type="password" name="password" placeholder="Crie uma senha" required>
-        <button class="btn-primary" type="submit">Criar conta</button>
-      </form>
+    <form method="post">
+      <label>E-mail</label>
+      <input type="email" name="email" placeholder="seu@email.com" required>
 
-      <hr style="border:none;border-top:1px solid #eee; margin:18px 0;">
+      <label>Senha</label>
+      <input type="password" name="password" placeholder="Uma senha segura" required>
 
-      <p style="margin:0;">
-        Já tem conta?
-        <a href="/login" style="font-weight:bold;">Entrar →</a>
-      </p>
-    </div>
+      <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+
+      <label style="font-weight:bold; color:#555;">💌 Tem um código de convite?</label>
+      <p style="font-size:0.8em; color:#888; margin:0 0 5px;">Se seu parceiro(a) já usa o app, peça o código dele para verem os mesmos pets.</p>
+      <input type="text" name="invite_code" class="code-input" placeholder="EX: A1B2C3">
+
+      <button type="submit" class="btn-primary">Criar Conta</button>
+    </form>
+
+    <p style="text-align:center; margin-top:20px;">
+      Já tem conta? <a href="{{ url_for('login') }}">Fazer Login</a>
+    </p>
   </div>
+
 </body>
 </html>

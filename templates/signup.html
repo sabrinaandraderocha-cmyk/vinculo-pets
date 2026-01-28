@@ -4,22 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Conta - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=11">
 </head>
 <body>
 
     <div class="container">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h1 class="brand-title">🐾 Vínculo</h1>
+            <p style="color: #666;">Comece a organizar o amor.</p>
+        </div>
+
         <div class="auth-box">
-            <h1 class="brand-title">🐾 Criar Conta</h1>
-            <p class="subtitle">Organize o amor pelo seu pet.</p>
+            <h2 class="page-title" style="text-align: center;">Criar Conta</h2>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    <div class="flash-messages">
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    </div>
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
                 {% endif %}
             {% endwith %}
 
@@ -31,20 +33,19 @@
 
                 <div class="form-group">
                     <label class="form-label">Senha</label>
-                    <input type="password" name="password" placeholder="••••••••" required>
+                    <input type="password" name="password" placeholder="Uma senha forte" required>
                 </div>
 
-                <div class="form-group" style="margin-top: 30px; border-top: 1px dashed #dfe6e9; padding-top: 20px;">
-                    <label class="form-label" style="color: var(--pink);">💌 Código de Convite (Opcional)</label>
-                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3">
+                <div class="form-group" style="margin-top: 25px; border-top: 1px dashed #ddd; padding-top: 15px;">
+                    <label class="form-label" style="color: #d35400;">💌 Tem código de convite? (Opcional)</label>
+                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3" style="text-align:center; letter-spacing:3px; text-transform:uppercase;">
                 </div>
 
-                <button type="submit" class="btn-primary">Criar Conta</button>
+                <button type="submit" class="btn-primary btn-block" style="width: 100%;">Criar Conta</button>
             </form>
 
-            <div class="mt-20">
-                <span class="muted">Já tem conta?</span> 
-                <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Fazer Login</a>
+            <div class="auth-footer">
+                Já tem conta? <a href="{{ url_for('login') }}" class="link-highlight">Fazer Login →</a>
             </div>
         </div>
     </div>

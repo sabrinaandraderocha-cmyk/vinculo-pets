@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diário - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=12">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=13">
 </head>
 <body>
 <div class="container">
@@ -18,7 +18,7 @@
 
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <div class="alert alert-{{ category }}" style="margin-bottom: 20px;">{{ message }}</div>
+        <div class="alert alert-{{ category }}">{{ message }}</div>
       {% endif %}
     {% endwith %}
 
@@ -32,19 +32,11 @@
 
     {% if pet.motivo_nome or pet.quase_chamou or pet.como_conhecemos or pet.atividade_preferida %}
     <div class="pet-card" style="background: #fffcf0; border: 1px solid #fcefdc;">
-        <h3 style="color: #f39c12; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">
-            ✨ Identidade Secreta
-        </h3>
+        <h3 style="color: #f39c12; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">✨ Identidade Secreta</h3>
         <div style="display: grid; gap: 15px;">
-            {% if pet.motivo_nome %}
-                <div><strong style="color: var(--primary); font-size: 0.9rem;">Por que esse nome?</strong><br><span style="color: #555;">{{ pet.motivo_nome }}</span></div>
-            {% endif %}
-            {% if pet.quase_chamou %}
-                <div><strong style="color: var(--primary); font-size: 0.9rem;">Quase se chamou...</strong><br><span style="color: #555;">{{ pet.quase_chamou }}</span></div>
-            {% endif %}
-            {% if pet.atividade_preferida %}
-                <div><strong style="color: var(--primary); font-size: 0.9rem;">Hobby Favorito</strong><br><span style="color: #555;">{{ pet.atividade_preferida }}</span></div>
-            {% endif %}
+            {% if pet.motivo_nome %}<div><strong style="color: var(--primary);">Por que esse nome?</strong><br>{{ pet.motivo_nome }}</div>{% endif %}
+            {% if pet.quase_chamou %}<div><strong style="color: var(--primary);">Quase se chamou...</strong><br>{{ pet.quase_chamou }}</div>{% endif %}
+            {% if pet.atividade_preferida %}<div><strong style="color: var(--primary);">Hobby Favorito</strong><br>{{ pet.atividade_preferida }}</div>{% endif %}
         </div>
     </div>
     {% endif %}
@@ -74,22 +66,16 @@
             </div>
 
             <div style="display: flex; gap: 15px; margin-bottom: 15px; justify-content: center;">
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
-                    <input type="checkbox" name="latindo" style="width: auto;"> 🐕 Latiu muito
-                </label>
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
-                    <input type="checkbox" name="mordeu_carteiro" style="width: auto;"> 📬 Aprontou
-                </label>
+                <label style="cursor: pointer;"><input type="checkbox" name="latindo"> 🐕 Latiu</label>
+                <label style="cursor: pointer;"><input type="checkbox" name="mordeu_carteiro"> 📬 Aprontou</label>
             </div>
 
-            <button type="submit" class="btn-primary btn-block">Salvar no Diário</button>
+            <button type="submit" class="btn-primary btn-block">Salvar Registro</button>
         </form>
     </div>
 
     <div style="margin-top: 30px;">
-        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: #333;">
-            📅 Histórico Recente
-        </h3>
+        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">📅 Histórico Recente</h3>
         {% if registros|length == 0 %}
             <p style="text-align: center; color: #999; margin-top: 20px;">Nenhuma anotação ainda.</p>
         {% endif %}
@@ -100,17 +86,10 @@
                 <strong style="color: var(--primary);">{{ reg.data }}</strong>
                 <span style="background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">{{ reg.humor }}</span>
             </div>
-            <p style="margin: 0; color: #555;">{{ reg.nota }}</p>
-            {% if reg.latindo or reg.mordeu_carteiro %}
-                <div style="margin-top: 8px; font-size: 0.8rem; color: #c0392b;">
-                    {% if reg.latindo %}🔊 Latiu muito {% endif %}
-                    {% if reg.mordeu_carteiro %}😈 Aprontou {% endif %}
-                </div>
-            {% endif %}
+            <p style="margin: 0;">{{ reg.nota }}</p>
         </div>
         {% endfor %}
     </div>
-
 </div>
 </body>
 </html>

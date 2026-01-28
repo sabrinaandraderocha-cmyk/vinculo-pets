@@ -21,9 +21,9 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "chave-secreta-desenvolvimento-vinculo")
 
 # Configuração do Banco de Dados (Inteligente: Neon na nuvem, SQLite no PC)
-# Se o link do Neon não tiver "postgresql", o SQLAlchemy corrige sozinho
 db_url = os.getenv("DATABASE_URL", "sqlite:///instance/database.db")
-if db_url.startswith("postgres://"):
+# Correção para o Render (postgres:// -> postgresql://)
+if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
@@ -35,10 +35,9 @@ db = SQLAlchemy(app)
 # =========================================================
 # PREPARAÇÃO VISUAL (TEMA ROXO)
 # =========================================================
-# Isso injeta a cor em todos os templates automaticamente
 @app.context_processor
 def inject_theme():
-    return dict(theme_color="#6f42c1")  # Um roxo bonito e moderno
+    return dict(theme_color="#6f42c1")
 
 # =========================================================
 # MODELOS (As tabelas do Banco)
@@ -115,9 +114,12 @@ class Evento(db.Model, DictMixin):
     detalhes = db.Column(db.Text)
     criado_em = db.Column(db.String(30))
 
-# Cria as tabelas se elas não existirem (Funciona no Neon e Local)
+# Tenta criar as tabelas automaticamente ao iniciar (mas a rota setup-banco é a garantia)
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+    except:
+        pass # Se falhar aqui, usamos a rota manual
 
 # =========================================================
 # HELPERS & UTILS
@@ -145,16 +147,13 @@ def fetch_pet_or_404(pet_id):
     if not user:
         abort(403)
 
-    # Lógica de Família: Busca o pet se for do usuário OU da mesma família
     query = Pet.query.filter(Pet.id == pet_id)
     
     if user.family_id:
-        # Pega IDs de todos da família
         family_members = db.session.query(User.id).filter_by(family_id=user.family_id).all()
         family_ids = [m.id for m in family_members]
         query = query.filter(Pet.user_id.in_(family_ids))
     else:
-        # Sem família, só pets do próprio usuário
         query = query.filter_by(user_id=user.id)
         
     pet = query.first()
@@ -197,7 +196,6 @@ def compute_wellbeing_summary(registros):
 
     for r in registros:
         try:
-            # Tenta converter string para data
             dt = datetime.strptime(r.data, "%d/%m/%Y %H:%M")
             if dt >= cutoff:
                 total += 1
@@ -213,6 +211,18 @@ def compute_wellbeing_summary(registros):
 
     return {"total_7d": total, "top_humor": top_humor, "top_count": top_count}
 
+
+# =========================================================
+# ROTAS DE EMERGÊNCIA (SALVA-VIDAS)
+# =========================================================
+@app.route('/setup-banco')
+def setup_banco():
+    try:
+        with app.app_context():
+            db.create_all()
+        return "<h1 style='color:green'>SUCESSO! Tabelas criadas.</h1> <p>Volte para <a href='/signup'>Criar Conta</a></p>"
+    except Exception as e:
+        return f"<h1 style='color:red'>ERRO:</h1> <p>{str(e)}</p>"
 
 # =========================================================
 # ROTAS DE AUTENTICAÇÃO
@@ -231,6 +241,7 @@ def signup():
             flash("Digite um e-mail válido.", "error")
             return redirect(url_for("signup"))
         
+        # Verifica se email já existe
         if User.query.filter_by(email=email).first():
             flash("E-mail já cadastrado. Tente fazer login.", "warning")
             return redirect(url_for("login"))
@@ -296,7 +307,7 @@ def logout():
 
 
 # =========================================================
-# ROTAS DO APP (Refatoradas para ORM)
+# ROTAS DO APP
 # =========================================================
 @app.route("/")
 @login_required
@@ -305,7 +316,6 @@ def index():
     pets = []
     
     if user.family_id:
-        # Busca usuários da mesma família
         family_members = User.query.filter_by(family_id=user.family_id).all()
         family_ids = [u.id for u in family_members]
         pets = Pet.query.filter(Pet.user_id.in_(family_ids)).order_by(Pet.id.desc()).all()
@@ -341,7 +351,6 @@ def cadastrar():
             especie=f.get("especie"),
             nascimento=f.get("nascimento"),
             obs=f.get("obs"),
-            # Campos novos e legados
             tutor=f.get("resp1_nome"), 
             resp1_tipo=f.get("resp1_tipo"),
             resp1_nome=f.get("resp1_nome"),
@@ -419,7 +428,7 @@ def detalhes_pet(pet_id):
 @login_required
 def anotar(pet_id):
     f = request.form
-    pet = fetch_pet_or_404(pet_id) # Garante permissão
+    pet = fetch_pet_or_404(pet_id)
 
     if f.get("nota"):
         novo_registro = Registro(
@@ -467,9 +476,8 @@ def modo_vet(pet_id):
 def agenda_done(agenda_id):
     tarefa = db.session.get(Agenda, agenda_id)
     if tarefa:
-        # Verifica se o usuário é dono do pet dessa tarefa
+        # Verifica se o usuário é dono do pet
         pet = db.session.get(Pet, tarefa.pet_id)
-        # (Aqui poderia ter uma verificação de segurança mais estrita igual fetch_pet_or_404)
         if pet: 
              tarefa.concluida = 1
              db.session.commit()

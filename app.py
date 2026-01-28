@@ -13,7 +13,6 @@ import os
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "chave-secreta-desenvolvimento-vinculo")
 
-# Configuração do Banco de Dados
 os.makedirs("instance", exist_ok=True)
 DB_PATH = os.path.join("instance", "database.db")
 
@@ -36,17 +35,16 @@ def add_column_if_missing(conn, table, column_def, column_name):
         try:
             conn.execute(f"ALTER TABLE {table} ADD COLUMN {column_def}")
         except sqlite3.OperationalError:
-            pass # Coluna já existe ou erro ignorável
+            pass
 
 def gerar_codigo_familia():
-    # Gera 6 caracteres maiúsculos/números (Ex: XK9M2P)
     chars = string.ascii_uppercase + string.digits
     return ''.join(random.choices(chars, k=6))
 
 def init_db():
     conn = get_db_connection()
 
-    # Tabela USERS com family_id
+    # Users
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,10 +54,9 @@ def init_db():
             family_id TEXT
         )
     """)
-    # Garante que family_id exista em bancos antigos
     add_column_if_missing(conn, "users", "family_id TEXT", "family_id")
 
-    # Tabela PETS
+    # Pets
     conn.execute("""
         CREATE TABLE IF NOT EXISTS pets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,24 +67,30 @@ def init_db():
             resp2_tipo TEXT, resp2_nome TEXT,
             musica_preferida TEXT, vet_preferido TEXT, motivo_nome TEXT,
             alimentos_preferidos TEXT, alimentos_proibidos TEXT,
+            quase_chamou TEXT, como_conhecemos TEXT, atividade_preferida TEXT,
             FOREIGN KEY (user_id) REFERENCES users (id)
         )
     """)
     
-    # Migrações Pets
+    # ✅ Migrações (Adicionando os campos novos e divertidos)
     cols = [
         ("user_id INTEGER", "user_id"), ("tutor TEXT", "tutor"),
         ("resp1_tipo TEXT", "resp1_tipo"), ("resp1_nome TEXT", "resp1_nome"),
         ("resp2_tipo TEXT", "resp2_tipo"), ("resp2_nome TEXT", "resp2_nome"),
         ("musica_preferida TEXT", "musica_preferida"),
-        ("vet_preferido TEXT", "vet_preferido"), ("motivo_nome TEXT", "motivo_nome"),
+        ("vet_preferido TEXT", "vet_preferido"), 
+        ("motivo_nome TEXT", "motivo_nome"),
         ("alimentos_preferidos TEXT", "alimentos_preferidos"),
-        ("alimentos_proibidos TEXT", "alimentos_proibidos")
+        ("alimentos_proibidos TEXT", "alimentos_proibidos"),
+        # Novos campos de humor/história:
+        ("quase_chamou TEXT", "quase_chamou"),
+        ("como_conhecemos TEXT", "como_conhecemos"),
+        ("atividade_preferida TEXT", "atividade_preferida")
     ]
     for col_def, col_name in cols:
         add_column_if_missing(conn, "pets", col_def, col_name)
 
-    # Tabela REGISTROS
+    # Tabelas auxiliares (mantidas iguais)
     conn.execute("""
         CREATE TABLE IF NOT EXISTS registros (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -102,7 +105,6 @@ def init_db():
     add_column_if_missing(conn, "registros", "latindo INTEGER DEFAULT 0", "latindo")
     add_column_if_missing(conn, "registros", "mordeu_carteiro INTEGER DEFAULT 0", "mordeu_carteiro")
 
-    # Tabela AGENDA
     conn.execute("""
         CREATE TABLE IF NOT EXISTS agenda (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -113,7 +115,6 @@ def init_db():
     """)
     add_column_if_missing(conn, "agenda", "created_at TEXT", "created_at")
 
-    # Tabela EVENTOS
     conn.execute("""
         CREATE TABLE IF NOT EXISTS eventos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -145,18 +146,13 @@ def current_user_id():
     return session.get("user_id")
 
 def fetch_pet_or_404(conn, pet_id):
-    # Verifica se o pet pertence a alguém da MINHA família
     user_id = current_user_id()
-    
-    # Busca minha família
     user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
     
-    # Se algo der errado e não tiver família, usa só o ID do usuário (fallback)
     if not user or not user["family_id"]:
         query = "SELECT * FROM pets WHERE id = ? AND user_id = ?"
         params = (pet_id, user_id)
     else:
-        # Busca membros da família
         fam_members = conn.execute("SELECT id FROM users WHERE family_id = ?", (user["family_id"],)).fetchall()
         ids = [str(m["id"]) for m in fam_members]
         query = f"SELECT * FROM pets WHERE id = ? AND user_id IN ({','.join(ids)})"
@@ -180,7 +176,7 @@ def get_responsaveis(pet_row):
         parts.append(f"Tutor: {pet_row['tutor'].strip()}")
     return parts
 
-# Utils de texto/data
+# Utils
 CURIOSIDADES = {
     "gato": ["Gatos bebem pouca água; fontes ajudam.", "Ronronar nem sempre é alegria.", "Arranhar é instinto."],
     "cão": ["Passeios cheios de cheiros cansam mais.", "Mudança de apetite? Anote.", "Roer acalma a ansiedade."],
@@ -213,7 +209,7 @@ def compute_wellbeing_summary(registros):
     return {"total_7d": total, "top_humor": top_humor, "top_count": top_count}
 
 # =========================
-# ROTAS PRINCIPAIS
+# ROTAS
 # =========================
 
 @app.route("/signup", methods=("GET", "POST"))
@@ -231,13 +227,12 @@ def signup():
 
             family_id = None
             if invite_code:
-                # Tenta achar a família pelo código
                 fam = conn.execute("SELECT family_id FROM users WHERE family_id = ?", (invite_code,)).fetchone()
                 if fam:
                     family_id = fam["family_id"]
                     flash(f"Oba! Você entrou na família {invite_code}!", "success")
                 else:
-                    flash("Código não encontrado. Criamos uma nova família para você.", "info")
+                    flash("Código não encontrado. Criamos uma nova família.", "info")
                     family_id = gerar_codigo_familia()
             else:
                 family_id = gerar_codigo_familia()
@@ -270,13 +265,10 @@ def login():
             flash("Login inválido.", "error")
             return redirect(url_for("login"))
 
-        # === AUTOCURA ===
-        # Se o usuário antigo não tem family_id, criamos agora!
         if not user["family_id"]:
             new_code = gerar_codigo_familia()
             conn.execute("UPDATE users SET family_id = ? WHERE id = ?", (new_code, user["id"]))
             conn.commit()
-            flash("Atualizamos seu perfil com o novo sistema de Família!", "info")
         
         conn.close()
         session["user_id"] = user["id"]
@@ -295,29 +287,21 @@ def logout():
 def index():
     conn = get_db_connection()
     user_id = current_user_id()
-    
-    # Pega dados do usuário atual
     user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
     
     pets = []
     my_code = "ERRO"
-    
     if user:
         my_code = user["family_id"]
         if my_code:
-            # Busca membros da família
             members = conn.execute("SELECT id FROM users WHERE family_id = ?", (my_code,)).fetchall()
             ids = [str(m["id"]) for m in members]
-            # Busca pets de todos os membros
             query = f"SELECT * FROM pets WHERE user_id IN ({','.join(ids)}) ORDER BY id DESC"
             pets = conn.execute(query).fetchall()
         else:
-            # Fallback se a autocura falhar (raro)
             pets = conn.execute("SELECT * FROM pets WHERE user_id = ?", (user_id,)).fetchall()
-            my_code = "Faça login novamente"
 
     conn.close()
-    
     especie = pets[0]["especie"] if pets else "outro"
     return render_template("index.html", pets=pets, curiosidade_home=pick_curiosidade(especie), my_code=my_code)
 
@@ -337,16 +321,24 @@ def cadastrar():
 
         conn = get_db_connection()
         conn.execute("""
-            INSERT INTO pets (user_id, nome, especie, nascimento, obs, tutor,
-            resp1_tipo, resp1_nome, resp2_tipo, resp2_nome, musica_preferida,
-            vet_preferido, motivo_nome, alimentos_preferidos, alimentos_proibidos)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO pets (
+                user_id, nome, especie, nascimento, obs, tutor,
+                resp1_tipo, resp1_nome, resp2_tipo, resp2_nome, 
+                musica_preferida, vet_preferido, motivo_nome, 
+                alimentos_preferidos, alimentos_proibidos,
+                quase_chamou, como_conhecemos, atividade_preferida
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             current_user_id(), f.get("nome"), f.get("especie"), f.get("nascimento"), f.get("obs"),
-            f.get("resp1_nome"), # legado
+            f.get("resp1_nome"), 
             f.get("resp1_tipo"), f.get("resp1_nome"), f.get("resp2_tipo"), f.get("resp2_nome"),
-            f.get("musica_preferida"), f.get("vet_preferido"), f.get("motivo_nome"),
-            f.get("alimentos_preferidos"), f.get("alimentos_proibidos")
+            f.get("musica_preferida"), f.get("vet_preferido"), 
+            f.get("motivo_nome"), # Motivo do nome
+            f.get("alimentos_preferidos"), f.get("alimentos_proibidos"),
+            f.get("quase_chamou"), # Quase se chamou...
+            f.get("como_conhecemos"), # Como nos conhecemos
+            f.get("atividade_preferida") # Atividade favorita
         ))
         conn.commit()
         conn.close()
@@ -355,12 +347,11 @@ def cadastrar():
 
     return render_template("cadastro.html")
 
-# EDIÇÃO DE PET
 @app.route("/pet/<int:pet_id>/editar", methods=("GET", "POST"))
 @login_required
 def editar_pet(pet_id):
     conn = get_db_connection()
-    pet = fetch_pet_or_404(conn, pet_id) # Usa a busca segura por família
+    pet = fetch_pet_or_404(conn, pet_id)
 
     if request.method == "POST":
         f = request.form
@@ -369,13 +360,15 @@ def editar_pet(pet_id):
             nome=?, especie=?, nascimento=?, obs=?,
             resp1_tipo=?, resp1_nome=?, resp2_tipo=?, resp2_nome=?,
             musica_preferida=?, vet_preferido=?, motivo_nome=?,
-            alimentos_preferidos=?, alimentos_proibidos=?
+            alimentos_preferidos=?, alimentos_proibidos=?,
+            quase_chamou=?, como_conhecemos=?, atividade_preferida=?
             WHERE id=?
         """, (
             f.get("nome"), f.get("especie"), f.get("nascimento"), f.get("obs"),
             f.get("resp1_tipo"), f.get("resp1_nome"), f.get("resp2_tipo"), f.get("resp2_nome"),
             f.get("musica_preferida"), f.get("vet_preferido"), f.get("motivo_nome"),
             f.get("alimentos_preferidos"), f.get("alimentos_proibidos"),
+            f.get("quase_chamou"), f.get("como_conhecemos"), f.get("atividade_preferida"),
             pet_id
         ))
         conn.commit()
@@ -384,9 +377,7 @@ def editar_pet(pet_id):
         return redirect(url_for("detalhes_pet", pet_id=pet_id))
     
     conn.close()
-    # Se ainda não tiver o template editar_pet.html, use o cadastro.html adaptado ou crie um.
-    # Por segurança, se não tiver o arquivo, redirecione.
-    # Mas como você vai criar, pode retornar render_template("cadastro.html", pet=pet) se adaptar o HTML.
+    # Reutiliza o cadastro.html com os dados preenchidos
     return render_template("cadastro.html", pet=pet, edit_mode=True) 
 
 @app.route("/pet/<int:pet_id>")
@@ -403,12 +394,13 @@ def detalhes_pet(pet_id):
                            summary=compute_wellbeing_summary(registros), curiosidade=pick_curiosidade(pet["especie"]),
                            responsaveis=get_responsaveis(pet))
 
+# (Restante das rotas: anotar, eventos, modo_vet, etc. mantidas iguais)
 @app.route("/pet/<int:pet_id>/anotar", methods=("POST",))
 @login_required
 def anotar(pet_id):
     f = request.form
     conn = get_db_connection()
-    fetch_pet_or_404(conn, pet_id) # Garante permissão
+    fetch_pet_or_404(conn, pet_id)
     if f.get("nota"):
         conn.execute("""INSERT INTO registros (pet_id, data, nota, humor, categoria, personalidade_hoje, latindo, mordeu_carteiro)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
@@ -420,11 +412,6 @@ def anotar(pet_id):
     conn.close()
     return redirect(url_for("detalhes_pet", pet_id=pet_id))
 
-# (Manter rotas de Eventos, Agenda e Modo Vet iguais, só garantindo fetch_pet_or_404)
-# ... Código restante igual ao anterior ...
-# Para economizar espaço aqui, as outras rotas (agenda_add, eventos_add, exportar, modo_vet)
-# seguem a mesma lógica: chame fetch_pet_or_404(conn, pet_id) no início que ela já valida a família.
-
 @app.route("/pet/<int:pet_id>/eventos")
 @login_required
 def eventos_pet(pet_id):
@@ -433,8 +420,6 @@ def eventos_pet(pet_id):
     eventos = conn.execute("SELECT * FROM eventos WHERE pet_id = ? ORDER BY id DESC", (pet_id,)).fetchall()
     conn.close()
     return render_template("eventos.html", pet=pet, eventos=eventos)
-
-# ... (outras rotas omitidas pois são iguais, mas use fetch_pet_or_404) ...
 
 @app.route("/pet/<int:pet_id>/modo-vet")
 @login_required

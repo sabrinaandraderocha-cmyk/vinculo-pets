@@ -1,36 +1,35 @@
-/* --- 🎨 VÍNCULO: TEMA SOFT PET --- */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+/* --- 🎨 VÍNCULO: ESTILO DEFINIDO & CLEAN --- */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
 
 :root {
-    /* Paleta Pastel Harmônica */
-    --primary: #8e44ad;       /* Roxo Suave */
-    --primary-light: #a569bd; 
-    --secondary: #27ae60;     /* Verde Natureza */
-    --accent: #f39c12;        /* Laranja Dourado */
-    --bg-page: #fdfbf7;       /* Creme bem clarinho (confortável aos olhos) */
+    /* Cores Principais */
+    --primary: #6c5ce7;       /* Roxo Moderno */
+    --primary-dark: #5b4cc4;
+    --secondary: #00cec9;     /* Turquesa */
+    --accent: #fd79a8;        /* Rosa */
     
-    /* Textos */
-    --text-dark: #4a4a4a;
-    --text-light: #888;
+    /* Fundos e Textos */
+    --bg-page: #fdfbf7;       /* Creme suave */
+    --text-dark: #2d3436;
+    --text-muted: #636e72;
     
     /* Elementos */
     --card-bg: #ffffff;
-    --input-bg: #f3f4f6;
-    --border-radius: 16px;
-    --shadow: 0 8px 24px rgba(149, 157, 165, 0.1); /* Sombra difusa e elegante */
+    --input-border: #dfe6e9;  /* Borda cinza clara */
+    --input-focus: #a29bfe;   /* Borda roxa ao clicar */
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* --- 🐾 FUNDO COM PATINHAS SUAVES --- */
 body {
     font-family: 'Nunito', sans-serif;
-    background-color: var(--bg-page);
     color: var(--text-dark);
+    background-color: var(--bg-page);
     margin: 0;
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    /* Padrão de patinhas cinza bem clarinho (não briga com o texto) */
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%23d1d8e0' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
+    /* Padrão de patinhas cinza (Visível mas suave) */
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%23b2bec3' fill-opacity='0.25' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Centraliza verticalmente nas telas de login */
@@ -40,144 +39,107 @@ html:has(.auth-container) body {
 
 .container {
     width: 100%;
-    max-width: 550px;
+    max-width: 600px;
     padding: 20px;
 }
 
-/* --- CARDS (Blocos Brancos) --- */
+/* --- CARDS (Blocos) --- */
 .auth-container, .pet-card, .top-nav, .family-box {
     background: var(--card-bg);
-    border-radius: var(--border-radius);
+    border-radius: 12px; /* Cantos menos redondos (mais "quadrado") */
     box-shadow: var(--shadow);
-    padding: 25px;
+    padding: 30px;
     margin-bottom: 25px;
-    border: 1px solid #fff; /* Borda branca sutil */
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Auth específico */
 .auth-container {
-    text-align: center;
-    max-width: 420px;
+    max-width: 400px;
     margin: 0 auto;
+    text-align: center;
 }
 
 /* --- TIPOGRAFIA --- */
 h1, h2, h3 { color: var(--primary); margin-top: 0; font-weight: 800; }
-.brand-title { font-size: 2rem; margin-bottom: 5px; color: var(--primary); display: flex; align-items: center; justify-content: center; gap: 10px; }
-.muted { color: var(--text-light); font-size: 0.9rem; }
+.brand-title { 
+    font-size: 2.2rem; margin-bottom: 10px; color: var(--primary); 
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
 
-/* --- INPUTS, SELECTS E TEXTAREAS (Correção Visual) --- */
+/* --- INPUTS & SELECTS (O DESTAQUE QUADRADO) --- */
 .form-group { margin-bottom: 20px; text-align: left; }
-.form-label { font-weight: 700; margin-bottom: 8px; display: block; color: var(--text-dark); }
+.form-label { 
+    font-weight: 700; margin-bottom: 8px; display: block; 
+    color: var(--text-dark); font-size: 0.95rem;
+}
 
-/* Estilo unificado para TODOS os campos */
+/* Estilo unificado "Caixa" */
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="date"],
 select,
 textarea {
-    width: 100%; /* Garante que ocupem a largura cheia */
-    padding: 14px;
-    background: var(--input-bg);
-    border: 2px solid transparent;
-    border-radius: 12px;
+    width: 100%;
+    padding: 12px 15px;
+    background: #ffffff;
+    border: 2px solid var(--input-border); /* Borda visível! */
+    border-radius: 8px; /* Levemente arredondado, mas "quadrado" */
     font-family: 'Nunito', sans-serif;
     font-size: 1rem;
-    color: #333;
-    box-sizing: border-box; /* Impede que padding estoure a largura */
+    color: #2d3436;
+    box-sizing: border-box;
     transition: 0.2s;
 }
 
-/* Efeito ao clicar */
+/* Foco: Borda roxa quando clica */
 input:focus, select:focus, textarea:focus {
     outline: none;
-    background: #fff;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 4px rgba(142, 68, 173, 0.1);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
 }
 
-/* Correção para Textarea (não ficar gigante) */
-textarea {
-    min-height: 80px;
-    resize: vertical;
-}
+/* Textarea ajustado */
+textarea { min-height: 80px; resize: vertical; }
 
 /* Código de Convite */
 .invite-code-input {
-    text-align: center;
-    letter-spacing: 4px;
-    font-weight: 800;
-    text-transform: uppercase;
-    background: #fdf2e9 !important;
-    color: var(--accent) !important;
-    border: 2px dashed var(--accent) !important;
+    text-align: center; letter-spacing: 3px; font-weight: 800;
+    text-transform: uppercase; background: #fff0f6 !important; 
+    color: var(--accent) !important; border-color: var(--accent) !important;
 }
 
-/* --- BOTÕES (Correção da Home) --- */
+/* --- BOTÕES --- */
 .btn-primary {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    padding: 14px;
-    background-color: var(--primary);
-    color: white;
-    font-weight: 700;
-    border: none;
-    border-radius: 50px; /* Redondo estilo pílula */
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-    text-decoration: none;
-    box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
+    display: block; width: 100%; padding: 14px;
+    background-color: var(--primary); color: white;
+    font-weight: 700; border: none; border-radius: 8px; /* Combinando com inputs */
+    font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.2s;
+    text-decoration: none; text-align: center; box-sizing: border-box;
 }
+.btn-primary:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
 
-.btn-primary:hover {
-    background-color: var(--primary-light);
-    transform: translateY(-2px);
-}
-
-/* Botão Secundário (Dicas) */
 .btn-secondary {
-    background-color: #fff;
-    color: var(--primary);
-    border: 2px solid #f0f0f0;
-    box-shadow: none;
+    background-color: #fff; color: var(--primary); border: 2px solid #dfe6e9;
 }
-.btn-secondary:hover {
-    background-color: #f8f8f8;
-    border-color: var(--primary-light);
-}
+.btn-secondary:hover { border-color: var(--primary); background-color: #f8f9fa; }
 
-/* Grid para os botões da Home ficarem lado a lado */
+/* Grid para botões lado a lado */
 .grid-btns {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide em 2 colunas iguais */
-    gap: 15px; /* Espaço entre eles */
-    margin-top: 15px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;
 }
 
-/* Links pequenos (Editar, Sair) */
-.btn-small { padding: 10px 20px; font-size: 0.9rem; }
-.btn-link-style { color: var(--text-light); font-size: 1.2rem; padding: 5px; text-decoration: none;}
-.btn-link-style:hover { color: var(--primary); }
+/* Links pequenos */
+.btn-small { padding: 10px 15px; font-size: 0.9rem; }
+.btn-link-style { font-size: 1.2rem; text-decoration: none; padding: 5px; }
 
-/* --- NAV SUPERIOR --- */
+/* --- HEADER --- */
 .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
-.logo-text { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-.logout-link { color: #e74c3c; background: #fceceb; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; font-size: 0.85rem; }
+.logo-text { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; }
+.logout-link { color: #d63031; background: #fab1a040; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
 
-/* --- FAMILY BOX --- */
-.family-box { text-align: center; background: #e8f6f3; border: 1px dashed var(--secondary); }
-.family-code {
-    background: white; padding: 8px 20px; border-radius: 12px;
-    font-weight: 800; color: var(--secondary); display: inline-block;
-    margin-top: 10px; letter-spacing: 2px; font-size: 1.3rem;
-}
-
-/* --- ALERTS --- */
-.flash-messages { margin-bottom: 20px; }
-.alert { padding: 12px; border-radius: 12px; font-size: 0.9rem; text-align: center; margin-bottom: 10px; font-weight: 600; }
-.alert-error { background: #fadbd8; color: #c0392b; }
-.alert-success { background: #d5f5e3; color: #27ae60; }
+/* --- UTILS --- */
+.alert { padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 15px; font-weight: 600; }
+.alert-error { background: #ff7675; color: white; }
+.alert-success { background: #00b894; color: white; }
+.muted { color: var(--text-muted); font-size: 0.85rem; }
+.family-box { text-align: center; background: #e0f7fa; border: 1px dashed var(--secondary); }

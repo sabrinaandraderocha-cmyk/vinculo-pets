@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% set narrow = true %}
+{% block content %}
+
+<div class="card auth">
+  <h2>Criar conta</h2>
+  <p class="muted">Um espaço simples para cuidar do seu pet.</p>
+
+  <form method="post" class="form">
+    <div class="field">
+      <label for="name">Seu nome</label>
+      <input id="name" name="name" type="text" required placeholder="Ex.: Sabrina">
+    </div>
+
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" required placeholder="seu@email.com">
+    </div>
+
+    <div class="field">
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" required placeholder="mínimo 6 caracteres">
+      <p class="help muted">Dica: use uma senha que você não usa em outros lugares.</p>
+    </div>
+
+    <button class="btn primary full" type="submit">Criar conta</button>
+  </form>
+
+  <div class="auth-footer">
+    <span class="muted">Já tem conta?</span>
+    <a href="{{ url_for('login') }}" class="link">Fazer login</a>
+  </div>
+</div>
+
+{% endblock %}

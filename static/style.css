@@ -1,21 +1,19 @@
-/* --- 🌿 VÍNCULO: TEMA NATUREZA (Igual ao seu print) --- */
+/* --- 🌿 VÍNCULO: TEMA NATUREZA (Com Patinhas Verdes!) --- */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
 
 :root {
-    /* Cores do Print (Verde Oliva e Tons de Terra) */
-    --primary: #78a838;       /* Verde Musgo (Botão Entrar) */
+    /* Cores do Tema (Verde Musgo) */
+    --primary: #78a838;       /* O Verde Principal */
     --primary-hover: #5e852a;
-    --title-color: #3d4a3e;   /* Verde Escuro (Título) */
+    --title-color: #3d4a3e;
     
-    /* Fundos */
-    --bg-gradient-start: #f4f9f4; /* Creme esverdeado claro */
-    --bg-gradient-end: #fffdf5;   /* Creme amarelado */
+    /* Fundo */
+    --bg-color: #f4f9f4;      /* Creme esverdeado claro (base) */
     --card-bg: #ffffff;
     
-    /* Inputs (Caixas azuis clarinhas do print) */
-    --input-bg: #e8f0fe;      /* Azulzinho claro */
-    --input-border: #cbd5e0;
-    --input-radius: 8px;      /* Cantos levemente arredondados */
+    /* Inputs (Caixas azuis clarinhas) */
+    --input-bg: #e8f0fe;
+    --input-radius: 8px;
 }
 
 body {
@@ -25,115 +23,69 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    /* Gradiente suave no fundo igual ao print */
-    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+
+    /* ✅ FUNDO BASE (Cor sólida clara) */
+    background-color: var(--bg-color);
+
+    /* ✅ AS PATINHAS VERDES (SVG com a cor #78a838) */
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%2378a838' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Centraliza verticalmente Login */
-html:has(.auth-box) body {
-    align-items: center;
-}
+html:has(.auth-box) body { align-items: center; }
 
-.container {
-    width: 100%;
-    max-width: 600px;
-    padding: 20px;
-}
+.container { width: 100%; max-width: 600px; padding: 20px; }
 
-/* --- O CARD BRANCO (Igual ao print) --- */
+/* --- O CARD BRANCO --- */
 .auth-box, .pet-card, .top-nav {
     background: var(--card-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Sombra leve */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     padding: 40px;
     margin-bottom: 20px;
     border: 1px solid #eee;
+    position: relative; /* Garante que fique acima do fundo */
 }
 
-.auth-box {
-    max-width: 450px;
-    margin: 0 auto;
-}
+.auth-box { max-width: 450px; margin: 0 auto; text-align: left; }
 
 /* --- TÍTULOS --- */
 h1, h2, h3 { margin-top: 0; }
+.brand-title { color: var(--title-color); font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 5px; }
+.page-title { font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 25px; }
 
-.brand-title {
-    color: var(--title-color);
-    font-size: 2rem;
-    font-weight: 800;
-    text-align: center;
-    margin-bottom: 5px;
-    display: flex; align-items: center; justify-content: center; gap: 10px;
-}
-
-.subtitle {
-    text-align: center;
-    color: #888;
-    font-size: 0.9rem;
-    margin-bottom: 30px;
-}
-
-.page-title {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-/* --- INPUTS (O estilo "Caixa Azulzinha") --- */
-.form-group { margin-bottom: 15px; }
-.form-label {
-    display: block; margin-bottom: 5px;
-    font-weight: 700; font-size: 0.95rem; color: #555;
-}
-
+/* --- INPUTS (Caixinhas azuis) --- */
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; color: #555; }
 input, select, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    background-color: var(--input-bg); /* Azulzinho */
-    border: 1px solid transparent;     /* Sem borda preta */
+    width: 100%; padding: 12px 15px;
+    background-color: var(--input-bg);
+    border: 2px solid transparent;
     border-radius: var(--input-radius);
     font-family: inherit; font-size: 1rem; color: #333;
-    box-sizing: border-box;
+    box-sizing: border-box; transition: 0.2s;
 }
-
 input:focus, select:focus, textarea:focus {
-    outline: none;
-    background-color: #fff;
-    border: 1px solid var(--primary);
-    box-shadow: 0 0 0 3px rgba(120, 168, 56, 0.2);
+    outline: none; background-color: #fff;
+    border-color: var(--primary); /* Borda verde ao clicar */
 }
+.invite-code-input { text-align: center; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; color: var(--primary); }
 
-/* --- BOTÃO VERDE (Igual ao print) --- */
+/* --- BOTÃO VERDE --- */
 .btn-primary {
-    display: inline-block;
-    padding: 12px 30px;
-    background-color: var(--primary); /* VERDE */
-    color: white;
-    font-weight: 800;
-    border: none;
-    border-radius: 50px; /* Redondo estilo pílula */
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s;
+    display: inline-block; padding: 12px 30px;
+    background-color: var(--primary); color: white;
+    font-weight: 800; border: none; border-radius: 50px;
+    font-size: 1rem; cursor: pointer; transition: background 0.2s;
     text-decoration: none;
-    margin-top: 10px;
-    width: auto; /* Não ocupa a tela toda, fica no canto esquerdo igual print */
 }
 .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-
-/* Para botões que precisam ocupar tudo (mobile) */
 .btn-block { width: 100%; text-align: center; }
 
-/* Links */
-.auth-footer { margin-top: 25px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 20px; }
-.link-highlight { color: var(--title-color); font-weight: 800; text-decoration: none; }
-
-/* --- OUTROS ELEMENTOS --- */
+/* Links e Outros */
+.auth-footer { margin-top: 25px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 20px; text-align: center; }
+.link-highlight { color: var(--primary); font-weight: 800; text-decoration: none; }
 .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
 .alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
 .alert-error { background: #ffebeb; color: #c0392b; }
-.alert-success { background: #eafaf1; color: #27ae60; }
-
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }

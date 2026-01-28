@@ -226,21 +226,49 @@ input[type="checkbox"] {
   .checkbox-group { flex-direction: column; align-items: flex-start; }
 }
 
-/* --- CORREÇÃO: NOME DO SITE GRANDE E COM OUTRA COR --- */
-.top-header, header { padding: 15px 0; }
+/* --- ESTILO LOGO PREMIUM (Substitui os anteriores) --- */
 
-.top-header a, header a, .top-header h1 {
-     font-size: 36px !important;
-     font-weight: 900;
-     /* MUDE A COR AQUI */
-     color: #2a1b3d !important; /* <-- Roxo quase preto */
-     text-decoration: none;
-     display: inline-flex;
-     align-items: center;
-     gap: 8px;
+/* 1. O Container do Topo */
+.top-header, header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza na tela */
+    padding: 25px 0 10px;    /* Mais espaço em cima */
+    margin-bottom: 20px;
 }
 
+/* 2. O Texto "Vínculo" */
+.top-header a, header a, .top-header h1 {
+    /* Fonte mais moderna e limpa */
+    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 42px !important;       /* Tamanho Grande */
+    font-weight: 800 !important;      /* Extra Negrito (Gordo) */
+    
+    /* Cor: Um Roxo Profundo e Chique */
+    color: #4b2c68 !important; 
+    
+    text-decoration: none;
+    letter-spacing: -1.5px;           /* Letras mais juntinhas (Efeito Logo) */
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sombra leve pra dar profundidade */
+    
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;                        /* Espaço entre a pata e o texto */
+}
+
+/* 3. A Patinha 🐾 */
 .top-header img, .top-header svg {
-    width: 32px; height: 32px;
-    fill: #2a1b3d !important;
+    width: 38px;
+    height: 38px;
+    /* Deixa a patinha da mesma cor do texto */
+    fill: #4b2c68 !important; 
+    color: #4b2c68 !important;
+    /* Sombra na patinha também */
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.05));
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Efeito Bônus: A patinha pula quando passa o mouse */
+.top-header a:hover img, .top-header a:hover svg {
+    transform: scale(1.2) rotate(10deg);
 }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Início - Vínculo</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=4">
 </head>
 <body>
 
@@ -12,7 +12,7 @@
     
     <nav class="top-nav">
       <a href="{{ url_for('index') }}" class="logo-text">🐾 Vínculo</a>
-      <a href="{{ url_for('logout') }}" class="logout-link">Sair</a>
+      <a href="{{ url_for('logout') }}" class="logout-link">Sair 🚪</a>
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -26,53 +26,65 @@
     {% endwith %}
 
     <div style="margin-bottom: 25px;">
-      <h2 style="font-size: 1.5rem;">Olá, Tutora! 👋</h2>
-      <p class="muted">Tudo sob controle hoje?</p>
+      <h2 style="font-size: 1.5rem; margin-bottom: 5px;">Olá, Tutora! 👋</h2>
+      <p class="muted">Tudo sob controle no mundo pet hoje?</p>
       
       <div class="grid-btns">
-        <a href="/cadastrar" class="btn-primary btn-small center">➕ Novo Pet</a>
-        <a href="/curiosidades" class="btn-primary btn-secondary btn-small center">💡 Dicas</a>
+        <a href="/cadastrar" class="btn-primary btn-small">➕ Novo Pet</a>
+        <a href="/curiosidades" class="btn-primary btn-secondary btn-small">💡 Dicas</a>
       </div>
     </div>
 
-    <div class="pet-card" style="border-left: 4px solid var(--accent);">
-      <h3 style="font-size: 1rem; color: var(--accent); margin-bottom: 5px;">✨ Dica do dia</h3>
-      <p style="margin: 0; font-size: 0.95rem;">"{{ curiosidade_home }}"</p>
+    <div class="pet-card" style="border-left: 4px solid var(--accent); background: #fffaf0;">
+      <h3 style="font-size: 1rem; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 5px;">
+        ✨ Dica do dia
+      </h3>
+      <p style="margin: 0; font-size: 0.95rem; font-style: italic;">"{{ curiosidade_home }}"</p>
     </div>
 
     {% if pets|length == 0 %}
       <div class="pet-card center" style="padding: 40px;">
-        <div style="font-size: 3rem; margin-bottom: 10px; opacity: 0.5;">🐶</div>
-        <h3>Nenhum pet aqui</h3>
-        <p class="muted">Sua lista está vazia. Cadastre um pet ou entre em uma família.</p>
+        <div style="font-size: 3rem; margin-bottom: 10px; opacity: 0.6;">🐶🐱</div>
+        <h3>Nenhum pet aqui...</h3>
+        <p class="muted">Sua lista está vazia. Cadastre seu bichinho ou conecte-se a uma família!</p>
       </div>
     {% else %}
       {% for pet in pets %}
         <div class="pet-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
             <div>
               <h2 style="margin:0; font-size: 1.4rem;">{{ pet.nome }}</h2>
-              <span class="muted" style="font-size: 0.85rem;">{{ pet.especie }}</span>
+              <span class="muted" style="font-size: 0.85rem;">
+                {{ pet.especie }} • 🎂 {{ pet.nascimento or 'N/A' }}
+              </span>
             </div>
-            <div style="font-size: 1.8rem;">
+            <div style="font-size: 2rem; background: var(--bg-app); padding: 5px 10px; border-radius: 12px;">
                {% if 'gat' in pet.especie|lower %}🐱{% elif 'cã' in pet.especie|lower %}🐶{% else %}🐹{% endif %}
             </div>
           </div>
 
-          <div style="display:flex; gap: 8px; flex-wrap:wrap;">
-            <a href="/pet/{{ pet.id }}" class="btn-primary btn-small" style="flex:1; padding: 10px;">📖 Diário</a>
-            <a href="/pet/{{ pet.id }}/eventos" class="btn-secondary btn-small" style="padding: 10px;">💉</a>
-            <a href="/pet/{{ pet.id }}/modo-vet" class="btn-secondary btn-small" style="padding: 10px;">🩺</a>
-            <a href="/pet/{{ pet.id }}/editar" class="btn-secondary btn-small" style="padding: 10px; color: #b2bec3;">✏️</a>
+          <div style="display:flex; justify-content: space-between; align-items: center;">
+            <a href="/pet/{{ pet.id }}" class="btn-primary btn-small" style="flex-grow: 1; margin-right: 10px;">
+              📖 Abrir Diário
+            </a>
+            <div style="display: flex; gap: 5px;">
+                <a href="/pet/{{ pet.id }}/eventos" class="btn-secondary btn-small" title="Eventos">💉</a>
+                <a href="/pet/{{ pet.id }}/modo-vet" class="btn-secondary btn-small" title="Modo Vet" style="color: var(--secondary); border-color: var(--secondary);">🩺</a>
+                <a href="/pet/{{ pet.id }}/editar" class="btn-link-style" title="Editar">✏️</a>
+            </div>
           </div>
         </div>
       {% endfor %}
     {% endif %}
 
     <div class="family-box">
-      <p style="margin:0; font-weight: 600; color: var(--primary);">💞 Família Conectada</p>
+      <p style="margin:0; font-weight: 600; color: var(--secondary); display: flex; align-items: center; justify-content: center; gap: 5px;">
+        💞 Família Conectada
+      </p>
       <div class="family-code">{{ my_code }}</div>
-      <p class="muted" style="font-size: 0.75rem; margin-top: 5px;">Compartilhe para verem os mesmos pets.</p>
+      <p class="muted" style="font-size: 0.8rem; margin-top: 8px;">
+        Compartilhe este código com quem cuida do pet com você.
+      </p>
     </div>
 
   </div>

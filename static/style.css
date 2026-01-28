@@ -1,20 +1,14 @@
-/* --- 🌿 VÍNCULO: TEMA NATUREZA (VERSÃO MASTER) --- */
+/* --- 🌿 VÍNCULO: TEMA NATUREZA (Ajuste Fino) --- */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
 
 :root {
-    /* Cores do Tema (Verde Musgo e Terra) */
-    --primary: #78a838;       /* Verde Principal */
+    --primary: #78a838;       /* Verde */
     --primary-hover: #5e852a;
-    --secondary: #fff;        /* Branco para botões secundários */
     --title-color: #3d4a3e;
-    
-    /* Fundo */
     --bg-color: #f4f9f4;
     --card-bg: #ffffff;
-    
-    /* Inputs */
-    --input-bg: #e8f0fe;      /* Azulzinho claro */
-    --input-radius: 8px;      /* Canto levemente arredondado */
+    --input-bg: #e8f0fe;
+    --input-radius: 8px;
 }
 
 body {
@@ -25,16 +19,14 @@ body {
     display: flex;
     justify-content: center;
     background-color: var(--bg-color);
-    
-    /* 🐾 PATINHAS VERDES */
+    /* Patinhas Verdes */
     background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%2378a838' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 html:has(.auth-box) body { align-items: center; }
-
 .container { width: 100%; max-width: 600px; padding: 20px; }
 
-/* --- CARD PRINCIPAL --- */
+/* CARD */
 .auth-box, .pet-card, .top-nav {
     background: var(--card-bg);
     border-radius: 12px;
@@ -43,17 +35,17 @@ html:has(.auth-box) body { align-items: center; }
     margin-bottom: 20px;
     border: 1px solid #eee;
 }
-
 .auth-box { max-width: 450px; margin: 0 auto; text-align: left; }
 
-/* --- TÍTULOS --- */
+/* TITULOS */
 h1, h2, h3 { margin-top: 0; }
 .brand-title { color: var(--title-color); font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 5px; }
 .page-title { font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 25px; }
 
-/* --- INPUTS --- */
-.form-group { margin-bottom: 20px; }
-.form-label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 0.9rem; color: #555; }
+/* INPUTS */
+.form-group { margin-bottom: 15px; } /* Reduzi um pouco aqui */
+.form-label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.9rem; color: #555; }
+
 input, select, textarea {
     width: 100%; padding: 12px 15px;
     background-color: var(--input-bg);
@@ -65,42 +57,27 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     outline: none; background-color: #fff; border-color: var(--primary);
 }
-.invite-code-input { 
-    text-align: center; letter-spacing: 3px; font-weight: 800; 
-    text-transform: uppercase; color: var(--primary); 
-}
+.invite-code-input { text-align: center; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; color: var(--primary); }
 
-/* --- BOTÕES --- */
-/* Botão Verde Principal */
+/* BOTÕES (Ajuste do Espaço) */
 .btn-primary {
     display: inline-block; padding: 12px 30px;
     background-color: var(--primary); color: white;
     font-weight: 800; border: none; border-radius: 50px;
     font-size: 1rem; cursor: pointer; transition: background 0.2s;
     text-decoration: none;
-    /* Espaçamento corrigido: */
-    margin-top: 15px; margin-bottom: 10px;
+    
+    /* ✅ AQUI ESTÁ A CORREÇÃO DE ESPAÇAMENTO */
+    margin-top: 5px;    /* Pouco espaço em cima (perto da senha) */
+    margin-bottom: 0px; 
 }
 .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-
-/* Botão Secundário (Branco com borda verde) - Usado na Home */
-.btn-secondary {
-    background-color: #fff; 
-    color: var(--primary); 
-    border: 2px solid var(--primary);
-}
-.btn-secondary:hover { background-color: #f0f9f0; }
-
 .btn-block { width: 100%; text-align: center; }
 
-/* Botões Pequenos (Lista de Pets) */
-.btn-small {
-    padding: 8px 16px; font-size: 0.9rem; margin-top: 0; margin-bottom: 0;
-}
-
-/* --- RODAPÉ E LINKS --- */
+/* RODAPÉ (Links) */
 .auth-footer { 
-    margin-top: 30px; /* Espaço extra que você pediu */
+    /* ✅ MAIS ESPAÇO EM BAIXO */
+    margin-top: 45px; 
     font-size: 0.9rem; color: #666; 
     text-align: left; 
     border-top: 1px solid #eee; 
@@ -108,17 +85,10 @@ input:focus, select:focus, textarea:focus {
 }
 .link-highlight { color: var(--primary); font-weight: 800; text-decoration: none; }
 
-/* --- UTILITÁRIOS HOME/CADASTRO --- */
+/* OUTROS */
 .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
 .alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
 .alert-error { background: #ffebeb; color: #c0392b; }
 .alert-success { background: #eafaf1; color: #27ae60; }
-
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-
-/* Caixa Família (Home) */
-.family-box { 
-    text-align: center; background: #e8f0fe; 
-    padding: 20px; border-radius: 12px; 
-    border: 1px dashed #4a90e2; margin-top: 30px; 
-}
+.family-box { text-align: center; background: #e8f0fe; padding: 20px; border-radius: 12px; border: 1px dashed #4a90e2; margin-top: 30px; }

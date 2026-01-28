@@ -1,25 +1,27 @@
-/* --- 💎 VÍNCULO: ESTILO MODERNO (PRO) --- */
+/* --- 🎨 PALETA HARMÔNICA "VÍNCULO" --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
 
 :root {
-    /* Cores Institucionais e Modernas */
-    --primary: #6c5ce7;      /* Roxo Moderno (Vínculo) */
-    --primary-hover: #5649c0;
-    --accent: #00cec9;       /* Turquesa (Detalhes) */
-    --pink: #fd79a8;         /* Rosa Suave */
+    /* Cores Principais (Suaves e Modernas) */
+    --primary: #8e44ad;       /* Roxo Ametista (Elegante) */
+    --primary-light: #a569bd;
+    --secondary: #27ae60;     /* Verde Esmeralda (Harmonia) */
+    --accent: #f39c12;        /* Laranja Suave (Destaque) */
     
     /* Cores de Fundo e Texto */
-    --bg-app: #f4f7f6;       /* Cinza gelo (muito moderno) */
-    --text-main: #2d3436;    /* Preto suave */
-    --text-muted: #636e72;   /* Cinza médio */
+    --bg-app: #f5f6fa;        /* Cinza Gelo muito claro */
+    --text-main: #2c3e50;     /* Azul Marinho Escuro */
+    --text-muted: #7f8c8d;    /* Cinza Médio */
     
-    /* Inputs */
-    --input-bg: #dfe6e9;
+    /* Cards e Inputs */
+    --card-bg: #ffffff;
+    --input-bg: #ecf0f1;
     
-    /* Sombra Suave (Elevada) */
-    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
+    /* Sombra Suave */
+    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
+/* --- 🐾 FUNDO DE PATINHAS SUTIL --- */
 body {
     font-family: 'Poppins', sans-serif;
     color: var(--text-main);
@@ -29,172 +31,107 @@ body {
     display: flex;
     justify-content: center;
     
-    /* 🐾 PATINHAS ELEGANTES (Textura de fundo) */
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z' fill='%23a29bfe' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
+    /* Padrão de Patinhas (Cinza claro, repetitivo e sutil) */
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%23bdc3c7' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Centralização para telas de Login */
 html:has(.auth-box) body {
-    align-items: center;
+    align-items: center; padding: 20px;
 }
 
 .container {
     width: 100%;
-    max-width: 500px; /* Largura de app mobile */
-    padding: 20px;
+    max-width: 500px; /* Largura ideal para app */
+    margin: 20px auto;
 }
 
-/* --- CARDS (O segredo do visual profissional) --- */
+/* --- CARDS (Limpos e Modernos) --- */
 .auth-box, .pet-card, .top-nav, .family-box {
-    background: #ffffff;
-    border-radius: 24px;
+    background: var(--card-bg);
+    border-radius: 20px;
     box-shadow: var(--shadow-soft);
-    padding: 30px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255,255,255,0.5); /* Borda sutil */
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(0,0,0,0.03);
 }
 
 /* Login específico */
-.auth-box {
-    text-align: center;
-}
+.auth-box { text-align: center; max-width: 400px; margin: 0 auto; }
 
-/* --- TYPOGRAPHY --- */
-h1, h2, h3 {
-    margin-top: 0;
-    color: var(--text-main);
-    font-weight: 800;
-}
-.brand-title {
-    color: var(--primary);
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-.subtitle {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    margin-bottom: 30px;
-    font-weight: 400;
-}
+/* --- TIPOGRAFIA --- */
+h1, h2, h3 { margin-top: 0; color: var(--text-main); font-weight: 800; }
+.brand-title { color: var(--primary); font-size: 1.8rem; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; font-weight: 400; }
 
-/* --- INPUTS MODERNOS (Estilo iOS/Android) --- */
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
+/* --- INPUTS --- */
+.form-group { margin-bottom: 18px; text-align: left; }
 .form-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 8px;
-    display: block;
-    margin-left: 5px;
+    font-size: 0.85rem; font-weight: 600; color: var(--text-main);
+    margin-bottom: 6px; display: block; margin-left: 4px;
 }
 input {
-    width: 100%;
-    padding: 16px;
-    background: var(--input-bg);
-    border: 2px solid transparent;
-    border-radius: 16px;
-    font-size: 1rem;
-    font-family: inherit;
-    box-sizing: border-box;
-    transition: all 0.2s;
-    color: var(--text-main);
+    width: 100%; padding: 14px; background: var(--input-bg);
+    border: 2px solid transparent; border-radius: 12px;
+    font-size: 1rem; font-family: inherit; box-sizing: border-box;
+    transition: all 0.2s; color: var(--text-main);
 }
 input:focus {
-    background: #fff;
-    border-color: var(--primary);
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
+    background: #fff; border-color: var(--primary-light); outline: none;
 }
 
 /* Código de Convite */
 .invite-code-input {
-    text-align: center;
-    letter-spacing: 4px;
-    font-weight: 800;
-    text-transform: uppercase;
-    background: #fff0f6; /* Fundo rosinha claro */
-    color: var(--pink);
+    text-align: center; letter-spacing: 3px; font-weight: 800;
+    text-transform: uppercase; background: #fdf2e9; color: var(--accent);
+    border: 2px dashed var(--accent);
 }
 
-/* --- BOTÕES (Sólidos e Elegantes) --- */
+/* --- BOTÕES (Ajustados) --- */
 .btn-primary {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    background-color: var(--primary);
-    color: white;
-    font-weight: 600;
-    border: none;
-    border-radius: 16px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s;
-    text-decoration: none;
-    text-align: center;
-    box-sizing: border-box;
+    display: block; width: 100%; padding: 14px;
+    background-color: var(--primary); color: white;
+    font-weight: 600; border: none; border-radius: 12px;
+    font-size: 1rem; cursor: pointer; transition: background 0.2s, transform 0.2s;
+    text-decoration: none; text-align: center; box-sizing: border-box;
 }
-.btn-primary:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-}
+.btn-primary:hover { background-color: var(--primary-light); transform: translateY(-2px); }
 
-/* Botões Secundários (Dicas, etc) */
-.btn-secondary {
-    background-color: #fff;
-    color: var(--primary);
-    border: 2px solid #dfe6e9;
-}
-.btn-secondary:hover {
-    border-color: var(--primary);
-    background-color: #f8f9fa;
-}
+/* Botões Secundários */
+.btn-secondary { background-color: #fff; color: var(--primary); border: 2px solid var(--input-bg); }
+.btn-secondary:hover { border-color: var(--primary-light); background-color: #f8f9fa; }
 
-/* Botões Pequenos (Home) */
-.btn-small {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    display: inline-block;
-    width: auto;
+/* Botões Pequenos e Links */
+.btn-small { padding: 10px 16px; font-size: 0.9rem; display: inline-flex; align-items: center; justify-content: center; gap: 5px; }
+.btn-link-style { color: var(--text-muted); font-size: 1.2rem; padding: 5px; }
+.btn-link-style:hover { color: var(--primary); }
+
+/* ✅ CORREÇÃO DOS BOTÕES SOBREPOSTOS NA HOME */
+.grid-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas iguais */
+    gap: 12px; /* Espaço entre eles */
+    margin-top: 15px;
 }
 
 /* --- HEADER & NAV --- */
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-}
-.logo-text { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; }
-.logout-link { color: #ff7675; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+.logo-text { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+.logout-link { color: #e74c3c; text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 6px 12px; background: #fdedec; border-radius: 8px; }
 
 /* --- FAMILY BOX --- */
-.family-box {
-    text-align: center;
-    background: #e8f0fe; /* Azulzinho Google */
-    border: none;
-}
+.family-box { text-align: center; background: #eafaf1; border: 1px dashed var(--secondary); }
 .family-code {
-    background: white;
-    padding: 8px 20px;
-    border-radius: 10px;
-    font-weight: 800;
-    color: var(--primary);
-    display: inline-block;
-    margin-top: 10px;
-    letter-spacing: 2px;
+    background: white; padding: 8px 20px; border-radius: 10px;
+    font-weight: 800; color: var(--secondary); display: inline-block;
+    margin-top: 10px; letter-spacing: 2px; font-size: 1.2rem;
 }
 
-/* Alerts */
+/* Alerts e Utilitários */
 .flash-messages { margin-bottom: 20px; }
-.alert { padding: 12px; border-radius: 12px; font-size: 0.9rem; text-align: center; margin-bottom: 10px; }
-.alert-error { background: #ff7675; color: white; }
-.alert-success { background: #00b894; color: white; }
-
-/* Utilitários */
-.muted { color: #b2bec3; font-size: 0.85rem; }
+.alert { padding: 12px; border-radius: 12px; font-size: 0.9rem; text-align: center; margin-bottom: 10px; font-weight: 600; }
+.alert-error { background: #fadbd8; color: #c0392b; }
+.alert-success { background: #d5f5e3; color: #27ae60; }
+.muted { color: var(--text-muted); font-size: 0.85rem; }
 .center { text-align: center; }
 .mt-20 { margin-top: 20px; }
-.grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }

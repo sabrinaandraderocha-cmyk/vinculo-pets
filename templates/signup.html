@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Criar Conta - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=11">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=13">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
                 {% endif %}
             {% endwith %}
 
-            <form method="post">
+            <form action="{{ url_for('signup') }}" method="post">
                 <div class="form-group">
                     <label class="form-label">E-mail</label>
                     <input type="email" name="email" placeholder="seu@email.com" required>
@@ -38,10 +38,10 @@
 
                 <div class="form-group" style="margin-top: 25px; border-top: 1px dashed #ddd; padding-top: 15px;">
                     <label class="form-label" style="color: #d35400;">💌 Tem código de convite? (Opcional)</label>
-                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3" style="text-align:center; letter-spacing:3px; text-transform:uppercase;">
+                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3">
                 </div>
 
-                <button type="submit" class="btn-primary btn-block" style="width: 100%;">Criar Conta</button>
+                <button type="submit" class="btn-primary btn-block">Criar Conta</button>
             </form>
 
             <div class="auth-footer">

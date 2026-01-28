@@ -487,3 +487,31 @@ def agenda_done(agenda_id):
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
+# =========================================================
+# ROTAS DE EMERGÊNCIA (SALVA-VIDAS)
+# =========================================================
+@app.route('/reset-banco-total')
+def reset_banco():
+    secret = request.args.get('force')
+    # Proteção simples para ninguém rodar sem querer (precisa digitar ?force=sim)
+    if secret != 'sim':
+        return "Para resetar, adicione ?force=sim na URL. CUIDADO: APAGA TUDO!"
+    
+    try:
+        with app.app_context():
+            db.drop_all()   # <--- O SEGREDO: Apaga tudo que está errado
+            db.create_all() # <--- Cria tudo novinho e correto (com family_id)
+            
+            # Cria um usuário de teste pra garantir
+            teste = User(
+                email="teste@vinculo.com", 
+                password_hash="123", 
+                created_at="Hoje", 
+                family_id="TESTE1"
+            )
+            db.session.add(teste)
+            db.session.commit()
+            
+        return "<h1 style='color:green'>BANCO RESETADO!</h1> <p>Agora a coluna family_id existe. Tente <a href='/signup'>criar conta</a>.</p>"
+    except Exception as e:
+        return f"<h1 style='color:red'>ERRO:</h1> <p>{str(e)}</p>"

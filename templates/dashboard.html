@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="headline">
+  <div>
+    <h1>Olá, {{ user.name }}! 👋</h1>
+    <p class="muted">Tudo sob controle hoje?</p>
+  </div>
+
+  <div class="headline-actions">
+    <a class="btn primary" href="{{ url_for('new_pet') }}">+ Novo Pet</a>
+  </div>
+</div>
+
+<div class="tabs">
+  <a class="tab {% if tab == 'pets' %}active{% endif %}" href="{{ url_for('dashboard', tab='pets') }}">🐾 Seus Pets</a>
+  <a class="tab {% if tab == 'tips' %}active{% endif %}" href="{{ url_for('dashboard', tab='tips') }}">💡 Dicas</a>
+</div>
+
+{% if tab == "pets" %}
+  <div class="grid">
+    <div class="card">
+      <h3>Seus pets</h3>
+      <p class="muted">Cadastre e acompanhe informações importantes.</p>
+
+      {% if not pets %}
+        <div class="empty">
+          <div class="empty-emoji">🐶🐱</div>
+          <p class="muted">Ainda não tem pets cadastrados.</p>
+          <a class="btn primary" href="{{ url_for('new_pet') }}">Cadastrar o primeiro</a>
+        </div>
+      {% else %}
+        <div class="pet-list">
+          {% for p in pets %}
+            <div class="pet-item">
+              <div class="pet-avatar" aria-hidden="true">
+                {% if p.species == "dog" %}🐶{% elif p.species == "cat" %}🐱{% else %}🐾{% endif %}
+              </div>
+              <div class="pet-info">
+                <div class="pet-name">{{ p.name }}</div>
+                <div class="pet-meta">
+                  {% if p.species == "dog" %}Cão{% elif p.species == "cat" %}Gato{% else %}Outro{% endif %}
+                  {% if p.breed %} • {{ p.breed }}{% endif %}
+                  {% if p.age_years is not none %} • {{ p.age_years }} ano(s){% endif %}
+                </div>
+                {% if p.notes %}
+                  <div class="pet-notes">{{ p.notes }}</div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="card">
+      <h3>Próximas ações (modelo)</h3>
+      <p class="muted">Uma área para você evoluir depois: vacinas, consultas, banho, vermífugo.</p>
+
+      <div class="checklist">
+        <label class="check">
+          <input type="checkbox" disabled>
+          <span>Atualizar vacina (exemplo)</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" disabled>
+          <span>Agendar check-up (exemplo)</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" disabled>
+          <span>Repor antipulgas (exemplo)</span>
+        </label>
+      </div>
+
+      <p class="help muted">Quer que eu transforme isso em funcionalidade real (com datas e alertas)?</p>
+    </div>
+  </div>
+
+{% else %}
+  <div class="grid">
+    <div class="card">
+      <div class="tips-header">
+        <div>
+          <h3>Dicas para hoje</h3>
+          <p class="muted">Pequenas práticas que fazem diferença.</p>
+        </div>
+
+        <form class="tips-filter" method="get" action="{{ url_for('dashboard') }}">
+          <input type="hidden" name="tab" value="tips">
+          <select name="species">
+            <option value="all" {% if species_filter=='all' %}selected{% endif %}>Todas</option>
+            <option value="dog" {% if species_filter=='dog' %}selected{% endif %}>Cão</option>
+            <option value="cat" {% if species_filter=='cat' %}selected{% endif %}>Gato</option>
+            <option value="other" {% if species_filter=='other' %}selected{% endif %}>Outro</option>
+          </select>
+          <button class="btn ghost" type="submit">Filtrar</button>
+        </form>
+      </div>
+
+      <div class="tips-list">
+        {% for tip in tips %}
+          <div class="tip">
+            <div class="tip-icon" aria-hidden="true">✨</div>
+            <div class="tip-text">{{ tip }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Dica do dia</h3>
+      <p class="muted quote">“Enriquecimento ambiental é vital.”</p>
+      <p class="help muted">
+        Você pode trocar por dicas dinâmicas por pet — se quiser, eu adapto.
+      </p>
+    </div>
+  </div>
+{% endif %}
+
+{% endblock %}

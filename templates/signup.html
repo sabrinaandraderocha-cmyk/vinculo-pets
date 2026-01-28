@@ -1,56 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Criar Conta - Vínculo</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <style>
-    /* Estilo extra só para o cadastro ficar bonitinho centralizado */
-    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #fdfbf7; font-family: sans-serif; }
-    .auth-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 400px; width: 100%; }
-    input { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-    .btn-primary { width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-    .btn-primary:hover { background: #1a252f; }
-    .code-input { text-transform: uppercase; letter-spacing: 3px; text-align: center; border: 2px dashed #bbb; background: #f9f9f9; }
-    .alert { padding: 10px; margin-bottom: 15px; border-radius: 6px; font-size: 0.9em; }
-    .alert-error { background: #f8d7da; color: #721c24; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vínculo - Criar Conta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
 </head>
 <body>
 
-  <div class="auth-box">
-    <h1 style="text-align:center; margin-top:0;">🐾 Criar Conta</h1>
-    <p style="text-align:center; color:#666; margin-bottom:25px;">Comece a organizar o amor pelo seu pet.</p>
+    <div class="auth-container">
+        <h1><span class="title-icon">🐾</span>Criar Conta</h1>
+        <p style="margin-bottom: 30px; color: #777;">Comece a organizar o amor pelo seu pet.</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <form method="post">
-      <label>E-mail</label>
-      <input type="email" name="email" placeholder="seu@email.com" required>
+        <form action="{{ url_for('signup') }}" method="post">
+            <div class="form-group">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required>
+            </div>
 
-      <label>Senha</label>
-      <input type="password" name="password" placeholder="Uma senha segura" required>
+            <div class="form-group">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" id="password" name="password" class="form-input" placeholder="********" required>
+            </div>
 
-      <hr style="border:0; border-top:1px solid #eee; margin: 20px 0;">
+            <hr style="border: none; border-top: 2px dashed #eee; margin: 30px 0;">
 
-      <label style="font-weight:bold; color:#555;">💌 Tem um código de convite?</label>
-      <p style="font-size:0.8em; color:#888; margin:0 0 5px;">Se seu parceiro(a) já usa o app, peça o código dele para verem os mesmos pets.</p>
-      <input type="text" name="invite_code" class="code-input" placeholder="EX: A1B2C3">
+            <div class="form-group">
+                <label for="invite_code" class="form-label" style="color: var(--pop-orange);">💌 Tem um código de convite?</label>
+                <small class="invite-hint">Se seu parceiro(a) já usa o app, peça o código dele.</small>
+                <input type="text" id="invite_code" name="invite_code" class="form-input invite-code-input" placeholder="EX: A1B2C3">
+            </div>
 
-      <button type="submit" class="btn-primary">Criar Conta</button>
-    </form>
+            <button type="submit" class="btn-primary">Criar Conta</button>
+        </form>
 
-    <p style="text-align:center; margin-top:20px;">
-      Já tem conta? <a href="{{ url_for('login') }}">Fazer Login</a>
-    </p>
-  </div>
+        <div class="auth-footer">
+            Já tem conta? <a href="{{ url_for('login') }}" class="auth-link">Fazer Login</a>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* --- 🌿 VÍNCULO: TEMA NATUREZA (Ajuste Fino) --- */
+/* --- 🌿 VÍNCULO: TEMA NATUREZA (Final) --- */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
 
 :root {
@@ -19,7 +19,6 @@ body {
     display: flex;
     justify-content: center;
     background-color: var(--bg-color);
-    /* Patinhas Verdes */
     background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%2378a838' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
@@ -37,15 +36,14 @@ html:has(.auth-box) body { align-items: center; }
 }
 .auth-box { max-width: 450px; margin: 0 auto; text-align: left; }
 
-/* TITULOS */
+/* TEXTOS */
 h1, h2, h3 { margin-top: 0; }
 .brand-title { color: var(--title-color); font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 5px; }
 .page-title { font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 25px; }
 
 /* INPUTS */
-.form-group { margin-bottom: 15px; } /* Reduzi um pouco aqui */
+.form-group { margin-bottom: 15px; }
 .form-label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.9rem; color: #555; }
-
 input, select, textarea {
     width: 100%; padding: 12px 15px;
     background-color: var(--input-bg);
@@ -59,7 +57,7 @@ input:focus, select:focus, textarea:focus {
 }
 .invite-code-input { text-align: center; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; color: var(--primary); }
 
-/* BOTÕES (Ajuste do Espaço) */
+/* BOTÕES (Ajuste Fino de Margem) */
 .btn-primary {
     display: inline-block; padding: 12px 30px;
     background-color: var(--primary); color: white;
@@ -67,17 +65,17 @@ input:focus, select:focus, textarea:focus {
     font-size: 1rem; cursor: pointer; transition: background 0.2s;
     text-decoration: none;
     
-    /* ✅ AQUI ESTÁ A CORREÇÃO DE ESPAÇAMENTO */
-    margin-top: 5px;    /* Pouco espaço em cima (perto da senha) */
-    margin-bottom: 0px; 
+    /* ✅ MUDANÇA AQUI: Espaço em cima pequeno, espaço em baixo GRANDE */
+    margin-top: 10px;    
+    margin-bottom: 25px; 
 }
 .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
 .btn-block { width: 100%; text-align: center; }
+.btn-secondary { background-color: #fff; color: var(--primary); border: 2px solid var(--primary); }
 
-/* RODAPÉ (Links) */
+/* RODAPÉ */
 .auth-footer { 
-    /* ✅ MAIS ESPAÇO EM BAIXO */
-    margin-top: 45px; 
+    margin-top: 0; /* Zerado pq o botão já empurrou */
     font-size: 0.9rem; color: #666; 
     text-align: left; 
     border-top: 1px solid #eee; 
@@ -85,7 +83,7 @@ input:focus, select:focus, textarea:focus {
 }
 .link-highlight { color: var(--primary); font-weight: 800; text-decoration: none; }
 
-/* OUTROS */
+/* UTILS */
 .top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
 .alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
 .alert-error { background: #ffebeb; color: #c0392b; }

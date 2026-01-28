@@ -1,17 +1,19 @@
 :root {
-  /* --- CORES (TEMA ROXO) --- */
-  --bg: #f8f6fc;          /* Fundo levemente lilás */
-  --card: #ffffff;
-  --text: #2a1b3d;        /* Texto roxo bem escuro */
-  --muted: #6c757d;       /* Cinza para textos secundários */
-  --border: #e2d9f3;      /* Bordas suaves */
+  /* --- PALETA DE CORES --- */
+  --bg: #f8f6fc;          /* Fundo lilás bem suave */
+  --card: #ffffff;        /* Branco puro */
+  --text: #2a1b3d;        /* Texto padrão */
+  --muted: #6c757d;       /* Texto cinza */
+  --border: #e2d9f3;      /* Bordas lilás claro */
 
-  --accent: #6f42c1;      /* ROXO PRINCIPAL (O mesmo do Python) */
+  --accent: #6f42c1;      /* Roxo do Sistema (Botões, Links) */
   --accent-hover: #5a32a3;
   --accent-light: rgba(111, 66, 193, 0.12);
+  
+  --brand: #4b2c68;       /* ROXO ESCURO (Cor do Logo) */
 
-  --success: #28a745;     /* Verde para sucesso */
-  --danger: #dc3545;      /* Vermelho para erros */
+  --success: #28a745;     /* Verde Sucesso */
+  --danger: #dc3545;      /* Vermelho Erro */
 
   --shadow: 0 12px 32px rgba(42, 27, 61, 0.08);
   --radius: 20px;
@@ -22,7 +24,7 @@ html, body { height: 100%; }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;
@@ -31,18 +33,16 @@ body {
 a { color: inherit; text-decoration: none; transition: 0.2s; }
 .muted { color: var(--muted); font-size: 0.9em; }
 
-/* --- FUNDO COM PATINHAS (ADAPTADO PARA ROXO) --- */
+/* --- FUNDO COM PATINHAS --- */
 .page-bg {
   min-height: 100vh;
   position: relative;
-  /* Gradientes sutis roxos */
   background:
     radial-gradient(circle at 15% 20%, rgba(111, 66, 193, 0.08), transparent 40%),
     radial-gradient(circle at 85% 80%, rgba(111, 66, 193, 0.06), transparent 40%),
     linear-gradient(180deg, #fbfaff, #f4effc);
 }
 
-/* Patinhas (Filtro hue-rotate transforma o verde original do SVG em roxo) */
 .page-bg::after {
   content: "";
   position: absolute; inset: 0;
@@ -50,32 +50,63 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
   background-size: 160px;
   opacity: 0.6;
   pointer-events: none;
-  /* Truque: gira a cor do SVG verde original para virar roxo */
   filter: hue-rotate(160deg) saturate(0.8); 
   background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%20viewBox='0%200%20160%20160'%3E%3Cg%20fill='%232f7a4a'%20fill-opacity='0.15'%3E%3Ccircle%20cx='44'%20cy='44'%20r='7'/%3E%3Ccircle%20cx='62'%20cy='36'%20r='7'/%3E%3Ccircle%20cx='74'%20cy='52'%20r='7'/%3E%3Ccircle%20cx='54'%20cy='60'%20r='7'/%3E%3Cpath%20d='M58%2078c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3Cg%20transform='translate(80,80)%20rotate(-12)'%3E%3Ccircle%20cx='10'%20cy='10'%20r='7'/%3E%3Ccircle%20cx='28'%20cy='2'%20r='7'/%3E%3Ccircle%20cx='40'%20cy='18'%20r='7'/%3E%3Ccircle%20cx='20'%20cy='26'%20r='7'/%3E%3Cpath%20d='M24%2044c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
-
 .page-bg > * { position: relative; }
 
-/* --- LAYOUT --- */
+/* --- LAYOUT & HEADER (O LOGO PREMIUM) --- */
 .container {
   width: min(900px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 40px 0;
+  padding: 0 0 40px; /* Padding ajustado */
 }
 .container.narrow { width: min(480px, calc(100% - 32px)); }
 
-/* HEADER / MENU TOPO */
-.top-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+/* Container do Topo */
+.top-header, header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centralizado */
+    padding: 30px 0 20px;
+    margin-bottom: 20px;
 }
-.back-link { font-weight: bold; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; }
+
+/* O Logo "Vínculo" */
+.top-header a, header a, .top-header h1 {
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    font-size: 42px !important;       
+    font-weight: 800 !important;      
+    color: var(--brand) !important;   
+    text-decoration: none;
+    letter-spacing: -1.5px;          
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;                      
+}
+
+/* A Patinha do Logo */
+.top-header img, .top-header svg {
+    width: 38px;
+    height: 38px;
+    fill: var(--brand) !important; 
+    color: var(--brand) !important;
+    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.05));
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Animação da patinha */
+.top-header a:hover img, .top-header a:hover svg {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Botão de Voltar (Pequeno, no canto, se existir fora do header) */
+.back-link { font-weight: bold; color: var(--muted); display: inline-flex; align-items: center; gap: 5px; margin-bottom: 15px; }
 .back-link:hover { color: var(--accent); }
 
-/* CARD PRINCIPAL */
+
+/* --- CARD PRINCIPAL --- */
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -90,13 +121,13 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-h1 { margin: 0 0 10px; font-size: 28px; color: var(--accent); }
-h2 { margin: 0 0 15px; font-size: 22px; }
-h3 { margin: 20px 0 10px; font-size: 18px; color: var(--muted); }
+/* Títulos DENTRO do card (não confundir com o logo) */
+h2 { margin: 0 0 15px; font-size: 24px; color: var(--text); }
+h3 { margin: 25px 0 10px; font-size: 18px; color: var(--muted); font-weight: 600; }
 
 /* --- FORMULÁRIOS --- */
 .field { margin-bottom: 20px; }
-label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.95em; }
+label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.95em; color: var(--text); }
 
 input[type="text"], input[type="email"], input[type="password"],
 input[type="date"], input[type="number"], select, textarea {
@@ -117,14 +148,14 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 4px var(--accent-light);
 }
 
-/* CHECKBOXES (Alinhamento lado a lado) */
+/* Checkboxes lado a lado */
 .checkbox-group {
     display: flex;
     gap: 20px;
     margin: 15px 0;
     align-items: center;
     background: #fdfdfd;
-    padding: 10px;
+    padding: 12px;
     border-radius: 12px;
     border: 1px dashed var(--border);
 }
@@ -134,16 +165,15 @@ input:focus, select:focus, textarea:focus {
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 input[type="checkbox"] {
     width: 20px; height: 20px;
-    accent-color: var(--accent); /* Deixa o "check" roxo */
+    accent-color: var(--accent);
     cursor: pointer;
 }
 
 /* --- BOTÕES --- */
-/* Aplica estilo em classe .btn E em botões crus */
 .btn, button, input[type="submit"] {
   display: inline-flex;
   align-items: center;
@@ -164,16 +194,13 @@ input[type="checkbox"] {
   box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
 }
 
-/* Hover e Active */
 .btn:hover, button:hover, input[type="submit"]:hover {
   background: var(--accent-hover);
   transform: translateY(-1px);
 }
-.btn:active, button:active, input[type="submit"]:active {
-  transform: translateY(1px);
-}
+.btn:active { transform: translateY(1px); }
 
-/* Botão Secundário (Outline) */
+/* Botão Outline (Borda roxa, fundo transparente) */
 .btn.outline {
   background: transparent;
   border: 2px solid var(--border);
@@ -187,88 +214,45 @@ input[type="checkbox"] {
 }
 
 .btn.full { width: 100%; }
-.btn.small { padding: 8px 16px; font-size: 14px; }
 
-/* --- FLASH MESSAGES (Alertas do Python) --- */
-.flashes {
-    list-style: none; padding: 0; margin: 0 0 20px 0;
+/* --- LINKS E FOOTER --- */
+.link { color: var(--accent); font-weight: bold; }
+.link:hover { text-decoration: underline; }
+
+.auth-footer {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.95em;
+  color: var(--muted);
 }
+
+/* --- ALERTA/FLASH MESSAGES --- */
+.flashes { list-style: none; padding: 0; margin: 0 0 20px 0; }
 .alert {
     padding: 15px;
     border-radius: 12px;
     margin-bottom: 10px;
     font-weight: 500;
     text-align: center;
+    border: 1px solid transparent;
 }
-.alert.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-.alert.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-.alert.warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-.alert.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+.alert.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb; }
+.alert.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.alert.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+.alert.info { background-color: #d1ecf1; color: #0c5460; border-color: #bee5eb; }
 
-/* Link de Texto (Login/Cadastro) */
-.link {
-  color: var(--accent);
-  font-weight: bold;
-}
-.link:hover { text-decoration: underline; }
-
-.auth-footer {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 0.9em;
-  color: var(--muted);
-}
-
-/* --- RESPONSIVO --- */
+/* --- RESPONSIVO (CELULAR) --- */
 @media (max-width: 600px) {
+  .container { padding-top: 10px; }
   .card { padding: 20px; border-radius: 16px; }
-  h1 { font-size: 24px; }
+  
+  /* Ajuste Fino do Logo no Celular (Não deixa ficar minúsculo) */
+  .top-header a, header a, .top-header h1 {
+      font-size: 34px !important; /* Um pouco menor que 42px, mas ainda grande */
+  }
+  .top-header img, .top-header svg {
+      width: 30px; height: 30px;
+  }
+  
   .checkbox-group { flex-direction: column; align-items: flex-start; }
-}
-
-/* --- ESTILO LOGO PREMIUM (Substitui os anteriores) --- */
-
-/* 1. O Container do Topo */
-.top-header, header {
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Centraliza na tela */
-    padding: 25px 0 10px;    /* Mais espaço em cima */
-    margin-bottom: 20px;
-}
-
-/* 2. O Texto "Vínculo" */
-.top-header a, header a, .top-header h1 {
-    /* Fonte mais moderna e limpa */
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    font-size: 42px !important;       /* Tamanho Grande */
-    font-weight: 800 !important;      /* Extra Negrito (Gordo) */
-    
-    /* Cor: Um Roxo Profundo e Chique */
-    color: #4b2c68 !important; 
-    
-    text-decoration: none;
-    letter-spacing: -1.5px;           /* Letras mais juntinhas (Efeito Logo) */
-    text-shadow: 2px 2px 0px rgba(0,0,0,0.05); /* Sombra leve pra dar profundidade */
-    
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;                        /* Espaço entre a pata e o texto */
-}
-
-/* 3. A Patinha 🐾 */
-.top-header img, .top-header svg {
-    width: 38px;
-    height: 38px;
-    /* Deixa a patinha da mesma cor do texto */
-    fill: #4b2c68 !important; 
-    color: #4b2c68 !important;
-    /* Sombra na patinha também */
-    filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.05));
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Efeito Bônus: A patinha pula quando passa o mouse */
-.top-header a:hover img, .top-header a:hover svg {
-    transform: scale(1.2) rotate(10deg);
 }

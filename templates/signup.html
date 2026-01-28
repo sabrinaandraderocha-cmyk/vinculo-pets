@@ -3,50 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vínculo - Criar Conta</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+    <title>Criar Conta - Vínculo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=3">
 </head>
 <body>
 
-    <div class="auth-container">
-        <h1><span class="title-icon">🐾</span>Criar Conta</h1>
-        <p style="margin-bottom: 30px; color: #777;">Comece a organizar o amor pelo seu pet.</p>
+    <div class="container">
+        <div class="auth-box">
+            <h1 class="brand-title">🐾 Criar Conta</h1>
+            <p class="subtitle">Organize o amor pelo seu pet.</p>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <div class="flash-messages">
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="post">
+                <div class="form-group">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" name="email" placeholder="seu@email.com" required>
                 </div>
-            {% endif %}
-        {% endwith %}
 
-        <form action="{{ url_for('signup') }}" method="post">
-            <div class="form-group">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" id="email" name="email" class="form-input" placeholder="seu@email.com" required>
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+
+                <div class="form-group" style="margin-top: 30px; border-top: 1px dashed #dfe6e9; padding-top: 20px;">
+                    <label class="form-label" style="color: var(--pink);">💌 Código de Convite (Opcional)</label>
+                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3">
+                </div>
+
+                <button type="submit" class="btn-primary">Criar Conta</button>
+            </form>
+
+            <div class="mt-20">
+                <span class="muted">Já tem conta?</span> 
+                <a href="{{ url_for('login') }}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Fazer Login</a>
             </div>
-
-            <div class="form-group">
-                <label for="password" class="form-label">Senha</label>
-                <input type="password" id="password" name="password" class="form-input" placeholder="********" required>
-            </div>
-
-            <hr style="border: none; border-top: 2px dashed #eee; margin: 30px 0;">
-
-            <div class="form-group">
-                <label for="invite_code" class="form-label" style="color: var(--pop-orange);">💌 Tem um código de convite?</label>
-                <small class="invite-hint">Se seu parceiro(a) já usa o app, peça o código dele.</small>
-                <input type="text" id="invite_code" name="invite_code" class="form-input invite-code-input" placeholder="EX: A1B2C3">
-            </div>
-
-            <button type="submit" class="btn-primary">Criar Conta</button>
-        </form>
-
-        <div class="auth-footer">
-            Já tem conta? <a href="{{ url_for('login') }}" class="auth-link">Fazer Login</a>
         </div>
     </div>
 

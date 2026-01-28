@@ -1,101 +1,161 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Modo Vet - {{ pet.nome }}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding:18px; background:#fff; color:#111; }
-    .muted{ color:#666; }
-    .box{ border:1px solid #eee; border-radius:14px; padding:12px; margin:12px 0; }
-    .danger{ border-color:#ffd6d6; background:#fff5f5; }
-    .tag{ display:inline-block; padding:4px 10px; border-radius:999px; background:#f1f5f9; font-weight:700; font-size:.85rem; margin-right:6px; }
-    hr{ border:none; border-top:1px solid #eee; margin:14px 0; }
-  </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
 
-  <h2 style="margin:0 0 6px 0;">📋 Relatório de Observação Clínica</h2>
-  <p class="muted" style="margin:0 0 10px 0;">
-    Gerado pelo App Vínculo — sem fins de diagnóstico automático.
-  </p>
+<div class="card modo-vet">
 
-  <div class="box">
-    <p style="margin:0;"><strong>Paciente:</strong> {{ pet.nome }} • <strong>Espécie:</strong> {{ pet.especie }}</p>
-    <p style="margin:6px 0 0 0;">
-      <strong>Responsáveis:</strong>
-      {% if responsaveis and responsaveis|length > 0 %}
-        {{ ", ".join(responsaveis) }}
-      {% else %}
-        —
-      {% endif %}
-    </p>
-  </div>
-
-  <div class="box">
-    <p style="margin:0;"><strong>Vet preferido:</strong> {{ pet.vet_preferido or "—" }}</p>
-    <p style="margin:6px 0 0 0;"><strong>Motivo do nome:</strong> {{ pet.motivo_nome or "—" }}</p>
-    <p class="muted" style="margin:8px 0 0 0;">{{ frase_extra }}</p>
-  </div>
-
-  <div class="box">
-    <p style="margin:0;"><strong>🎵 Música preferida:</strong> {{ pet.musica_preferida or "—" }}</p>
-    <p style="margin:6px 0 0 0;"><strong>Alimentos preferidos:</strong> {{ pet.alimentos_preferidos or "—" }}</p>
-  </div>
-
-  <div class="box danger">
-    <p style="margin:0;"><strong>🚫 ALIMENTOS PROIBIDOS / ALERTAS:</strong></p>
-    <p style="margin:6px 0 0 0;">{{ pet.alimentos_proibidos or "—" }}</p>
-  </div>
-
-  <div class="box">
-    <p style="margin:0;"><strong>Resumo (7 dias):</strong>
-      {% if summary.total_7d == 0 %}
-        sem registros recentes
-      {% else %}
-        {{ summary.total_7d }} registro(s); estado mais frequente:
-        <span class="tag">{{ summary.top_humor }}</span> ({{ summary.top_count }})
-      {% endif %}
-    </p>
-  </div>
-
-  <h3 style="margin:18px 0 8px 0;">🧰 Eventos recentes (saúde e rotina)</h3>
-  <hr>
-
-  {% for e in eventos %}
-    <div class="box">
-      <div class="muted" style="font-size:.9rem;">{{ e.data_evento or "" }}</div>
-      <div><span class="tag">{{ e.tipo }}</span></div>
-      {% if e.detalhes %}<p style="margin:8px 0 0 0;">{{ e.detalhes }}</p>{% endif %}
+  <!-- CABEÇALHO -->
+  <div class="vet-header">
+    <div class="vet-title">
+      <h1>Modo Vet 🩺</h1>
+      <p class="muted">
+        Resumo clínico e histórico recente para acompanhamento veterinário.
+      </p>
     </div>
-  {% else %}
-    <p class="muted">Sem eventos registrados.</p>
-  {% endfor %}
 
-  <h3 style="margin:18px 0 8px 0;">📝 Últimas observações (20)</h3>
-  <hr>
+    <div class="vet-actions">
+      <button class="btn secondary" onclick="window.print()">🖨️ Imprimir</button>
+      <a class="btn ghost" href="{{ url_for('detalhes_pet', pet_id=pet.id) }}">Voltar</a>
+    </div>
+  </div>
 
-  {% for r in registros %}
-    <div class="box">
-      <div class="muted" style="font-size:.9rem;">{{ r.data }}</div>
+  <!-- DADOS DO PET -->
+  <section class="vet-section">
+    <h3>Identificação do Pet</h3>
 
-      <div style="margin:6px 0;">
-        <span class="tag">Estado: {{ r.humor }}</span>
-        {% if r.categoria %}<span class="tag">{{ r.categoria }}</span>{% endif %}
+    <div class="vet-grid">
+      <div>
+        <strong>Nome:</strong> {{ pet.nome }}
       </div>
-
-      {% if r.personalidade_hoje or r.latindo == 1 or r.mordeu_carteiro == 1 %}
-        <p class="muted" style="margin:0 0 6px 0;">
-          <strong>Hoje:</strong>
-          {% if r.personalidade_hoje %}{{ r.personalidade_hoje }}{% endif %}
-          {% if r.latindo == 1 %}{% if r.personalidade_hoje %} • {% endif %}latindo{% endif %}
-          {% if r.mordeu_carteiro == 1 %} • mordeu o carteiro{% endif %}
-        </p>
+      <div>
+        <strong>Espécie:</strong> {{ pet.especie }}
+      </div>
+      {% if pet.nascimento %}
+      <div>
+        <strong>Nascimento:</strong> {{ pet.nascimento }}
+      </div>
       {% endif %}
-
-      <p style="margin:0;">{{ r.nota }}</p>
+      {% if pet.vet_preferido %}
+      <div>
+        <strong>Veterinário de referência:</strong> {{ pet.vet_preferido }}
+      </div>
+      {% endif %}
     </div>
-  {% endfor %}
 
-</body>
-</html>
+    {% if responsaveis %}
+      <div class="vet-block">
+        <strong>Responsáveis:</strong>
+        <ul>
+          {% for r in responsaveis %}
+            <li>{{ r }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- RESUMO DE BEM-ESTAR -->
+  <section class="vet-section highlight">
+    <h3>Resumo de Bem-estar (últimos 7 dias)</h3>
+
+    {% if summary.total_7d > 0 %}
+      <p>
+        <strong>Registros recentes:</strong> {{ summary.total_7d }}
+      </p>
+      <p>
+        <strong>Humor predominante:</strong>
+        {{ summary.top_humor }} ({{ summary.top_count }}x)
+      </p>
+    {% else %}
+      <p class="muted">Nenhum registro nos últimos 7 dias.</p>
+    {% endif %}
+
+    <p class="muted small">{{ frase_extra }}</p>
+  </section>
+
+  <!-- EVENTOS -->
+  <section class="vet-section">
+    <h3>Eventos Registrados</h3>
+
+    {% if eventos %}
+      <ul class="vet-list">
+        {% for e in eventos %}
+          <li>
+            <strong>{{ e.tipo }}</strong>
+            {% if e.data_evento %} — {{ e.data_evento }}{% endif %}
+            {% if e.detalhes %}
+              <div class="muted small">{{ e.detalhes }}</div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">Nenhum evento registrado.</p>
+    {% endif %}
+  </section>
+
+  <!-- DIÁRIO / REGISTROS -->
+  <section class="vet-section">
+    <h3>Últimos Registros do Diário</h3>
+
+    {% if registros %}
+      <div class="vet-table-wrap">
+        <table class="vet-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Nota</th>
+              <th>Humor</th>
+              <th>Categoria</th>
+              <th>Comportamentos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in registros %}
+              <tr>
+                <td>{{ r.data }}</td>
+                <td>{{ r.nota }}</td>
+                <td>{{ r.humor or "-" }}</td>
+                <td>{{ r.categoria or "-" }}</td>
+                <td>
+                  {% if r.latindo %}Latindo{% endif %}
+                  {% if r.mordeu_carteiro %}
+                    {% if r.latindo %}, {% endif %}
+                    Mordeu carteiro
+                  {% endif %}
+                  {% if not r.latindo and not r.mordeu_carteiro %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="muted">Nenhum registro disponível.</p>
+    {% endif %}
+  </section>
+
+  <!-- OBSERVAÇÕES FIXAS -->
+  <section class="vet-section">
+    <h3>Observações Importantes</h3>
+
+    <div class="vet-notes">
+      {% if pet.obs %}
+        {{ pet.obs }}
+      {% else %}
+        <span class="muted">Sem observações adicionais cadastradas.</span>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- RODAPÉ -->
+  <footer class="vet-footer">
+    <p class="muted small">
+      Relatório gerado pelo app <strong>Vínculo</strong> • {{ now().strftime("%d/%m/%Y") if now else "" }}
+    </p>
+  </footer>
+
+</div>
+
+{% endblock %}

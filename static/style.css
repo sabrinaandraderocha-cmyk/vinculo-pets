@@ -1,207 +1,159 @@
-/* --- Variáveis de Cor (Paleta Pop) --- */
+/* --- 🎨 PALETA POP ANIMAIS --- */
 :root {
-    --pop-blue: #4facfe;
-    --pop-pink: #f77062;
-    --pop-orange: #fe8c00;
-    --pop-yellow: #f83600;
-    --pop-bg: #fff5e6; /* Fundo creme claro */
-    --card-bg: #ffffff;
-    --text-color: #333;
-    --input-border: #ddd;
-    --input-focus: var(--pop-blue);
+    --pop-blue: #4facfe;    /* Azul Céu */
+    --pop-pink: #ff9a9e;    /* Rosa Chiclete */
+    --pop-orange: #fecfef;  /* Laranja Suave (Gradiente) */
+    --pop-text: #555;
+    --pop-bg: #fffcf5;      /* Creme bem clarinho */
+    --card-shadow: 0 10px 20px rgba(0,0,0,0.08);
 }
 
-/* --- Fonte Divertida (Exemplo: usar uma do Google Fonts) --- */
-@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap');
-
+/* --- 🐾 FUNDO DE PATINHAS (Obrigatório) --- */
 body {
-    font-family: 'Nunito', sans-serif;
-    color: var(--text-color);
+    font-family: 'Nunito', 'Segoe UI', sans-serif;
+    color: var(--pop-text);
     margin: 0;
     padding: 0;
-    /* Padrão de fundo de patinhas (você pode substituir a URL por uma sua) */
-    background-color: var(--pop-bg);
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffdec8' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
+    
+    /* Cor de fundo base */
+    background-color: var(--pop-bg);
+    
+    /* Imagem de Fundo (Patinhas) */
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffdec8' fill-opacity='0.6'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* --- Títulos com Fonte Pop --- */
-h1, h2, h3, .brand-title {
-    font-family: 'Fredoka One', cursive;
-    color: var(--pop-blue);
-    text-align: center;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 0px #eee;
+/* Container Principal */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/* --- Container Centralizado (Auth Box) --- */
+/* --- CARTÕES (Login e Home) --- */
+.auth-container, .pet-card, .top-nav, .family-box {
+    background: white;
+    border-radius: 25px; /* Bem redondo! */
+    box-shadow: var(--card-shadow);
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 3px solid #fff; /* Borda branca para destacar do fundo */
+}
+
+/* Estilo para a tela de Login/Signup ficar centralizada */
 .auth-container {
-    background-color: var(--card-bg);
-    padding: 40px;
-    border-radius: 30px; /* Bordas bem redondas */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 450px; /* Largura máxima do card */
+    max-width: 400px;
+    margin: 50px auto; /* Centraliza na tela */
     text-align: center;
-    border: 4px solid #fff; /* Borda branca para destacar do fundo */
-    position: relative; /* Para posicionar elementos decorativos */
-    overflow: hidden; /* Para o efeito de ondinha não sair */
 }
 
-/* --- Efeito de "Ondinha" no Topo do Card (Decoração) --- */
-.auth-container::before {
-    content: "";
-    position: absolute;
-    top: -50px;
-    left: -50%;
-    width: 200%;
-    height: 150px;
-    background: var(--pop-blue);
-    border-radius: 50%;
-    opacity: 0.1;
-    z-index: 0;
+/* --- NAVEGAÇÃO SUPERIOR --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
 }
-
-/* --- Inputs (Campos de Texto) --- */
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
-    position: relative;
-    z-index: 1; /* Ficar acima da ondinha */
-}
-
-.form-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 700;
-    color: var(--pop-pink);
-}
-
-.form-input {
-    width: 100%;
-    padding: 15px 20px;
-    border: 3px solid var(--input-border);
-    border-radius: 50px; /* Formato de pílula */
-    font-size: 16px;
-    font-family: 'Nunito', sans-serif;
-    transition: all 0.3s ease;
-    background-color: #f9f9f9;
-}
-
-.form-input:focus {
-    outline: none;
-    border-color: var(--input-focus);
-    background-color: #fff;
-    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.2);
-}
-
-/* --- Campo de Código de Convite --- */
-.invite-code-input {
-    text-align: center;
-    letter-spacing: 4px;
-    font-weight: bold;
-    text-transform: uppercase;
-    border: 3px dashed var(--pop-orange); /* Borda tracejada laranja */
-    background-color: #fffaf0;
-    color: var(--pop-orange);
-}
-
-.invite-code-input::placeholder {
-    color: #ffcba4;
-    letter-spacing: 1px;
-}
-
-.invite-hint {
-    font-size: 0.9em;
-    color: #888;
-    margin-top: 5px;
-    text-align: center;
-    display: block;
-}
-
-/* --- Botão Principal (Pop Button) --- */
-.btn-primary {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 50px;
-    background: linear-gradient(to right, var(--pop-orange), var(--pop-pink)); /* Gradiente Laranja -> Rosa */
-    color: white;
-    font-size: 18px;
-    font-family: 'Fredoka One', cursive;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(247, 112, 98, 0.4);
-    position: relative;
-    z-index: 1;
-}
-
-.btn-primary:hover {
-    transform: translateY(-3px); /* Efeito de "levantar" */
-    box-shadow: 0 8px 20px rgba(247, 112, 98, 0.6);
-    background: linear-gradient(to right, var(--pop-pink), var(--pop-orange)); /* Inverte o gradiente */
-}
-
-.btn-primary:active {
-    transform: translateY(1px); /* Efeito de clique */
-    box-shadow: 0 2px 10px rgba(247, 112, 98, 0.4);
-}
-
-/* --- Links --- */
-.auth-footer {
-    margin-top: 25px;
-    font-size: 14px;
-    color: #666;
-    position: relative;
-    z-index: 1;
-}
-
-.auth-link {
+.brand-logo {
+    font-size: 1.4em;
+    font-weight: 800;
     color: var(--pop-blue);
     text-decoration: none;
-    font-weight: 700;
-    border-bottom: 2px solid transparent;
-    transition: border-color 0.3s;
 }
-
-.auth-link:hover {
-    border-color: var(--pop-blue);
-}
-
-/* --- Ícone do Título --- */
-.title-icon {
-    display: inline-block;
-    margin-right: 10px;
-    font-size: 1.2em;
-    vertical-align: middle;
-}
-
-/* --- Flash Messages (Avisos) --- */
-.flash-messages {
-    margin-bottom: 20px;
-    position: relative;
-    z-index: 1;
-}
-
-.alert {
-    padding: 15px;
-    border-radius: 15px;
-    margin-bottom: 10px;
+.btn-logout {
+    color: #ff6b6b;
+    text-decoration: none;
     font-weight: bold;
+    font-size: 0.9em;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: background 0.2s;
+}
+.btn-logout:hover { background: #fff0f0; }
+
+/* --- BOTÕES POP --- */
+.btn-primary {
+    display: inline-block;
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+    color: #fff;
+    font-weight: 800;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
+    transition: transform 0.2s;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 154, 158, 0.6);
+}
+/* Botão secundário (azulzinho) */
+.btn-secondary {
+    background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+}
+
+/* --- INPUTS --- */
+input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: #555;
+    background: #fdfdfd;
+}
+input:focus {
+    outline: none;
+    border-color: var(--pop-pink);
+    background: white;
+}
+.invite-code-input {
+    text-align: center;
+    letter-spacing: 3px;
+    font-weight: bold;
+    color: var(--pop-blue);
+    border: 2px dashed var(--pop-blue);
+    text-transform: uppercase;
+}
+
+/* --- DETALHES VISUAIS --- */
+h1, h2 { color: var(--pop-blue); margin-top: 0; }
+.muted { color: #999; font-size: 0.9em; }
+
+.humor-tag {
+    background: #e0f7fa;
+    color: #006064;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.family-box {
+    background: #f3f8ff;
+    border: 2px dashed #aecbf7;
     text-align: center;
 }
-
-.alert-error {
-    background-color: #ffecec;
-    color: var(--pop-pink);
-    border: 2px solid var(--pop-pink);
-}
-
-.alert-success {
-    background-color: #e8f8f5;
+.family-code {
+    font-size: 1.5em;
+    font-weight: 900;
     color: var(--pop-blue);
-    border: 2px solid var(--pop-blue);
+    letter-spacing: 2px;
+    margin-top: 5px;
 }
+
+/* --- ALERTS (Flash Messages) --- */
+.alert { padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: center; font-weight: bold; }
+.alert-error { background: #ffeded; color: #ff4757; }
+.alert-success { background: #e3fcef; color: #2ed573; }
+.alert-info { background: #e7f5ff; color: #2f80ed; }
+.alert-warning { background: #fff9db; color: #f1c40f; }

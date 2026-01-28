@@ -1,54 +1,35 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Criar Conta - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=13">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Cadastrar • Vínculo{% endblock %}
 
-    <div class="container">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h1 class="brand-title">🐾 Vínculo</h1>
-            <p style="color: #666;">Comece a organizar o amor.</p>
-        </div>
+{% block content %}
+<section class="card auth">
+  <h1>Criar conta</h1>
+  <p class="muted">Você pode entrar numa família por código ou criar uma nova.</p>
 
-        <div class="auth-box">
-            <h2 class="page-title" style="text-align: center;">Criar Conta</h2>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-
-            <form action="{{ url_for('signup') }}" method="post">
-                <div class="form-group">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" name="email" placeholder="seu@email.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" name="password" placeholder="Uma senha forte" required>
-                </div>
-
-                <div class="form-group" style="margin-top: 25px; border-top: 1px dashed #ddd; padding-top: 15px;">
-                    <label class="form-label" style="color: #d35400;">💌 Tem código de convite? (Opcional)</label>
-                    <input type="text" name="invite_code" class="invite-code-input" placeholder="EX: A1B2C3">
-                </div>
-
-                <button type="submit" class="btn-primary btn-block">Criar Conta</button>
-            </form>
-
-            <div class="auth-footer">
-                Já tem conta? <a href="{{ url_for('login') }}" class="link-highlight">Fazer Login →</a>
-            </div>
-        </div>
+  <form method="post" class="form">
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" required placeholder="seu@email.com">
     </div>
 
-</body>
-</html>
+    <div class="field">
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" required placeholder="mínimo 6 caracteres">
+      <p class="help muted">Dica: use uma senha diferente de outras contas.</p>
+    </div>
+
+    <div class="field">
+      <label for="invite_code">Código da família (opcional)</label>
+      <input id="invite_code" name="invite_code" type="text" maxlength="6" placeholder="Ex.: A1B2C3">
+      <p class="help muted">Se você não preencher, criaremos uma família nova.</p>
+    </div>
+
+    <button class="btn primary full" type="submit">Criar conta</button>
+  </form>
+
+  <div class="auth-footer">
+    <span class="muted">Já tem conta?</span>
+    <a class="link" href="{{ url_for('login') }}">Fazer login</a>
+  </div>
+</section>
+{% endblock %}

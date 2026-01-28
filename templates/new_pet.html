@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+  <div class="page-title">
+    <div>
+      <h2>Novo Pet</h2>
+      <p class="muted">Cadastre o básico agora. Você pode completar depois.</p>
+    </div>
+    <a class="btn ghost" href="{{ url_for('dashboard', tab='pets') }}">Voltar</a>
+  </div>
+
+  <form method="post" class="form">
+    <div class="field">
+      <label for="name">Nome do pet</label>
+      <input id="name" name="name" required placeholder="Ex.: Luna">
+    </div>
+
+    <div class="field">
+      <label for="species">Espécie</label>
+      <select id="species" name="species" required>
+        <option value="" selected disabled>Selecione</option>
+        <option value="dog">Cão</option>
+        <option value="cat">Gato</option>
+        <option value="other">Outro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="breed">Raça (opcional)</label>
+      <input id="breed" name="breed" placeholder="Ex.: SRD, Poodle, Siamês...">
+    </div>
+
+    <div class="field">
+      <label for="age_years">Idade (em anos, opcional)</label>
+      <input id="age_years" name="age_years" inputmode="numeric" placeholder="Ex.: 3">
+    </div>
+
+    <div class="field">
+      <label for="notes">Observações (opcional)</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="Ex.: alergias, medos, rotina..."></textarea>
+    </div>
+
+    <button class="btn primary full" type="submit">Salvar</button>
+  </form>
+</div>
+
+{% endblock %}

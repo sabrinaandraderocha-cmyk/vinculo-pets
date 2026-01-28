@@ -1,46 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vínculo Pets</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-    <div class="page-bg">
-        <div class="container {% if narrow %}narrow{% endif %}">
-            
-            <header class="top-header">
-                <a href="{{ url_for('index') }}" class="brand">
-                    <svg viewBox="0 0 512 512" width="32" height="32">
-                        <path d="M226.5 69c35.6 0 64.5-28.9 64.5-64.5S262.1 4.5 226.5 4.5 162 33.4 162 69s28.9 64.5 64.5 64.5zm-145 77c35.6 0 64.5-28.9 64.5-64.5S117.1 81.5 81.5 81.5 17 110.4 17 146s28.9 64.5 64.5 64.5zM430.5 81.5c-35.6 0-64.5 28.9-64.5 64.5s28.9 64.5 64.5 64.5 64.5-28.9 64.5-64.5-28.9-64.5-64.5-64.5zm-33 133c-38.3 0-70.9 23.6-83.3 56.4-15.6-7.8-33.7-7.6-48.4.1-12.3-32.9-44.9-56.5-83.3-56.5-49.3 0-89.4 40-89.4 89.4 0 35.1 19.8 65.6 49.3 80.3v26.6c0 51.3 41.6 93.3 92.9 93.3s92.9-42 92.9-93.3v-26.6c29.5-14.7 49.3-45.2 49.3-80.3 0-49.4-40-89.4-89.4-89.4z"/>
-                    </svg>
-                    Vínculo
+{% block content %}
+
+<div style="text-align: center; margin-bottom: 30px;">
+    <h1>Meus Pets 🐾</h1>
+    {% if my_code and my_code != "ERRO" %}
+        <p class="muted">Código da Família: <strong>{{ my_code }}</strong></p>
+    {% endif %}
+</div>
+
+<div style="margin-bottom: 30px; text-align: center;">
+    <a href="{{ url_for('cadastrar') }}" class="btn primary">
+        + Adicionar Novo Pet
+    </a>
+</div>
+
+{% if pets %}
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        {% for pet in pets %}
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h2 style="margin-bottom: 5px; color: var(--brand);">{{ pet.nome }}</h2>
+                    <span class="muted">{{ pet.especie|capitalize }}</span>
+                </div>
+                
+                <a href="{{ url_for('detalhes_pet', pet_id=pet.id) }}" class="btn outline small">
+                    Ver Diário
                 </a>
-
-                {% if session.get('user_id') %}
-                <a href="{{ url_for('logout') }}" class="btn outline small">
-                    Sair
-                </a>
-                {% endif %}
-            </header>
-
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class="flashes">
-                    {% for category, message in messages %}
-                        <li class="alert {{ category }}">{{ message }}</li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-
-            {% block content %}{% endblock %}
-
+            </div>
         </div>
+        {% endfor %}
     </div>
 
-</body>
-</html>
+{% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <h3>Nenhum pet por aqui ainda... 🐢</h3>
+        <p class="muted">Que tal cadastrar o primeiro membro da família?</p>
+    </div>
+{% endif %}
+
+<div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+    <p class="muted" style="font-size: 0.85em;">💡 Você sabia? {{ curiosidade_home }}</p>
+</div>
+
+{% endblock %}

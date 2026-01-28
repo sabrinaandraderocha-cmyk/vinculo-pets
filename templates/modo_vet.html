@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Modo Vet - {{ pet.nome }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{ font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding:18px; background:#fff; color:#111; }
+    .muted{ color:#666; }
+    .box{ border:1px solid #eee; border-radius:14px; padding:12px; margin:12px 0; }
+    .danger{ border-color:#ffd6d6; background:#fff5f5; }
+    .tag{ display:inline-block; padding:4px 10px; border-radius:999px; background:#f1f5f9; font-weight:700; font-size:.85rem; margin-right:6px; }
+    hr{ border:none; border-top:1px solid #eee; margin:14px 0; }
+  </style>
+</head>
+<body>
+
+  <h2 style="margin:0 0 6px 0;">📋 Relatório de Observação Clínica</h2>
+  <p class="muted" style="margin:0 0 10px 0;">
+    Gerado pelo App Vínculo — sem fins de diagnóstico automático.
+  </p>
+
+  <div class="box">
+    <p style="margin:0;"><strong>Paciente:</strong> {{ pet.nome }} • <strong>Espécie:</strong> {{ pet.especie }}</p>
+    <p style="margin:6px 0 0 0;">
+      <strong>Responsáveis:</strong>
+      {% if responsaveis and responsaveis|length > 0 %}
+        {{ ", ".join(responsaveis) }}
+      {% else %}
+        —
+      {% endif %}
+    </p>
+  </div>
+
+  <div class="box">
+    <p style="margin:0;"><strong>Vet preferido:</strong> {{ pet.vet_preferido or "—" }}</p>
+    <p style="margin:6px 0 0 0;"><strong>Motivo do nome:</strong> {{ pet.motivo_nome or "—" }}</p>
+    <p class="muted" style="margin:8px 0 0 0;">{{ frase_extra }}</p>
+  </div>
+
+  <div class="box">
+    <p style="margin:0;"><strong>🎵 Música preferida:</strong> {{ pet.musica_preferida or "—" }}</p>
+    <p style="margin:6px 0 0 0;"><strong>Alimentos preferidos:</strong> {{ pet.alimentos_preferidos or "—" }}</p>
+  </div>
+
+  <div class="box danger">
+    <p style="margin:0;"><strong>🚫 ALIMENTOS PROIBIDOS / ALERTAS:</strong></p>
+    <p style="margin:6px 0 0 0;">{{ pet.alimentos_proibidos or "—" }}</p>
+  </div>
+
+  <div class="box">
+    <p style="margin:0;"><strong>Resumo (7 dias):</strong>
+      {% if summary.total_7d == 0 %}
+        sem registros recentes
+      {% else %}
+        {{ summary.total_7d }} registro(s); estado mais frequente:
+        <span class="tag">{{ summary.top_humor }}</span> ({{ summary.top_count }})
+      {% endif %}
+    </p>
+  </div>
+
+  <h3 style="margin:18px 0 8px 0;">🧰 Eventos recentes (saúde e rotina)</h3>
+  <hr>
+
+  {% for e in eventos %}
+    <div class="box">
+      <div class="muted" style="font-size:.9rem;">{{ e.data_evento or "" }}</div>
+      <div><span class="tag">{{ e.tipo }}</span></div>
+      {% if e.detalhes %}<p style="margin:8px 0 0 0;">{{ e.detalhes }}</p>{% endif %}
+    </div>
+  {% else %}
+    <p class="muted">Sem eventos registrados.</p>
+  {% endfor %}
+
+  <h3 style="margin:18px 0 8px 0;">📝 Últimas observações (20)</h3>
+  <hr>
+
+  {% for r in registros %}
+    <div class="box">
+      <div class="muted" style="font-size:.9rem;">{{ r.data }}</div>
+
+      <div style="margin:6px 0;">
+        <span class="tag">Estado: {{ r.humor }}</span>
+        {% if r.categoria %}<span class="tag">{{ r.categoria }}</span>{% endif %}
+      </div>
+
+      {% if r.personalidade_hoje or r.latindo == 1 or r.mordeu_carteiro == 1 %}
+        <p class="muted" style="margin:0 0 6px 0;">
+          <strong>Hoje:</strong>
+          {% if r.personalidade_hoje %}{{ r.personalidade_hoje }}{% endif %}
+          {% if r.latindo == 1 %}{% if r.personalidade_hoje %} • {% endif %}latindo{% endif %}
+          {% if r.mordeu_carteiro == 1 %} • mordeu o carteiro{% endif %}
+        </p>
+      {% endif %}
+
+      <p style="margin:0;">{{ r.nota }}</p>
+    </div>
+  {% endfor %}
+
+</body>
+</html>

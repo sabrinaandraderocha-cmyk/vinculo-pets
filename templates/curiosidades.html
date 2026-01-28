@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo - Curiosidades</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-voltar">← Voltar</a>
+
+    <header>
+      <h1>💡 Curiosidades</h1>
+      <p class="muted">Pistas úteis, sem “Google do pânico”.</p>
+    </header>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">🐱 Gatos</h2>
+      <ul>
+        {% for c in curiosidades["gato"] %}
+          <li style="margin:10px 0;">{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">🐶 Cães</h2>
+      <ul>
+        {% for c in curiosidades["cão"] %}
+          <li style="margin:10px 0;">{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">🐾 Outros</h2>
+      <ul>
+        {% for c in curiosidades["outro"] %}
+          <li style="margin:10px 0;">{{ c }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo • Eventos — {{ pet.nome }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <a href="/pet/{{ pet.id }}" class="btn-voltar">← Voltar</a>
+
+    <header>
+      <h1>🧰 Eventos — {{ pet.nome }}</h1>
+      <p class="muted">Vacina, vermífugo, cirurgia, hotelzinho… tudo no mesmo lugar.</p>
+    </header>
+
+    <div class="pet-card">
+      <h2>➕ Novo evento</h2>
+      <form method="post" action="/pet/{{ pet.id }}/eventos/add">
+        <select name="tipo" required>
+          <option value="">Tipo do evento</option>
+          <option>Vacina</option>
+          <option>Vermífugo</option>
+          <option>Cirurgia</option>
+          <option>Consulta</option>
+          <option>Hotelzinho</option>
+          <option>Banho/Tosa</option>
+          <option>Outro</option>
+        </select>
+
+        <input type="date" name="data_evento">
+        <textarea name="detalhes" rows="4" placeholder="Detalhes (dose, clínica, observações...)"></textarea>
+
+        <button class="btn-primary" type="submit">Salvar evento</button>
+      </form>
+    </div>
+
+    <div class="pet-card">
+      <h2>📅 Linha do tempo</h2>
+
+      {% for e in eventos %}
+        <div class="registro">
+          <small>{{ e.data_evento or "sem data" }}</small>
+          <div style="margin:6px 0;">
+            <span class="humor-tag">{{ e.tipo }}</span>
+          </div>
+          {% if e.detalhes %}<p>{{ e.detalhes }}</p>{% endif %}
+
+          <form method="post" action="/eventos/{{ e.id }}/delete">
+            <button class="btn-primary btn-export" type="submit" style="background:#991b1b;">Excluir</button>
+          </form>
+        </div>
+      {% else %}
+        <p class="muted">Nenhum evento ainda.</p>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

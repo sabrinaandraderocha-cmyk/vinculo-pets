@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo - Início</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>🐾 Vínculo</h1>
+      <p><strong>Registrar é cuidar.</strong> (E sim, quem ama pet entende.)</p>
+      <p class="muted" style="margin-top:6px;">
+        Bem-vinda ao clube das pessoas que falam “olha que fofinho” 37 vezes por dia.
+      </p>
+    </header>
+
+    <div style="text-align:center; margin: 18px 0 18px;">
+      <a href="/cadastrar" class="btn-primary">➕ Adicionar Novo Pet</a>
+      <a href="/curiosidades" class="btn-primary btn-export" style="margin-left:10px;">💡 Curiosidades</a>
+    </div>
+
+    <!-- Curiosidade do dia -->
+    <div class="pet-card">
+      <h2 style="margin-top:0;">💡 Curiosidade do dia</h2>
+      <p style="margin:0;">{{ curiosidade_home }}</p>
+      <p class="muted" style="margin:10px 0 0;">
+        Sem “Google do pânico”. Só pistas úteis e carinho organizado.
+      </p>
+    </div>
+
+    {% if pets|length == 0 %}
+      <div class="pet-card">
+        <h2 style="margin-top:0;">Nenhum pet cadastrado… ainda 😭</h2>
+        <p class="muted">
+          Seu futuro eu vai agradecer quando você tiver tudo organizadinho:
+          personalidade, rotina, eventos, agenda e aquele “quieto demais pro meu gosto”.
+        </p>
+        <a href="/cadastrar" class="btn-primary">Cadastrar o primeiro 🐶🐱</a>
+      </div>
+    {% endif %}
+
+    {% for pet in pets %}
+      <div class="pet-card">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+          <div>
+            <h2 style="margin:0;">{{ pet.nome }}</h2>
+            <p style="margin:6px 0 0;"><strong>{{ pet.especie }}</strong>{% if pet.nascimento %} • {{ pet.nascimento }}{% endif %}</p>
+          </div>
+
+          <div>
+            <span class="humor-tag">pet do coração 💚</span>
+          </div>
+        </div>
+
+        {% if pet.obs %}
+          <p style="margin:12px 0 0;"><em>"{{ pet.obs }}"</em></p>
+        {% else %}
+          <p class="muted" style="margin:12px 0 0;">Sem descrição ainda (suspeito… mas ok).</p>
+        {% endif %}
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
+          <a href="/pet/{{ pet.id }}" class="btn-primary btn-export">Abrir Diário →</a>
+          <a href="/pet/{{ pet.id }}/eventos" class="btn-primary btn-export">Eventos 🧰</a>
+          <a href="/pet/{{ pet.id }}/modo-vet" class="btn-primary btn-export">Modo Vet 🩺</a>
+        </div>
+
+        <p class="muted" style="margin:12px 0 0;">
+          Dica de pessoa obcecada: se você pensou “isso nunca aconteceu antes”… anota 😅
+        </p>
+      </div>
+    {% endfor %}
+
+    <div class="pet-card" style="text-align:center;">
+      <p class="muted" style="margin:0;">
+        Vínculo é para quem ama, observa e organiza — não para quem “exagera”. 😉
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

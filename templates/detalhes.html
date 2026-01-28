@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo - {{ pet.nome }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="btn-voltar">← Voltar</a>
+
+    <header>
+      <h1>{{ pet.nome }}</h1>
+      <p class="muted">{{ pet.especie }}{% if pet.nascimento %} • {{ pet.nascimento }}{% endif %}</p>
+
+      <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+        <a href="/pet/{{ pet.id }}/eventos" class="btn-primary btn-export">Eventos 🧰</a>
+        <a href="/pet/{{ pet.id }}/modo-vet" class="btn-primary btn-export">Modo Vet 🩺</a>
+        <a href="/curiosidades" class="btn-primary btn-export">Curiosidades 🐾</a>
+        <a href="/pet/{{ pet.id }}/exportar" class="btn-primary btn-export">Exportar TXT 📋</a>
+      </div>
+    </header>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">👤 Responsáveis</h2>
+      {% if responsaveis and responsaveis|length > 0 %}
+        <p style="margin:0;"><strong>{{ ", ".join(responsaveis) }}</strong></p>
+      {% else %}
+        <p class="muted" style="margin:0;">Não informado.</p>
+      {% endif %}
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">🎵 Preferências</h2>
+      <p><strong>Música preferida:</strong> {{ pet.musica_preferida or "—" }}</p>
+      <p><strong>Alimentos preferidos:</strong> {{ pet.alimentos_preferidos or "—" }}</p>
+
+      <div class="registro" style="border-left-color:#991b1b;">
+        <strong>🚫 Alimentos proibidos:</strong>
+        <p style="margin:6px 0 0 0;">{{ pet.alimentos_proibidos or "—" }}</p>
+      </div>
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">💡 Curiosidade rápida</h2>
+      <p style="margin:0;">{{ curiosidade }}</p>
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">Como estamos? (últimos 7 dias)</h2>
+      {% if summary.total_7d == 0 %}
+        <p class="muted">Nenhum registro nos últimos 7 dias. (O pet: “paz”.)</p>
+      {% else %}
+        <p>
+          Nos últimos 7 dias, houve <strong>{{ summary.total_7d }}</strong> registros.
+          {% if summary.top_humor %}
+            O estado mais frequente foi <span class="humor-tag">{{ summary.top_humor }}</span>
+            em <strong>{{ summary.top_count }}</strong> registro(s).
+          {% endif %}
+        </p>
+      {% endif %}
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">📅 Agenda de cuidados</h2>
+
+      <form method="post" action="/pet/{{ pet.id }}/agenda/add">
+        <input type="text" name="tarefa" placeholder="Ex.: vacina, vermífugo, retorno, banho..." required>
+        <input type="date" name="data_prevista">
+        <button type="submit" class="btn-primary">Adicionar</button>
+      </form>
+
+      <h3 style="margin-top:16px;">Pendentes</h3>
+      {% for a in agenda_pend %}
+        <div class="registro">
+          <small>{{ a.data_prevista or "sem data" }}</small>
+          <p><strong>{{ a.tarefa }}</strong></p>
+
+          <form method="post" action="/agenda/{{ a.id }}/done" style="display:inline;">
+            <button class="btn-primary btn-export" type="submit">Concluir</button>
+          </form>
+
+          <form method="post" action="/agenda/{{ a.id }}/delete" style="display:inline;">
+            <button class="btn-primary btn-export" type="submit" style="background:#991b1b;">Excluir</button>
+          </form>
+        </div>
+      {% else %}
+        <p class="muted">Nenhum pendente. (Suspeito… mas ótimo.)</p>
+      {% endfor %}
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">📝 Nova Observação</h2>
+
+      <form action="/pet/{{ pet.id }}/anotar" method="post">
+        <select name="humor">
+          <option>Absolutamente normal (suspeito)</option>
+          <option>Mais grudado que o normal</option>
+          <option>Quieto demais pro meu gosto</option>
+          <option>Energia de filhote</option>
+          <option>Outro (descrever)</option>
+        </select>
+
+        <select name="categoria">
+          <option value="">Categoria (opcional)</option>
+          <option>Alimentação</option>
+          <option>Sono</option>
+          <option>Passeio</option>
+          <option>Fezes/Xixi</option>
+          <option>Interação</option>
+          <option>Medicação</option>
+          <option>Humor/Comportamento</option>
+        </select>
+
+        <input type="text" name="personalidade_hoje" placeholder="Personalidade hoje (ex.: chato, carente, brincalhão, estressado...)">
+
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:10px 0;">
+          <label style="display:flex; gap:8px; align-items:center; margin:0;">
+            <input type="checkbox" name="latindo">
+            Latindo muito
+          </label>
+
+          <label style="display:flex; gap:8px; align-items:center; margin:0;">
+            <input type="checkbox" name="mordeu_carteiro">
+            Mordeu o carteiro (não confirmo nem nego 😅)
+          </label>
+        </div>
+
+        <textarea name="nota" placeholder="O que você percebeu hoje?" required></textarea>
+
+        <button type="submit" class="btn-primary">Registrar</button>
+      </form>
+    </div>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">📚 Linha do tempo (diário)</h2>
+
+      {% for r in registros %}
+        <div class="registro">
+          <small>{{ r.data }}</small>
+          <div style="margin:6px 0;">
+            <span class="humor-tag">{{ r.humor }}</span>
+            {% if r.categoria %}
+              <span class="humor-tag" style="margin-left:6px;">{{ r.categoria }}</span>
+            {% endif %}
+          </div>
+
+          {% if r.personalidade_hoje %}
+            <p class="muted" style="margin:0 0 6px 0;">
+              <strong>Hoje:</strong> {{ r.personalidade_hoje }}
+              {% if r.latindo == 1 %} • latindo{% endif %}
+              {% if r.mordeu_carteiro == 1 %} • mordeu o carteiro{% endif %}
+            </p>
+          {% else %}
+            <p class="muted" style="margin:0 0 6px 0;">
+              {% if r.latindo == 1 %}<strong>Hoje:</strong> latindo{% endif %}
+              {% if r.mordeu_carteiro == 1 %}{% if r.latindo == 1 %} • {% else %}<strong>Hoje:</strong> {% endif %}mordeu o carteiro{% endif %}
+            </p>
+          {% endif %}
+
+          <p style="margin:0;">{{ r.nota }}</p>
+        </div>
+      {% else %}
+        <p class="muted">Nenhuma observação ainda.</p>
+      {% endfor %}
+    </div>
+
+  </div>
+</body>
+</html>

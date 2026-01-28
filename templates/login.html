@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo • Entrar</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🐾 Vínculo</h1>
+      <p>Registrar é cuidar.</p>
+    </header>
+
+    <div class="pet-card">
+      <h2 style="margin-top:0;">Entrar</h2>
+      <p style="color:#6b7280; margin-top:-6px;">
+        Bem-vinda de volta. Seu pet sentiu sua falta (ou fingiu que não).
+      </p>
+
+      {% if error %}
+        <div class="registro" style="border-left-color:#991b1b;">
+          <strong>Ops:</strong> {{ error }}
+        </div>
+      {% endif %}
+
+      <form method="post">
+        <input type="email" name="email" placeholder="Seu e-mail" required>
+        <input type="password" name="password" placeholder="Sua senha" required>
+        <button class="btn-primary" type="submit">Entrar</button>
+      </form>
+
+      <hr style="border:none;border-top:1px solid #eee; margin:18px 0;">
+
+      <p style="margin:0;">
+        Ainda não tem conta?
+        <a href="/signup" style="font-weight:bold;">Criar agora →</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

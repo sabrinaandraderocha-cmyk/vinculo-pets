@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vínculo - Novo Pet</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <header style="margin-bottom: 25px;">
+      <a href="/" class="btn-voltar">← Voltar</a>
+      <h1>🐾 Novo Cadastro</h1>
+      <p class="muted">Registrar é cuidar.</p>
+    </header>
+
+    <div class="pet-card">
+      {% if error %}
+        <div class="registro" style="border-left-color:#991b1b;">
+          <strong>Ops:</strong> {{ error }}
+        </div>
+      {% endif %}
+
+      <form method="post" class="form-container">
+
+        <section class="form-section">
+          <h3>🐶 Informações do Pet</h3>
+
+          <div class="form-group">
+            <input type="text" name="nome" placeholder="Nome do pet" required>
+            <input type="text" name="especie" placeholder="Espécie (ex.: Cão, Gato)" required>
+          </div>
+
+          <input type="number" name="nascimento" placeholder="Ano de nascimento (opcional)">
+
+          <textarea name="obs" placeholder="Pistas e personalidade (ama sofá, medo de trovão, dorme muito...)"></textarea>
+        </section>
+
+        <section class="form-section">
+          <h3>👤 Responsáveis (do jeitinho que sua família chama)</h3>
+          <p class="muted" style="margin-top:-6px;">
+            Escolha o termo mais confortável: Tutor, Papai ou Mamãe. 💛
+          </p>
+
+          <div class="form-group">
+            <select name="resp1_tipo">
+              <option value="Tutor">Tutor</option>
+              <option value="Papai">Papai</option>
+              <option value="Mamãe">Mamãe</option>
+            </select>
+            <input type="text" name="resp1_nome" placeholder="Nome do responsável 1" required>
+          </div>
+
+          <div class="form-group">
+            <select name="resp2_tipo">
+              <option value="Tutor">Tutor</option>
+              <option value="Papai">Papai</option>
+              <option value="Mamãe">Mamãe</option>
+            </select>
+            <input type="text" name="resp2_nome" placeholder="Nome do responsável 2 (opcional)">
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>🎵 Preferências (importantes e fofas)</h3>
+
+          <input type="text" name="musica_preferida" placeholder="Música preferida do pet (opcional)">
+
+          <textarea name="alimentos_preferidos" rows="3" placeholder="Alimentos preferidos (opcional)"></textarea>
+
+          <textarea name="alimentos_proibidos" rows="3" placeholder="ALIMENTOS PROIBIDOS (alergias, restrições, perigos) — opcional"></textarea>
+
+          <p class="muted" style="margin-top:6px;">
+            Dica: “alimentos proibidos” ajuda MUITO em consulta e emergências.
+          </p>
+        </section>
+
+        <section class="form-section">
+          <h3>🩺 Apoio do cuidado</h3>
+
+          <div class="form-group">
+            <input type="text" name="vet_preferido" placeholder="Veterinário(a) preferido(a) (opcional)">
+            <input type="text" name="motivo_nome" placeholder="Por que você escolheu o nome? (opcional)">
+          </div>
+
+          <p class="muted" style="margin-top:6px;">
+            “Motivo do nome” é oficial: item obrigatório emocionalmente. 😄
+          </p>
+        </section>
+
+        <button type="submit" class="btn-primary">Salvar Perfil</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

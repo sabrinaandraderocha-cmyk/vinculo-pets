@@ -1,28 +1,50 @@
 {% extends "base.html" %}
-{% block title %}Login • Vínculo{% endblock %}
+{% set narrow = true %}
 
 {% block content %}
-<section class="card auth">
-  <h1>Bem-vinda de volta</h1>
-  <p class="muted">Entre para acompanhar seus pets com organização e afeto.</p>
+<div class="card auth">
 
-  <form method="post" class="form">
+  <h2>Bem-vinda de volta</h2>
+  <p class="muted">
+    Entre para acompanhar seus pets com carinho 🐾
+  </p>
+
+  <form method="post" autocomplete="off">
+
     <div class="field">
       <label for="email">E-mail</label>
-      <input id="email" name="email" type="email" autocomplete="email" required placeholder="seu@email.com">
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        placeholder="seu@email.com"
+        autocomplete="email"
+      >
     </div>
 
     <div class="field">
       <label for="password">Senha</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        placeholder="••••••••"
+        autocomplete="current-password"
+      >
     </div>
 
-    <button class="btn primary full" type="submit">Entrar</button>
+    <button type="submit" class="btn primary full">
+      Entrar
+    </button>
+
   </form>
 
   <div class="auth-footer">
     <span class="muted">Não tem conta?</span>
-    <a class="link" href="{{ url_for('signup') }}">Cadastrar</a>
+    <a href="{{ url_for('signup') }}" class="link">Criar conta</a>
   </div>
-</section>
+
+</div>
 {% endblock %}

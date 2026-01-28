@@ -1,96 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Vínculo - Novo Pet</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Pet - Vínculo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=5">
 </head>
 <body>
-  <div class="container">
+<div class="container">
+    <nav class="top-nav">
+        <a href="/" class="logo-text">⬅ Voltar</a>
+        <span style="font-weight:bold; color:#888;">Novo Pet</span>
+    </nav>
 
-    <header style="margin-bottom: 25px;">
-      <a href="/" class="btn-voltar">← Voltar</a>
-      <h1>🐾 Novo Cadastro</h1>
-      <p class="muted">Registrar é cuidar.</p>
-    </header>
-
-    <div class="pet-card">
-      {% if error %}
-        <div class="registro" style="border-left-color:#991b1b;">
-          <strong>Ops:</strong> {{ error }}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
         </div>
       {% endif %}
+    {% endwith %}
 
-      <form method="post" class="form-container">
+    <div class="auth-container" style="max-width: 100%; text-align: left;">
+        <h2 style="text-align: center; margin-bottom: 25px;">Quem é o novo membro? 🐶🐱</h2>
 
-        <section class="form-section">
-          <h3>🐶 Informações do Pet</h3>
+        <form method="post">
+            <div class="form-group">
+                <label class="form-label">Nome do Pet</label>
+                <input type="text" name="nome" placeholder="Ex: Thor, Luna..." required>
+            </div>
 
-          <div class="form-group">
-            <input type="text" name="nome" placeholder="Nome do pet" required>
-            <input type="text" name="especie" placeholder="Espécie (ex.: Cão, Gato)" required>
-          </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label class="form-label">Espécie</label>
+                    <select name="especie">
+                        <option value="Cão">Cão 🐶</option>
+                        <option value="Gato">Gato 🐱</option>
+                        <option value="Outro">Outro 🐹</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nascimento (aprox)</label>
+                    <input type="text" name="nascimento" placeholder="Ex: 10/2023">
+                </div>
+            </div>
 
-          <input type="number" name="nascimento" placeholder="Ano de nascimento (opcional)">
+            <div class="form-group">
+                <label class="form-label">Observações / Personalidade</label>
+                <textarea name="obs" placeholder="Ex: Ama dormir no sofá, tem medo de chuva..."></textarea>
+            </div>
 
-          <textarea name="obs" placeholder="Pistas e personalidade (ama sofá, medo de trovão, dorme muito...)"></textarea>
-        </section>
+            <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">👨‍👩‍👧‍👦 Responsáveis</h3>
 
-        <section class="form-section">
-          <h3>👤 Responsáveis (do jeitinho que sua família chama)</h3>
-          <p class="muted" style="margin-top:-6px;">
-            Escolha o termo mais confortável: Tutor, Papai ou Mamãe. 💛
-          </p>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 15px;">
+                <select name="resp1_tipo">
+                    <option value="Tutor">Tutor</option>
+                    <option value="Mãe">Mamãe</option>
+                    <option value="Pai">Papai</option>
+                </select>
+                <input type="text" name="resp1_nome" placeholder="Nome (Ex: Sabrina)">
+            </div>
 
-          <div class="form-group">
-            <select name="resp1_tipo">
-              <option value="Tutor">Tutor</option>
-              <option value="Papai">Papai</option>
-              <option value="Mamãe">Mamãe</option>
-            </select>
-            <input type="text" name="resp1_nome" placeholder="Nome do responsável 1" required>
-          </div>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
+                <select name="resp2_tipo">
+                    <option value="Tutor">Tutor</option>
+                    <option value="Pai">Papai</option>
+                    <option value="Mãe">Mamãe</option>
+                </select>
+                <input type="text" name="resp2_nome" placeholder="Nome do parceiro(a)">
+            </div>
 
-          <div class="form-group">
-            <select name="resp2_tipo">
-              <option value="Tutor">Tutor</option>
-              <option value="Papai">Papai</option>
-              <option value="Mamãe">Mamãe</option>
-            </select>
-            <input type="text" name="resp2_nome" placeholder="Nome do responsável 2 (opcional)">
-          </div>
-        </section>
+            <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">🍗 Preferências</h3>
 
-        <section class="form-section">
-          <h3>🎵 Preferências (importantes e fofas)</h3>
+            <div class="form-group">
+                <label class="form-label">Música Preferida</label>
+                <input type="text" name="musica_preferida" placeholder="Ex: MPB, Piano clássico...">
+            </div>
 
-          <input type="text" name="musica_preferida" placeholder="Música preferida do pet (opcional)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group">
+                    <label class="form-label" style="color: var(--secondary);">Comidas Preferidas</label>
+                    <textarea name="alimentos_preferidos" placeholder="Sachê, frango..." style="height: 100px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" style="color: #c0392b;">🚫 PROIBIDOS (Alergias)</label>
+                    <textarea name="alimentos_proibidos" placeholder="Chocolate, uva..." style="height: 100px; border-color: #fadbd8; background: #fff5f5;"></textarea>
+                </div>
+            </div>
 
-          <textarea name="alimentos_preferidos" rows="3" placeholder="Alimentos preferidos (opcional)"></textarea>
-
-          <textarea name="alimentos_proibidos" rows="3" placeholder="ALIMENTOS PROIBIDOS (alergias, restrições, perigos) — opcional"></textarea>
-
-          <p class="muted" style="margin-top:6px;">
-            Dica: “alimentos proibidos” ajuda MUITO em consulta e emergências.
-          </p>
-        </section>
-
-        <section class="form-section">
-          <h3>🩺 Apoio do cuidado</h3>
-
-          <div class="form-group">
-            <input type="text" name="vet_preferido" placeholder="Veterinário(a) preferido(a) (opcional)">
-            <input type="text" name="motivo_nome" placeholder="Por que você escolheu o nome? (opcional)">
-          </div>
-
-          <p class="muted" style="margin-top:6px;">
-            “Motivo do nome” é oficial: item obrigatório emocionalmente. 😄
-          </p>
-        </section>
-
-        <button type="submit" class="btn-primary">Salvar Perfil</button>
-      </form>
+            <button type="submit" class="btn-primary" style="margin-top: 20px;">Salvar Cadastro ✨</button>
+        </form>
     </div>
-  </div>
+</div>
 </body>
 </html>

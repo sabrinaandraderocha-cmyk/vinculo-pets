@@ -1,35 +1,66 @@
 {% extends "base.html" %}
-{% block title %}Cadastrar • Vínculo{% endblock %}
+{% set narrow = true %}
 
 {% block content %}
-<section class="card auth">
-  <h1>Criar conta</h1>
-  <p class="muted">Você pode entrar numa família por código ou criar uma nova.</p>
+<div class="card auth">
 
-  <form method="post" class="form">
+  <h2>Criar conta</h2>
+  <p class="muted">
+    Você pode entrar numa família por código ou criar uma nova.
+  </p>
+
+  <form method="post" autocomplete="off">
+
     <div class="field">
       <label for="email">E-mail</label>
-      <input id="email" name="email" type="email" required placeholder="seu@email.com">
+      <input
+        id="email"
+        name="email"
+        type="email"
+        required
+        placeholder="seu@email.com"
+        autocomplete="email"
+      >
     </div>
 
     <div class="field">
       <label for="password">Senha</label>
-      <input id="password" name="password" type="password" required placeholder="mínimo 6 caracteres">
-      <p class="help muted">Dica: use uma senha diferente de outras contas.</p>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        required
+        minlength="6"
+        placeholder="mínimo 6 caracteres"
+        autocomplete="new-password"
+      >
+      <p class="help">Dica: use uma senha diferente de outras contas.</p>
     </div>
 
     <div class="field">
       <label for="invite_code">Código da família (opcional)</label>
-      <input id="invite_code" name="invite_code" type="text" maxlength="6" placeholder="Ex.: A1B2C3">
-      <p class="help muted">Se você não preencher, criaremos uma família nova.</p>
+      <input
+        id="invite_code"
+        name="invite_code"
+        type="text"
+        placeholder="Ex.: A1B2C3"
+        maxlength="6"
+      >
+      <p class="help">
+        Se você não preencher, criaremos uma família nova.
+      </p>
     </div>
 
-    <button class="btn primary full" type="submit">Criar conta</button>
+    <button type="submit" class="btn primary full">
+      Criar conta
+    </button>
+
   </form>
 
   <div class="auth-footer">
     <span class="muted">Já tem conta?</span>
-    <a class="link" href="{{ url_for('login') }}">Fazer login</a>
+    <a href="{{ url_for('login') }}" class="link">Fazer login</a>
   </div>
-</section>
+
+</div>
 {% endblock %}

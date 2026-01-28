@@ -1,114 +1,102 @@
-/* --- 🌿 VÍNCULO: TEMA NATUREZA (MASTER FINAL) --- */
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap');
+:root{
+  --bg: #f6fbf7;
+  --card: #ffffff;
+  --text: #15321f;
+  --muted: #5d7866;
+  --border: #d9e7dd;
 
-:root {
-    /* Cores do Tema */
-    --primary: #78a838;       /* Verde Musgo Principal */
-    --primary-hover: #5e852a;
-    --title-color: #3d4a3e;
-    
-    /* Fundos */
-    --bg-color: #f4f9f4;      /* Creme esverdeado claro */
-    --card-bg: #ffffff;
-    
-    /* Inputs */
-    --input-bg: #e8f0fe;      /* Azulzinho claro */
-    --input-radius: 8px;      /* Cantos levemente quadrados */
+  --accent: #6ea62a;
+  --accent-2: #2f7a4a;
+
+  --shadow: 0 14px 34px rgba(14, 32, 21, .10);
+  --radius: 18px;
 }
 
-body {
-    font-family: 'Nunito', sans-serif;
-    color: #444;
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    background-color: var(--bg-color);
-    
-    /* 🐾 PATINHAS VERDES (Fundo) */
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%2378a838' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
+*{ box-sizing: border-box; }
+
+.page{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.5;
 }
 
-html:has(.auth-box) body { align-items: center; }
-.container { width: 100%; max-width: 600px; padding: 20px; }
+a{ color: inherit; text-decoration: none; }
 
-/* --- CARTÕES (Branco com Sombra) --- */
-.auth-box, .pet-card, .top-nav {
-    background: var(--card-bg);
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    padding: 40px;
-    margin-bottom: 20px;
-    border: 1px solid #eee;
-}
-.auth-box { max-width: 450px; margin: 0 auto; text-align: left; }
-
-/* --- TÍTULOS --- */
-h1, h2, h3 { margin-top: 0; }
-
-/* ✅ NOME COLORIDINHO (Gradiente Verde -> Turquesa) */
-.brand-title {
-    font-size: 2.2rem;
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, #78a838, #00b894); /* O Gradiente Mágico */
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    display: block; /* Garante que ocupe a linha */
+.page-bg{
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(110,166,42,.09), transparent 38%),
+    radial-gradient(circle at 90% 30%, rgba(47,122,74,.09), transparent 38%),
+    radial-gradient(circle at 20% 80%, rgba(110,166,42,.08), transparent 42%),
+    radial-gradient(circle at 80% 90%, rgba(47,122,74,.08), transparent 42%);
 }
 
-.page-title { font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 25px; }
-
-/* --- INPUTS (Quadrados Azulzinhos) --- */
-.form-group { margin-bottom: 15px; }
-.form-label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 0.9rem; color: #555; }
-
-input, select, textarea {
-    width: 100%; padding: 12px 15px;
-    background-color: var(--input-bg);
-    border: 2px solid transparent;
-    border-radius: var(--input-radius);
-    font-family: inherit; font-size: 1rem; color: #333;
-    box-sizing: border-box; transition: 0.2s;
+/* Container */
+.container{
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
 }
-input:focus, select:focus, textarea:focus {
-    outline: none; background-color: #fff; border-color: var(--primary);
-}
-.invite-code-input { text-align: center; letter-spacing: 3px; font-weight: 800; text-transform: uppercase; color: var(--primary); }
 
-/* --- BOTÕES (Com Espaçamento Correto) --- */
-.btn-primary {
-    display: inline-block; padding: 12px 30px;
-    background-color: var(--primary); color: white;
-    font-weight: 800; border: none; border-radius: 50px;
-    font-size: 1rem; cursor: pointer; transition: background 0.2s;
-    text-decoration: none;
-    
-    /* ✅ ESPAÇAMENTO PERFEITO */
-    margin-top: 15px;    
-    margin-bottom: 15px; 
+/* Topbar */
+.topbar{
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(10px);
+  background: rgba(246, 251, 247, 0.70);
+  border-bottom: 1px solid rgba(217,231,221,.8);
+  z-index: 20;
 }
-.btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
-.btn-block { width: 100%; text-align: center; }
-.btn-secondary { background-color: #fff; color: var(--primary); border: 2px solid var(--primary); }
-.btn-small { padding: 8px 16px; font-size: 0.9rem; margin-top: 0; margin-bottom: 0; }
-
-/* --- RODAPÉ E LINKS --- */
-.auth-footer { 
-    margin-top: 35px; /* Espaço generoso antes do "Não tem conta?" */
-    font-size: 0.9rem; color: #666; 
-    text-align: left; 
-    border-top: 1px solid #eee; 
-    padding-top: 20px; 
+.topbar-inner{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  padding: 16px 0;
 }
-.link-highlight { color: var(--primary); font-weight: 800; text-decoration: none; }
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+.brand-mark{
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(110,166,42,.14);
+  border: 1px solid rgba(110,166,42,.25);
+}
+.brand-name{
+  font-size: 26px;
+  color: var(--accent-2);
+}
 
-/* --- OUTROS --- */
-.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
-.alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
-.alert-error { background: #ffebeb; color: #c0392b; }
-.alert-success { background: #eafaf1; color: #27ae60; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
-.family-box { text-align: center; background: #e8f0fe; padding: 20px; border-radius: 12px; border: 1px dashed #4a90e2; margin-top: 30px; }
+main.container{
+  padding: 22px 0 40px;
+}
+
+.footer{
+  margin-top: 16px;
+  padding: 18px 0 26px;
+  border-top: 1px solid rgba(217,231,221,.7);
+}
+.footer-inner{
+  display:flex;
+  justify-content:center;
+}
+
+/* Flash / toast */
+.toast-stack{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+.toast{
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: 0 10px 22px rgba(0,0,0,.06);

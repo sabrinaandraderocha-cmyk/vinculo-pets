@@ -1,45 +1,139 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Entrar - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=8">
-</head>
-<body>
+/* --- 🌿 VÍNCULO: TEMA NATUREZA (Igual ao seu print) --- */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
 
-    <div class="container">
-        <div class="auth-container">
-            <h1 class="brand-title">🐾 Vínculo</h1>
-            <p class="subtitle">Bem-vinda de volta!</p>
+:root {
+    /* Cores do Print (Verde Oliva e Tons de Terra) */
+    --primary: #78a838;       /* Verde Musgo (Botão Entrar) */
+    --primary-hover: #5e852a;
+    --title-color: #3d4a3e;   /* Verde Escuro (Título) */
+    
+    /* Fundos */
+    --bg-gradient-start: #f4f9f4; /* Creme esverdeado claro */
+    --bg-gradient-end: #fffdf5;   /* Creme amarelado */
+    --card-bg: #ffffff;
+    
+    /* Inputs (Caixas azuis clarinhas do print) */
+    --input-bg: #e8f0fe;      /* Azulzinho claro */
+    --input-border: #cbd5e0;
+    --input-radius: 8px;      /* Cantos levemente arredondados */
+}
 
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+body {
+    font-family: 'Nunito', sans-serif;
+    color: #444;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    /* Gradiente suave no fundo igual ao print */
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+}
 
-            <form method="post">
-                <div class="form-group">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" name="email" placeholder="seu@email.com" required>
-                </div>
+/* Centraliza verticalmente Login */
+html:has(.auth-box) body {
+    align-items: center;
+}
 
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" name="password" placeholder="••••••••" required>
-                </div>
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+}
 
-                <button type="submit" class="btn-primary">Entrar</button>
-            </form>
+/* --- O CARD BRANCO (Igual ao print) --- */
+.auth-box, .pet-card, .top-nav {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Sombra leve */
+    padding: 40px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
 
-            <div style="margin-top: 20px; font-size: 0.9rem; color: #747d8c;">
-                Ainda não tem conta? <a href="{{ url_for('signup') }}" style="color: var(--primary); font-weight: 700; text-decoration: none;">Criar agora →</a>
-            </div>
-        </div>
-    </div>
+.auth-box {
+    max-width: 450px;
+    margin: 0 auto;
+}
 
-</body>
-</html>
+/* --- TÍTULOS --- */
+h1, h2, h3 { margin-top: 0; }
+
+.brand-title {
+    color: var(--title-color);
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 5px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* --- INPUTS (O estilo "Caixa Azulzinha") --- */
+.form-group { margin-bottom: 15px; }
+.form-label {
+    display: block; margin-bottom: 5px;
+    font-weight: 700; font-size: 0.95rem; color: #555;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: var(--input-bg); /* Azulzinho */
+    border: 1px solid transparent;     /* Sem borda preta */
+    border-radius: var(--input-radius);
+    font-family: inherit; font-size: 1rem; color: #333;
+    box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    background-color: #fff;
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 0 3px rgba(120, 168, 56, 0.2);
+}
+
+/* --- BOTÃO VERDE (Igual ao print) --- */
+.btn-primary {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: var(--primary); /* VERDE */
+    color: white;
+    font-weight: 800;
+    border: none;
+    border-radius: 50px; /* Redondo estilo pílula */
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    margin-top: 10px;
+    width: auto; /* Não ocupa a tela toda, fica no canto esquerdo igual print */
+}
+.btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+
+/* Para botões que precisam ocupar tudo (mobile) */
+.btn-block { width: 100%; text-align: center; }
+
+/* Links */
+.auth-footer { margin-top: 25px; font-size: 0.9rem; color: #666; border-top: 1px solid #eee; padding-top: 20px; }
+.link-highlight { color: var(--title-color); font-weight: 800; text-decoration: none; }
+
+/* --- OUTROS ELEMENTOS --- */
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
+.alert { padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-weight: bold; }
+.alert-error { background: #ffebeb; color: #c0392b; }
+.alert-success { background: #eafaf1; color: #27ae60; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }

@@ -1,4 +1,5 @@
-flask
-gunicorn
-werkzeug
+Flask
+flask-sqlalchemy
 psycopg2-binary
+werkzeug
+gunicorn

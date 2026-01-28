@@ -14,16 +14,34 @@ app = Flask(__name__)
 # Chave secreta (em produção, use uma variável de ambiente)
 app.secret_key = os.getenv("SECRET_KEY", "chave-secreta-desenvolvimento-vinculo")
 
-# Configuração do Banco de Dados
-os.makedirs("instance", exist_ok=True)
-DB_PATH = os.path.join("instance", "database.db")
+# =========================
+# Banco de Dados (corrigido para produção / Render)
+# =========================
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
+os.makedirs(INSTANCE_DIR, exist_ok=True)
+
+# ✅ Em produção (Render com Persistent Disk), configure:
+# DB_PATH=/var/data/database.db
+DB_PATH = os.getenv("DB_PATH", os.path.join(INSTANCE_DIR, "database.db"))
+
 
 # =========================
 # DB helpers
 # =========================
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    # check_same_thread=False ajuda em alguns ambientes WSGI/threads
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
+
+    # pragmas úteis (não muda seu esquema, só melhora robustez)
+    try:
+        conn.execute("PRAGMA foreign_keys = ON;")
+        conn.execute("PRAGMA journal_mode = WAL;")
+        conn.execute("PRAGMA synchronous = NORMAL;")
+    except Exception:
+        pass
+
     return conn
 
 def table_info(conn, table_name):
@@ -76,7 +94,7 @@ def init_db():
         ("resp1_tipo TEXT", "resp1_tipo"), ("resp1_nome TEXT", "resp1_nome"),
         ("resp2_tipo TEXT", "resp2_tipo"), ("resp2_nome TEXT", "resp2_nome"),
         ("musica_preferida TEXT", "musica_preferida"),
-        ("vet_preferido TEXT", "vet_preferido"), 
+        ("vet_preferido TEXT", "vet_preferido"),
         ("motivo_nome TEXT", "motivo_nome"),
         ("alimentos_preferidos TEXT", "alimentos_preferidos"),
         ("alimentos_proibidos TEXT", "alimentos_proibidos"),
@@ -150,23 +168,29 @@ def login_required(view):
 def current_user_id():
     return session.get("user_id")
 
+def _in_clause_placeholders(n: int) -> str:
+    return ",".join(["?"] * max(n, 1))
+
 def fetch_pet_or_404(conn, pet_id):
     user_id = current_user_id()
-    # Verifica família
     user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
-    
-    if not user or not user["family_id"]:
-        # Se não tem família, busca só pelo ID
-        query = "SELECT * FROM pets WHERE id = ? AND user_id = ?"
-        params = (pet_id, user_id)
-    else:
-        # Se tem família, busca pets de todos os membros
-        fam_members = conn.execute("SELECT id FROM users WHERE family_id = ?", (user["family_id"],)).fetchall()
-        ids = [str(m["id"]) for m in fam_members]
-        query = f"SELECT * FROM pets WHERE id = ? AND user_id IN ({','.join(ids)})"
-        params = (pet_id,)
 
-    pet = conn.execute(query, params).fetchone()
+    if not user or not user["family_id"]:
+        pet = conn.execute(
+            "SELECT * FROM pets WHERE id = ? AND user_id = ?",
+            (pet_id, user_id)
+        ).fetchone()
+    else:
+        fam_members = conn.execute(
+            "SELECT id FROM users WHERE family_id = ?",
+            (user["family_id"],)
+        ).fetchall()
+        ids = [m["id"] for m in fam_members] or [user_id]
+
+        sql = f"SELECT * FROM pets WHERE id = ? AND user_id IN ({_in_clause_placeholders(len(ids))})"
+        params = [pet_id] + ids
+        pet = conn.execute(sql, params).fetchone()
+
     if not pet:
         abort(404)
     return pet
@@ -209,11 +233,13 @@ def compute_wellbeing_summary(registros):
                 total += 1
                 h = (r["humor"] or "Neutro").strip()
                 counts[h] = counts.get(h, 0) + 1
-        except: continue
-    
+        except:
+            continue
+
     top_humor, top_count = None, 0
     for k, v in counts.items():
-        if v > top_count: top_humor, top_count = k, v
+        if v > top_count:
+            top_humor, top_count = k, v
     return {"total_7d": total, "top_humor": top_humor, "top_count": top_count}
 
 # =========================
@@ -229,12 +255,10 @@ def signup():
 
         conn = get_db_connection()
         try:
-            # Verifica se já existe
             if conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone():
                 flash("E-mail já cadastrado. Tente fazer login.", "warning")
                 return redirect(url_for("login"))
 
-            # Lógica da Família
             family_id = None
             if code:
                 fam = conn.execute("SELECT family_id FROM users WHERE family_id = ?", (code,)).fetchone()
@@ -247,14 +271,14 @@ def signup():
             else:
                 family_id = gerar_codigo_familia()
 
-            # Cria usuário
             pw_hash = generate_password_hash(password)
             created_at = datetime.now().strftime("%d/%m/%Y %H:%M")
-            conn.execute("INSERT INTO users (email, password_hash, created_at, family_id) VALUES (?, ?, ?, ?)", 
-                         (email, pw_hash, created_at, family_id))
+            conn.execute(
+                "INSERT INTO users (email, password_hash, created_at, family_id) VALUES (?, ?, ?, ?)",
+                (email, pw_hash, created_at, family_id)
+            )
             conn.commit()
 
-            # Loga automaticamente
             user = conn.execute("SELECT id FROM users WHERE email = ?", (email,)).fetchone()
             session["user_id"] = user["id"]
             flash("Conta criada com sucesso!", "success")
@@ -272,7 +296,7 @@ def login():
 
         conn = get_db_connection()
         user = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
-        
+
         if not user or not check_password_hash(user["password_hash"], password):
             conn.close()
             flash("E-mail ou senha incorretos.", "error")
@@ -283,7 +307,7 @@ def login():
             new_code = gerar_codigo_familia()
             conn.execute("UPDATE users SET family_id = ? WHERE id = ?", (new_code, user["id"]))
             conn.commit()
-        
+
         conn.close()
         session["user_id"] = user["id"]
         return redirect(url_for("index"))
@@ -306,18 +330,21 @@ def index():
     conn = get_db_connection()
     user_id = current_user_id()
     user = conn.execute("SELECT family_id FROM users WHERE id = ?", (user_id,)).fetchone()
-    
+
     pets = []
     my_code = "ERRO"
-    
+
     if user:
         my_code = user["family_id"]
         if my_code:
-            members = conn.execute("SELECT id FROM users WHERE family_id = ?", (my_code,)).fetchall()
-            ids = [str(m["id"]) for m in members]
-            # Busca pets de toda a família
-            query = f"SELECT * FROM pets WHERE user_id IN ({','.join(ids)}) ORDER BY id DESC"
-            pets = conn.execute(query).fetchall()
+            members = conn.execute(
+                "SELECT id FROM users WHERE family_id = ?",
+                (my_code,)
+            ).fetchall()
+            ids = [m["id"] for m in members] or [user_id]
+
+            query = f"SELECT * FROM pets WHERE user_id IN ({_in_clause_placeholders(len(ids))}) ORDER BY id DESC"
+            pets = conn.execute(query, ids).fetchall()
         else:
             pets = conn.execute("SELECT * FROM pets WHERE user_id = ?", (user_id,)).fetchall()
 
@@ -343,15 +370,16 @@ def cadastrar():
         conn.execute("""
             INSERT INTO pets (
                 user_id, nome, especie, nascimento, obs, tutor,
-                resp1_tipo, resp1_nome, resp2_tipo, resp2_nome, 
-                musica_preferida, vet_preferido, motivo_nome, 
+                resp1_tipo, resp1_nome, resp2_tipo, resp2_nome,
+                musica_preferida, vet_preferido, motivo_nome,
                 alimentos_preferidos, alimentos_proibidos,
                 quase_chamou, como_conhecemos, atividade_preferida
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             current_user_id(), f.get("nome"), f.get("especie"), f.get("nascimento"), f.get("obs"),
-            f.get("resp1_nome"), # Legado
+            # ✅ mantém legado, mas evita tutor vazio se você tiver campo tutor no form
+            (f.get("tutor") or f.get("resp1_nome")),
             f.get("resp1_tipo"), f.get("resp1_nome"), f.get("resp2_tipo"), f.get("resp2_nome"),
             f.get("musica_preferida"), f.get("vet_preferido"), f.get("motivo_nome"),
             f.get("alimentos_preferidos"), f.get("alimentos_proibidos"),
@@ -373,7 +401,7 @@ def editar_pet(pet_id):
     if request.method == "POST":
         f = request.form
         conn.execute("""
-            UPDATE pets SET 
+            UPDATE pets SET
             nome=?, especie=?, nascimento=?, obs=?,
             resp1_tipo=?, resp1_nome=?, resp2_tipo=?, resp2_nome=?,
             musica_preferida=?, vet_preferido=?, motivo_nome=?,
@@ -392,9 +420,9 @@ def editar_pet(pet_id):
         conn.close()
         flash("Dados atualizados!", "success")
         return redirect(url_for("detalhes_pet", pet_id=pet_id))
-    
+
     conn.close()
-    return render_template("cadastro.html", pet=pet, edit_mode=True) 
+    return render_template("cadastro.html", pet=pet, edit_mode=True)
 
 @app.route("/pet/<int:pet_id>")
 @login_required
@@ -410,24 +438,22 @@ def detalhes_pet(pet_id):
                            summary=compute_wellbeing_summary(registros), curiosidade=pick_curiosidade(pet["especie"]),
                            responsaveis=get_responsaveis(pet))
 
-# ✅ ROTA DE DIÁRIO CORRIGIDA
 @app.route("/pet/<int:pet_id>/anotar", methods=("POST",))
 @login_required
 def anotar(pet_id):
     f = request.form
     conn = get_db_connection()
-    # Verifica se o pet existe e pertence ao usuário
     fetch_pet_or_404(conn, pet_id)
-    
+
     if f.get("nota"):
         conn.execute("""INSERT INTO registros (pet_id, data, nota, humor, categoria, personalidade_hoje, latindo, mordeu_carteiro)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-                     (pet_id, datetime.now().strftime("%d/%m/%Y %H:%M"), f.get("nota"), f.get("humor"), 
-                      f.get("categoria"), f.get("personalidade_hoje"), 
+                     (pet_id, datetime.now().strftime("%d/%m/%Y %H:%M"), f.get("nota"), f.get("humor"),
+                      f.get("categoria"), f.get("personalidade_hoje"),
                       1 if f.get("latindo") else 0, 1 if f.get("mordeu_carteiro") else 0))
         conn.commit()
         flash("Diário atualizado!", "success")
-    
+
     conn.close()
     return redirect(url_for("detalhes_pet", pet_id=pet_id))
 
@@ -449,15 +475,13 @@ def modo_vet(pet_id):
     eventos = conn.execute("SELECT * FROM eventos WHERE pet_id = ? ORDER BY id DESC LIMIT 15", (pet_id,)).fetchall()
     conn.close()
     return render_template("modo_vet.html", pet=pet, registros=registros, eventos=eventos,
-                           summary=compute_wellbeing_summary(registros), 
+                           summary=compute_wellbeing_summary(registros),
                            frase_extra=random.choice(["Tudo em ordem?", "Histórico ajuda muito."]),
                            responsaveis=get_responsaveis(pet))
 
-# Rotas auxiliares de exclusão e agenda (mantidas para compatibilidade)
 @app.route("/agenda/<int:agenda_id>/done", methods=("POST",))
 @login_required
 def agenda_done(agenda_id):
-    # (Logica simplificada para manter o código limpo, mas funcional)
     conn = get_db_connection()
     conn.execute("UPDATE agenda SET concluida = 1 WHERE id = ?", (agenda_id,))
     conn.commit()

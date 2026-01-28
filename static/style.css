@@ -1,169 +1,200 @@
-/* --- 🎨 PALETA DE CORES (Mais Contraste e Vida) --- */
+/* --- 💎 VÍNCULO: ESTILO MODERNO (PRO) --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
 :root {
-    /* Cores principais mais escuras para leitura */
-    --primary-blue: #0056b3;    /* Azul forte para títulos */
-    --accent-pink: #e91e63;     /* Rosa vivo para botões */
-    --accent-orange: #ff5722;   /* Laranja vivo para gradientes */
+    /* Cores Institucionais e Modernas */
+    --primary: #6c5ce7;      /* Roxo Moderno (Vínculo) */
+    --primary-hover: #5649c0;
+    --accent: #00cec9;       /* Turquesa (Detalhes) */
+    --pink: #fd79a8;         /* Rosa Suave */
     
-    /* Cores de texto e fundo */
-    --text-dark: #2c3e50;       /* Cinza quase preto para texto comum (leitura fácil) */
-    --text-muted: #607d8b;      /* Cinza médio para textos secundários */
-    --bg-color: #f0f4f8;        /* Fundo cinza azulado claro */
-    --card-white: #ffffff;      /* Branco puro para os cartões */
+    /* Cores de Fundo e Texto */
+    --bg-app: #f4f7f6;       /* Cinza gelo (muito moderno) */
+    --text-main: #2d3436;    /* Preto suave */
+    --text-muted: #636e72;   /* Cinza médio */
     
-    --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Sombra mais marcada */
+    /* Inputs */
+    --input-bg: #dfe6e9;
+    
+    /* Sombra Suave (Elevada) */
+    --shadow-soft: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* --- 🐾 FUNDO DE PATINHAS VISÍVEL --- */
 body {
-    font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
-    color: var(--text-dark);
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-app);
     margin: 0;
-    padding: 0;
     min-height: 100vh;
+    display: flex;
+    justify-content: center;
     
-    /* Cor de fundo base */
-    background-color: var(--bg-color);
-    
-    /* ✅ NOVO PADRÃO DE PATINHAS (Mais nítido) */
-    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 2c.8 0 1.5.3 2.1.8l.4.4c.6.7.9 1.6.8 2.5-.1.9-.5 1.8-1.2 2.4-.7.6-1.6.9-2.5.8-.9-.1-1.8-.5-2.4-1.2-.6-.7-.9-1.6-.8-2.5.1-.9.5-1.8 1.2-2.4.4-.3.9-.6 1.4-.7.3 0 .7-.1 1-.1zm0 10c1.9 0 3.7.7 5 2 1.3 1.3 2 3.1 2 5s-.7 3.7-2 5-3.1 2-5 2-3.7-.7-5-2-2-3.1-2-5 .7-3.7 2-5 3.1-2 5-2zm7-7c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1zm-14 0c.8 0 1.5.3 2.1.8.6.6.9 1.5.9 2.3 0 .9-.3 1.7-.9 2.3-.6.6-1.5.9-2.3.9-.9 0-1.7-.3-2.3-.9-.6-.6-.9-1.5-.9-2.3 0-.9.3-1.7.9-2.3.2-.3.5-.5.8-.6.3-.2.7-.3 1.1-.3.2 0 .4 0 .6.1z' fill='%23b0bec5' fill-opacity='0.3' fill-rule='evenodd'/%3E%3C/svg%3E");
+    /* 🐾 PATINHAS ELEGANTES (Textura de fundo) */
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z' fill='%23a29bfe' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E");
 }
 
-/* Container Principal */
+/* Centralização para telas de Login */
+html:has(.auth-box) body {
+    align-items: center;
+}
+
 .container {
-    max-width: 600px;
     width: 100%;
-    margin: 0 auto;
+    max-width: 500px; /* Largura de app mobile */
     padding: 20px;
 }
 
-/* --- CARTÕES (Brancos e Arredondados) --- */
-.auth-container, .pet-card, .top-nav, .family-box {
-    background: var(--card-white);
-    border-radius: 20px;
-    box-shadow: var(--card-shadow);
-    padding: 25px;
-    margin-bottom: 25px;
-    border: 2px solid #eef2f7; /* Borda sutil para definição */
+/* --- CARDS (O segredo do visual profissional) --- */
+.auth-box, .pet-card, .top-nav, .family-box {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    padding: 30px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(255,255,255,0.5); /* Borda sutil */
 }
 
-/* Centralização Login/Signup */
-.auth-container {
-    max-width: 420px;
-    margin: 60px auto;
+/* Login específico */
+.auth-box {
     text-align: center;
 }
 
-/* --- TIPOGRAFIA E CORES --- */
-h1, h2, .brand-title, .brand-logo {
-    color: var(--primary-blue);
-    font-weight: 800;
+/* --- TYPOGRAPHY --- */
+h1, h2, h3 {
     margin-top: 0;
+    color: var(--text-main);
+    font-weight: 800;
 }
-
-.muted {
+.brand-title {
+    color: var(--primary);
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+.subtitle {
     color: var(--text-muted);
-    font-size: 0.95em;
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    font-weight: 400;
 }
 
-/* --- BOTÕES (Vibrantes e Legíveis) --- */
-.btn-primary {
-    display: inline-block;
-    width: 100%;
-    box-sizing: border-box;
-    /* Gradiente mais forte: Rosa para Laranja */
-    background: linear-gradient(135deg, var(--accent-pink), var(--accent-orange));
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
-    padding: 14px 24px;
-    border-radius: 50px;
-    border: none;
-    box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1em;
-    text-align: center;
+/* --- INPUTS MODERNOS (Estilo iOS/Android) --- */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
 }
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(233, 30, 99, 0.5);
-}
-
-/* Botão secundário (Azul) */
-.btn-secondary {
-    background: linear-gradient(135deg, #42a5f5, #1e88e5);
-    box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
-}
-
-.btn-logout {
-    color: #d32f2f; /* Vermelho mais escuro */
-    text-weight: bold;
-    text-decoration: none;
-}
-
-/* --- INPUTS (Campos de texto definidos) --- */
-.form-group { margin-bottom: 18px; text-align: left; }
-.form-label { 
-    display: block; margin-bottom: 6px; 
-    font-weight: 700; color: var(--primary-blue); 
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: block;
+    margin-left: 5px;
 }
 input {
     width: 100%;
-    padding: 14px;
-    border: 2px solid #cfd8dc; /* Borda cinza visível */
-    border-radius: 12px;
-    font-size: 16px;
+    padding: 16px;
+    background: var(--input-bg);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-family: inherit;
     box-sizing: border-box;
-    background: #f8faff; /* Fundo ligeiramente azulado dentro do input */
-    color: var(--text-dark);
+    transition: all 0.2s;
+    color: var(--text-main);
 }
 input:focus {
+    background: #fff;
+    border-color: var(--primary);
     outline: none;
-    border-color: var(--accent-pink);
-    background: white;
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.1);
 }
 
-/* Input do Código de Convite */
+/* Código de Convite */
 .invite-code-input {
     text-align: center;
     letter-spacing: 4px;
     font-weight: 800;
-    color: var(--accent-pink);
-    border: 3px dashed var(--accent-pink);
     text-transform: uppercase;
-    background: #fff0f3;
+    background: #fff0f6; /* Fundo rosinha claro */
+    color: var(--pink);
 }
 
-/* --- LINKS E RODAPÉ --- */
-.auth-footer { margin-top: 25px; font-size: 0.9em; color: var(--text-muted); }
-.auth-link { color: var(--accent-pink); text-decoration: none; font-weight: 700; }
-
-/* --- OUTROS ELEMENTOS --- */
-.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; }
-.brand-logo { text-decoration: none; font-size: 1.4em; }
-
-.family-box {
-    background: #e3f2fd; /* Azul claro */
-    border: 2px dashed #90caf9;
+/* --- BOTÕES (Sólidos e Elegantes) --- */
+.btn-primary {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    text-decoration: none;
     text-align: center;
-    color: var(--primary-blue);
+    box-sizing: border-box;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+
+/* Botões Secundários (Dicas, etc) */
+.btn-secondary {
+    background-color: #fff;
+    color: var(--primary);
+    border: 2px solid #dfe6e9;
+}
+.btn-secondary:hover {
+    border-color: var(--primary);
+    background-color: #f8f9fa;
+}
+
+/* Botões Pequenos (Home) */
+.btn-small {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    display: inline-block;
+    width: auto;
+}
+
+/* --- HEADER & NAV --- */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+}
+.logo-text { font-weight: 800; color: var(--primary); text-decoration: none; font-size: 1.2rem; }
+.logout-link { color: #ff7675; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
+
+/* --- FAMILY BOX --- */
+.family-box {
+    text-align: center;
+    background: #e8f0fe; /* Azulzinho Google */
+    border: none;
 }
 .family-code {
-    font-size: 1.6em;
-    font-weight: 900;
-    color: var(--primary-blue);
-    letter-spacing: 2px;
-    margin-top: 10px;
     background: white;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-weight: 800;
+    color: var(--primary);
     display: inline-block;
-    padding: 5px 15px;
-    border-radius: 8px;
+    margin-top: 10px;
+    letter-spacing: 2px;
 }
 
 /* Alerts */
 .flash-messages { margin-bottom: 20px; }
-.alert { padding: 12px; border-radius: 10px; margin-bottom: 10px; text-align: center; font-weight: bold; font-size: 0.9em;}
-.alert-error { background: #ffebee; color: #c62828; }
-.alert-success { background: #e8f5e9; color: #2e7d32; }
-.alert-warning { background: #fffde7; color: #f57f17; }
+.alert { padding: 12px; border-radius: 12px; font-size: 0.9rem; text-align: center; margin-bottom: 10px; }
+.alert-error { background: #ff7675; color: white; }
+.alert-success { background: #00b894; color: white; }
+
+/* Utilitários */
+.muted { color: #b2bec3; font-size: 0.85rem; }
+.center { text-align: center; }
+.mt-20 { margin-top: 20px; }
+.grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }

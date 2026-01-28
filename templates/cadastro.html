@@ -3,25 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Pet - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=6">
+    <title>Cadastro Pet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=7">
 </head>
 <body>
 <div class="container">
     <nav class="top-nav">
         <a href="/" class="logo-text">⬅ Voltar</a>
-        <span style="font-weight:bold; color:#888;">{% if edit_mode %}Editar Pet{% else %}Novo Pet{% endif %}</span>
+        <span style="font-weight:bold; color:#888;">
+            {% if edit_mode %}Editar{% else %}Novo{% endif %}
+        </span>
     </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-messages">
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
 
     <div class="auth-container" style="max-width: 100%; text-align: left;">
         <h2 style="text-align: center; margin-bottom: 25px;">
@@ -31,7 +23,7 @@
         <form method="post">
             <div class="form-group">
                 <label class="form-label">Nome do Pet</label>
-                <input type="text" name="nome" value="{{ pet.nome if pet else '' }}" placeholder="Ex: Thor, Luna, Paçoca..." required>
+                <input type="text" name="nome" value="{{ pet.nome if pet else '' }}" placeholder="Ex: Thor, Luna..." required>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -50,31 +42,31 @@
             </div>
 
             <hr style="border:0; border-top: 2px dashed #eee; margin: 30px 0;">
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--accent);">📜 Identidade & Histórias (Humor)</h3>
+            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--secondary);">📜 Identidade & Histórias</h3>
 
             <div class="form-group">
                 <label class="form-label">Por que escolheu esse nome?</label>
-                <input type="text" name="motivo_nome" value="{{ pet.motivo_nome if pet else '' }}" placeholder="Ex: Tem cara de quem apronta ou foi homenagem?">
+                <input type="text" name="motivo_nome" value="{{ pet.motivo_nome if pet else '' }}" placeholder="Ex: Homenagem, cara de quem apronta...">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Ele(a) quase se chamou...</label>
-                <input type="text" name="quase_chamou" value="{{ pet.quase_chamou if pet else '' }}" placeholder="Ex: Rex, Godzila, Fifi (ainda bem que não foi!)">
+                <input type="text" name="quase_chamou" value="{{ pet.quase_chamou if pet else '' }}" placeholder="Ex: Rex, Godzila, Fifi...">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Como nos conhecemos (O Encontro)</label>
-                <textarea name="como_conhecemos" placeholder="Ex: Amor à primeira vista, resgate dramático ou ele invadiu minha casa por comida?">{{ pet.como_conhecemos if pet else '' }}</textarea>
+                <textarea name="como_conhecemos" placeholder="Ex: Resgate dramático, amor à primeira vista...">{{ pet.como_conhecemos if pet else '' }}</textarea>
             </div>
             
             <div class="form-group">
                 <label class="form-label">Atividade preferida (Hobby)</label>
-                <input type="text" name="atividade_preferida" value="{{ pet.atividade_preferida if pet else '' }}" placeholder="Ex: Dormir 20h por dia, latir pro vento, julgar a família...">
+                <input type="text" name="atividade_preferida" value="{{ pet.atividade_preferida if pet else '' }}" placeholder="Ex: Dormir, latir pro nada...">
             </div>
 
             <div class="form-group">
                 <label class="form-label">Observações Gerais</label>
-                <textarea name="obs" placeholder="Outros detalhes importantes (ou fofocas sobre ele)...">{{ pet.obs if pet else '' }}</textarea>
+                <textarea name="obs">{{ pet.obs if pet else '' }}</textarea>
             </div>
 
             <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
@@ -86,7 +78,7 @@
                     <option value="Mãe" {% if pet and pet.resp1_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
                     <option value="Pai" {% if pet and pet.resp1_tipo == 'Pai' %}selected{% endif %}>Papai</option>
                 </select>
-                <input type="text" name="resp1_nome" value="{{ pet.resp1_nome if pet else '' }}" placeholder="Nome (Ex: Sabrina)">
+                <input type="text" name="resp1_nome" value="{{ pet.resp1_nome if pet else '' }}" placeholder="Nome">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
@@ -95,7 +87,7 @@
                     <option value="Pai" {% if pet and pet.resp2_tipo == 'Pai' %}selected{% endif %}>Papai</option>
                     <option value="Mãe" {% if pet and pet.resp2_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
                 </select>
-                <input type="text" name="resp2_nome" value="{{ pet.resp2_nome if pet else '' }}" placeholder="Nome do parceiro(a)">
+                <input type="text" name="resp2_nome" value="{{ pet.resp2_nome if pet else '' }}" placeholder="Nome">
             </div>
 
             <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
@@ -103,17 +95,17 @@
 
             <div class="form-group">
                 <label class="form-label">Música Preferida</label>
-                <input type="text" name="musica_preferida" value="{{ pet.musica_preferida if pet else '' }}" placeholder="Ex: MPB, Piano clássico, Funk...">
+                <input type="text" name="musica_preferida" value="{{ pet.musica_preferida if pet else '' }}" placeholder="Ex: MPB...">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group">
-                    <label class="form-label" style="color: var(--secondary);">Comidas Preferidas</label>
+                    <label class="form-label" style="color: var(--secondary);">Gosta de...</label>
                     <textarea name="alimentos_preferidos" style="height: 100px;">{{ pet.alimentos_preferidos if pet else '' }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label class="form-label" style="color: #c0392b;">🚫 PROIBIDOS</label>
-                    <textarea name="alimentos_proibidos" style="height: 100px; border-color: #fadbd8; background: #fff5f5;">{{ pet.alimentos_proibidos if pet else '' }}</textarea>
+                    <label class="form-label" style="color: #d63031;">🚫 Proibidos</label>
+                    <textarea name="alimentos_proibidos" style="height: 100px; border-color: #fab1a0; background: #fff5f5;">{{ pet.alimentos_proibidos if pet else '' }}</textarea>
                 </div>
             </div>
 

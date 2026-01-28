@@ -1,50 +1,19 @@
-/* =========================================================
-   VÍNCULO • UI CLEAN + FOFO + PROFISSIONAL
-   - fundo com patinhas bem sutil
-   - cards com sombra suave
-   - inputs com foco claro
-   - botões consistentes
-   - responsivo
-   ========================================================= */
-
-/* -------------------------
-   VARIÁVEIS
--------------------------- */
 :root{
   --bg: #f6fbf7;
-  --bg2: #edf7f0;
-
   --card: #ffffff;
-  --text: #173322;
-  --muted: #5f7a68;
+  --text: #15321f;
+  --muted: #5d7866;
+  --border: #d9e7dd;
 
-  --border: #d7e7dc;
-  --border-2: #cfe3d6;
+  --accent: #6ea62a;
+  --accent2: #2f7a4a;
 
-  --accent: #6ea62a;     /* verde principal */
-  --accent2: #2f7a4a;    /* verde escuro */
-  --accent-soft: rgba(110, 166, 42, .14);
-
-  --danger: #b42318;
-  --warning: #b54708;
-  --info: #175cd3;
-  --success: #067647;
-
-  --shadow: 0 14px 34px rgba(17, 32, 22, .10);
-  --shadow2: 0 10px 20px rgba(17, 32, 22, .08);
-
-  --radius: 18px;
-  --radius2: 14px;
+  --shadow: 0 16px 40px rgba(14, 32, 21, .12);
+  --radius: 20px;
 }
 
-/* -------------------------
-   RESET / BASE
--------------------------- */
 *{ box-sizing: border-box; }
-
-html, body{
-  height: 100%;
-}
+html, body{ height: 100%; }
 
 body{
   margin:0;
@@ -54,282 +23,76 @@ body{
   line-height: 1.55;
 }
 
-a{
-  color: inherit;
-  text-decoration: none;
-}
+a{ color: inherit; text-decoration: none; }
+.muted{ color: var(--muted); }
 
-img{ max-width: 100%; }
-
-/* -------------------------
-   FUNDO (PATINHAS MAIS SUTIS)
-   Você pode usar pattern real aqui se tiver
--------------------------- */
+/* FUNDO COM PATINHAS (SVG EMBUTIDO) */
 .page-bg{
   min-height: 100vh;
   position: relative;
-
-  /* Camadas suaves para dar “vida” sem competir */
   background:
-    radial-gradient(circle at 12% 12%, rgba(110,166,42,.10), transparent 38%),
-    radial-gradient(circle at 88% 30%, rgba(47,122,74,.10), transparent 38%),
-    radial-gradient(circle at 16% 86%, rgba(110,166,42,.08), transparent 45%),
-    radial-gradient(circle at 86% 92%, rgba(47,122,74,.08), transparent 45%),
-    linear-gradient(180deg, var(--bg), var(--bg2));
+    radial-gradient(circle at 12% 18%, rgba(110,166,42,.14), transparent 35%),
+    radial-gradient(circle at 85% 25%, rgba(47,122,74,.12), transparent 38%),
+    radial-gradient(circle at 20% 85%, rgba(110,166,42,.10), transparent 45%),
+    radial-gradient(circle at 82% 90%, rgba(47,122,74,.10), transparent 45%),
+    linear-gradient(180deg, #f7fcf8, #eef7f1);
 }
 
-/* Overlay “leitoso” para suavizar qualquer pattern */
+/* pattern de patinhas via data-uri (não precisa static/img) */
+.page-bg::after{
+  content:"";
+  position:absolute; inset:0;
+  background-repeat: repeat;
+  background-size: 160px;
+  opacity: .8;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%20viewBox='0%200%20160%20160'%3E%3Cg%20fill='%232f7a4a'%20fill-opacity='0.12'%3E%3Ccircle%20cx='44'%20cy='44'%20r='7'/%3E%3Ccircle%20cx='62'%20cy='36'%20r='7'/%3E%3Ccircle%20cx='74'%20cy='52'%20r='7'/%3E%3Ccircle%20cx='54'%20cy='60'%20r='7'/%3E%3Cpath%20d='M58%2078c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3Cg%20transform='translate(80,80)%20rotate(-12)'%3E%3Ccircle%20cx='10'%20cy='10'%20r='7'/%3E%3Ccircle%20cx='28'%20cy='2'%20r='7'/%3E%3Ccircle%20cx='40'%20cy='18'%20r='7'/%3E%3Ccircle%20cx='20'%20cy='26'%20r='7'/%3E%3Cpath%20d='M24%2044c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* overlay leitoso pra não competir com o conteúdo */
 .page-bg::before{
   content:"";
   position:absolute; inset:0;
   background: rgba(246, 251, 247, 0.86);
+  pointer-events: none;
 }
+
 .page-bg > *{ position: relative; }
 
-/* Se você tiver um pattern de patinhas (png), use assim:
-.page-bg{
-  background-image: url("/static/img/paws.png");
-  background-repeat: repeat;
-  background-size: 140px;
-}
-.page-bg::before{
-  background: rgba(246, 251, 247, 0.92);
-}
-*/
-
-/* -------------------------
-   CONTAINER / LAYOUT
--------------------------- */
+/* CONTAINER */
 .container{
   width: min(980px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 26px 0 44px;
+  padding: 30px 0 46px;
 }
-
 .container.narrow{
   width: min(520px, calc(100% - 32px));
 }
 
-.wrap{
-  width: min(980px, calc(100% - 32px));
-  margin: 0 auto;
-}
-
-.muted{ color: var(--muted); }
-.small{ font-size: 13px; }
-.center{ text-align: center; }
-
-/* -------------------------
-   TOPBAR / HEADER
--------------------------- */
-.topbar, .top{
-  display:flex;
-  align-items:center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-}
-
-.brand h1, .brand .brand-title{
-  margin: 0;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.5px;
-  color: var(--accent2);
-}
-
-.brandlink{
-  font-weight: 900;
-  font-size: 28px;
-  letter-spacing: -0.5px;
-  color: var(--accent2);
-}
-
-.subtitle{
-  margin: 6px 0 0;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.logo-mark, .brand-mark{
-  width: 40px; height: 40px;
-  border-radius: 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: var(--accent-soft);
-  border: 1px solid rgba(110,166,42,.25);
-}
-
-.nav{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-/* -------------------------
-   TÍTULOS
--------------------------- */
-h1{
-  margin: 0 0 6px;
-  font-size: 34px;
-  letter-spacing: -0.6px;
-}
-h2{
-  margin: 0 0 6px;
-  font-size: 26px;
-  letter-spacing: -0.4px;
-}
-h3{
-  margin: 0 0 6px;
-  font-size: 18px;
-  letter-spacing: -0.2px;
-}
-
-/* -------------------------
-   CARDS
--------------------------- */
+/* CARD */
 .card{
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 20px;
+  padding: 26px;
+  animation: pop .22s ease-out;
+}
+@keyframes pop{
+  from{ transform: translateY(8px); opacity: 0; }
+  to{ transform: translateY(0); opacity: 1; }
 }
 
-.card + .card{
-  margin-top: 14px;
-}
+h1{ margin:0 0 6px; font-size: 34px; letter-spacing: -0.6px; }
+h2{ margin:0 0 6px; font-size: 26px; letter-spacing: -0.4px; }
 
-.card-title{
-  display:flex;
-  align-items:flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.section-title{
-  display:flex;
-  align-items:flex-end;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 12px 0 14px;
-}
-
-.hero{
-  text-align: center;
-  padding: 10px 0 2px;
-}
-
-/* -------------------------
-   FLASH / ALERTAS
--------------------------- */
-.flash{
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.85);
-  box-shadow: var(--shadow2);
-  margin-bottom: 12px;
-  font-weight: 700;
-}
-
-.flash.success{ border-color: rgba(6,118,71,.25); }
-.flash.error{ border-color: rgba(180,35,24,.25); }
-.flash.warning{ border-color: rgba(181,71,8,.25); }
-.flash.info{ border-color: rgba(23,92,211,.18); }
-
-/* Se seus templates usam get_flashed_messages sem classe,
-   você pode envelopar cada msg com <div class="flash ..."> */
-
-/* -------------------------
-   BOTÕES
--------------------------- */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap: 8px;
-  padding: 11px 16px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  cursor:pointer;
-  text-decoration:none;
-  font-weight: 900;
-  user-select: none;
-  transition: transform .06s ease, filter .18s ease, background .18s ease, border .18s ease;
-  white-space: nowrap;
-}
-
-.btn:active{
-  transform: translateY(1px);
-}
-
-.btn.primary{
-  background: var(--accent);
-  color: #fff;
-}
-.btn.primary:hover{
-  filter: brightness(0.96);
-}
-
-.btn.secondary{
-  background: rgba(255,255,255,.86);
-  border-color: var(--border);
-  color: var(--text);
-}
-.btn.secondary:hover{
-  background: rgba(255,255,255,1);
-}
-
-.btn.ghost{
-  background: transparent;
-  border-color: var(--border);
-  color: var(--text);
-}
-.btn.ghost:hover{
-  background: rgba(0,0,0,.03);
-}
-
-.btn.danger{
-  background: var(--danger);
-  color: #fff;
-}
-.btn.full{
-  width: 100%;
-  padding: 12px 16px;
-}
-
-/* -------------------------
-   FORM / INPUTS
--------------------------- */
-.form,
-form{
-  margin-top: 12px;
-}
-
-.field{
-  margin: 12px 0;
-}
-
-label{
-  display:block;
-  font-weight: 900;
-  margin-bottom: 6px;
-}
+.field{ margin: 12px 0; }
+label{ display:block; font-weight: 900; margin-bottom: 6px; }
 
 input, select, textarea{
   width:100%;
   padding: 12px 12px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border);
   outline: none;
   font-size: 15px;
@@ -337,28 +100,35 @@ input, select, textarea{
   transition: box-shadow .18s ease, border .18s ease;
 }
 
-textarea{
-  resize: vertical;
-  min-height: 96px;
-}
-
 input:focus, select:focus, textarea:focus{
   border-color: rgba(47,122,74,.55);
   box-shadow: 0 0 0 4px rgba(47,122,74,.12);
 }
 
-.help{
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--muted);
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor:pointer;
+  font-weight: 950;
+  user-select: none;
+  transition: filter .18s ease, transform .06s ease, background .18s ease;
 }
 
-/* -------------------------
-   AUTH (LOGIN/CADASTRO)
--------------------------- */
-.auth{
-  padding: 26px;
+.btn:active{ transform: translateY(1px); }
+
+.btn.primary{
+  background: linear-gradient(180deg, var(--accent), #5a9720);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(110,166,42,.18);
 }
+.btn.primary:hover{ filter: brightness(0.98); }
+
+.btn.full{ width: 100%; }
 
 .auth-footer{
   margin-top: 14px;
@@ -369,236 +139,12 @@ input:focus, select:focus, textarea:focus{
 }
 
 .link{
-  font-weight: 900;
+  font-weight: 950;
   color: var(--accent2);
 }
-.link:hover{
-  text-decoration: underline;
-}
+.link:hover{ text-decoration: underline; }
 
-/* -------------------------
-   DASH: CABEÇALHO + AÇÕES
--------------------------- */
-.headline{
-  display:flex;
-  align-items:flex-end;
-  justify-content: space-between;
-  gap: 14px;
-  margin: 10px 0 14px;
-}
-
-.headline-actions{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-/* -------------------------
-   SEGMENTED / TABS (Novo Pet / Dicas)
-   Use .tabs e .tab / .active
--------------------------- */
-.tabs{
-  display:flex;
-  gap: 10px;
-  margin: 12px 0 16px;
-  flex-wrap: wrap;
-}
-
-.tab{
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.78);
-  font-weight: 900;
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-}
-
-.tab:hover{
-  background: rgba(255,255,255,1);
-}
-
-.tab.active{
-  background: var(--accent);
-  color: #fff;
-  border-color: transparent;
-}
-
-/* -------------------------
-   GRID (Dashboard)
--------------------------- */
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-}
-
-@media (min-width: 860px){
-  .grid{ grid-template-columns: 1.2fr 0.8fr; }
-}
-
-/* -------------------------
-   LISTA DE PETS
--------------------------- */
-.pet-list{
-  margin-top: 12px;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.pet-item{
-  display:flex;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(246, 251, 247, .60);
-}
-
-.pet-avatar{
-  width: 46px; height: 46px;
-  border-radius: 14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background: var(--accent-soft);
-  border: 1px solid rgba(110,166,42,.22);
-  font-size: 22px;
-  flex: 0 0 auto;
-}
-
-.pet-info{ min-width: 0; }
-.pet-name{
-  font-weight: 950;
-  font-size: 16px;
-}
-
-.pet-meta{
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 2px;
-}
-
-.pet-notes{
-  margin-top: 6px;
-  font-size: 14px;
-  word-break: break-word;
-}
-
-/* -------------------------
-   EMPTY STATES
--------------------------- */
-.empty{
-  margin-top: 12px;
-  border: 1px dashed rgba(47,122,74,.25);
-  border-radius: 16px;
-  padding: 16px;
-  text-align: center;
-  background: rgba(255,255,255,.70);
-}
-
-.empty-emoji{
-  font-size: 30px;
-  margin-bottom: 6px;
-}
-
-/* -------------------------
-   CHECKLIST (card lateral)
--------------------------- */
-.checklist{
-  margin-top: 12px;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.check{
-  display:flex;
-  gap: 10px;
-  align-items:center;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.82);
-}
-
-.check input{
-  width: 16px;
-  height: 16px;
-}
-
-/* -------------------------
-   DICAS
--------------------------- */
-.tips-header{
-  display:flex;
-  gap: 10px;
-  align-items:flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.tips-filter{
-  display:flex;
-  gap: 8px;
-  align-items:center;
-}
-
-.tips-filter select{
-  width: 150px;
-}
-
-.tips-list{
-  margin-top: 12px;
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.tip{
-  display:flex;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.86);
-}
-
-.tip-icon{
-  width: 28px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.tip-text{
-  font-weight: 700;
-}
-
-/* -------------------------
-   UTIL: AÇÕES (copiar, etc.)
--------------------------- */
-.actions{
-  display:flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* -------------------------
-   FOOTER / MARGENS
--------------------------- */
-.spacer{ height: 12px; }
-
-/* -------------------------
-   RESPONSIVO
--------------------------- */
 @media (max-width: 520px){
-  h1{ font-size: 28px; }
+  .card{ padding: 20px; border-radius: 18px; }
   h2{ font-size: 22px; }
-  .brandlink{ font-size: 24px; }
-  .card{ padding: 18px; }
-  .auth{ padding: 20px; }
 }

@@ -2,41 +2,52 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Vínculo • Entrar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - Vínculo</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #fdfbf7; font-family: sans-serif; }
+    .auth-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 400px; width: 100%; }
+    input { width: 100%; padding: 10px; margin: 8px 0 15px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+    .btn-primary { width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .btn-primary:hover { background: #1a252f; }
+    
+    /* Estilo das mensagens de erro/sucesso */
+    .alert { padding: 10px; margin-bottom: 15px; border-radius: 6px; font-size: 0.9em; }
+    .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .alert-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🐾 Vínculo</h1>
-      <p>Registrar é cuidar.</p>
-    </header>
 
-    <div class="pet-card">
-      <h2 style="margin-top:0;">Entrar</h2>
-      <p style="color:#6b7280; margin-top:-6px;">
-        Bem-vinda de volta. Seu pet sentiu sua falta (ou fingiu que não).
-      </p>
+  <div class="auth-box">
+    <h1 style="text-align:center; margin-top:0;">🐾 Entrar</h1>
+    <p style="text-align:center; color:#666; margin-bottom:25px;">Bem-vinda de volta.</p>
 
-      {% if error %}
-        <div class="registro" style="border-left-color:#991b1b;">
-          <strong>Ops:</strong> {{ error }}
-        </div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
       {% endif %}
+    {% endwith %}
 
-      <form method="post">
-        <input type="email" name="email" placeholder="Seu e-mail" required>
-        <input type="password" name="password" placeholder="Sua senha" required>
-        <button class="btn-primary" type="submit">Entrar</button>
-      </form>
+    <form method="post">
+      <label>E-mail</label>
+      <input type="email" name="email" placeholder="seu@email.com" required>
 
-      <hr style="border:none;border-top:1px solid #eee; margin:18px 0;">
+      <label>Senha</label>
+      <input type="password" name="password" placeholder="Sua senha" required>
 
-      <p style="margin:0;">
-        Ainda não tem conta?
-        <a href="/signup" style="font-weight:bold;">Criar agora →</a>
-      </p>
-    </div>
+      <button type="submit" class="btn-primary">Entrar</button>
+    </form>
+
+    <p style="text-align:center; margin-top:20px;">
+      Ainda não tem conta? <a href="{{ url_for('signup') }}">Cadastrar</a>
+    </p>
   </div>
+
 </body>
 </html>

@@ -3,94 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diário do {{ pet.nome }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=7">
+    <title>Diário - Vínculo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=12">
 </head>
 <body>
 <div class="container">
     <nav class="top-nav">
-        <a href="/" class="logo-text">⬅ Início</a>
+        <a href="/" class="brand-title" style="font-size: 1.2rem; margin:0; color: var(--primary);">⬅ Voltar</a>
         <div style="display:flex; gap:10px;">
-            <a href="/pet/{{ pet.id }}/modo-vet" class="btn-secondary btn-small">🩺 Vet</a>
-            <a href="/pet/{{ pet.id }}/editar" class="btn-secondary btn-small">✏️ Editar</a>
+            <a href="{{ url_for('modo_vet', pet_id=pet.id) }}" class="btn-primary" style="background: white; color: var(--primary); border: 1px solid var(--primary); padding: 5px 15px; font-size: 0.8rem; margin:0;">🩺 Vet</a>
+            <a href="{{ url_for('editar_pet', pet_id=pet.id) }}" class="btn-primary" style="background: white; color: #f39c12; border: 1px solid #f39c12; padding: 5px 15px; font-size: 0.8rem; margin:0;">✏️ Editar</a>
         </div>
     </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="alert alert-{{ category }}" style="margin-bottom: 20px;">{{ message }}</div>
+      {% endif %}
+    {% endwith %}
 
     <div class="pet-card" style="text-align: center; border-top: 5px solid var(--primary);">
         <div style="font-size: 3rem; margin-bottom: 10px;">
             {% if 'gat' in pet.especie|lower %}🐱{% elif 'cã' in pet.especie|lower %}🐶{% else %}🐹{% endif %}
         </div>
         <h1 style="margin-bottom: 5px;">{{ pet.nome }}</h1>
-        <p class="muted">{{ pet.especie }} • {{ pet.nascimento or 'Idade não informada' }}</p>
-        
-        <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            {% for resp in responsaveis %}
-                <span style="background: #f0f0f0; padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; color: #555;">
-                    {{ resp }}
-                </span>
-            {% endfor %}
-        </div>
+        <p style="color: #666;">{{ pet.especie }} • {{ pet.nascimento or 'Idade n/a' }}</p>
     </div>
 
     {% if pet.motivo_nome or pet.quase_chamou or pet.como_conhecemos or pet.atividade_preferida %}
-    <div class="pet-card" style="background: #fffaf0; border-color: #fcefdc;">
-        <h3 style="color: var(--accent); font-size: 1.1rem; margin-bottom: 15px; text-align: center;">
+    <div class="pet-card" style="background: #fffcf0; border: 1px solid #fcefdc;">
+        <h3 style="color: #f39c12; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">
             ✨ Identidade Secreta
         </h3>
-        
         <div style="display: grid; gap: 15px;">
             {% if pet.motivo_nome %}
-            <div>
-                <strong style="color: var(--primary); display: block; font-size: 0.9rem;">Por que esse nome?</strong>
-                <span style="color: #555;">{{ pet.motivo_nome }}</span>
-            </div>
+                <div><strong style="color: var(--primary); font-size: 0.9rem;">Por que esse nome?</strong><br><span style="color: #555;">{{ pet.motivo_nome }}</span></div>
             {% endif %}
-
             {% if pet.quase_chamou %}
-            <div>
-                <strong style="color: var(--primary); display: block; font-size: 0.9rem;">Quase se chamou...</strong>
-                <span style="color: #555;">{{ pet.quase_chamou }}</span>
-            </div>
+                <div><strong style="color: var(--primary); font-size: 0.9rem;">Quase se chamou...</strong><br><span style="color: #555;">{{ pet.quase_chamou }}</span></div>
             {% endif %}
-            
             {% if pet.atividade_preferida %}
-            <div>
-                <strong style="color: var(--primary); display: block; font-size: 0.9rem;">Hobby Favorito</strong>
-                <span style="color: #555;">{{ pet.atividade_preferida }}</span>
-            </div>
-            {% endif %}
-
-            {% if pet.como_conhecemos %}
-            <div style="background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #eec;">
-                <strong style="color: var(--primary); display: block; font-size: 0.9rem; margin-bottom: 5px;">O Encontro (História)</strong>
-                <span style="color: #555; font-style: italic;">"{{ pet.como_conhecemos }}"</span>
-            </div>
+                <div><strong style="color: var(--primary); font-size: 0.9rem;">Hobby Favorito</strong><br><span style="color: #555;">{{ pet.atividade_preferida }}</span></div>
             {% endif %}
         </div>
     </div>
     {% endif %}
 
-    <div class="family-box" style="display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px;">
-        <div>
-            <span style="display:block; font-size: 1.5rem; font-weight: 800; color: var(--secondary);">{{ summary.total_7d }}</span>
-            <span class="muted" style="font-size: 0.8rem;">Registros (7d)</span>
-        </div>
-        <div>
-            <span style="display:block; font-size: 1.5rem;">
-                {% if summary.top_humor == 'Feliz' %}😄{% elif summary.top_humor == 'Bravo' %}😡{% elif summary.top_humor == 'Triste' %}😢{% else %}😐{% endif %}
-            </span>
-            <span class="muted" style="font-size: 0.8rem;">Vibe da semana</span>
-        </div>
-    </div>
-
-    <div class="auth-container" style="max-width: 100%; text-align: left;">
+    <div class="auth-box" style="max-width: 100%;">
         <h3 style="text-align: center; margin-bottom: 15px;">✍️ Diário de Hoje</h3>
-        <form action="/pet/{{ pet.id }}/anotar" method="post">
+        
+        <form action="{{ url_for('anotar', pet_id=pet.id) }}" method="post">
             <div class="form-group">
                 <textarea name="nota" placeholder="Como ele(a) está hoje? Novidades?" style="height: 80px;" required></textarea>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <div class="grid-2" style="margin-bottom: 15px;">
                 <select name="humor">
                     <option value="Feliz">😄 Feliz</option>
                     <option value="Animado">⚡ Animado</option>
@@ -107,36 +74,35 @@
             </div>
 
             <div style="display: flex; gap: 15px; margin-bottom: 15px; justify-content: center;">
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
-                    <input type="checkbox" name="latindo" style="width: auto;"> 🐕 Latindo muito
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
+                    <input type="checkbox" name="latindo" style="width: auto;"> 🐕 Latiu muito
                 </label>
-                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px;">
+                <label style="cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem;">
                     <input type="checkbox" name="mordeu_carteiro" style="width: auto;"> 📬 Aprontou
                 </label>
             </div>
 
-            <button type="submit" class="btn-primary">Salvar Registro</button>
+            <button type="submit" class="btn-primary btn-block">Salvar no Diário</button>
         </form>
     </div>
 
     <div style="margin-top: 30px;">
-        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: var(--text-dark);">
+        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px; color: #333;">
             📅 Histórico Recente
         </h3>
-
         {% if registros|length == 0 %}
-            <p class="muted" style="text-align: center; margin-top: 20px;">Nenhuma anotação ainda.</p>
+            <p style="text-align: center; color: #999; margin-top: 20px;">Nenhuma anotação ainda.</p>
         {% endif %}
 
         {% for reg in registros %}
-        <div class="pet-card" style="padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary-light);">
+        <div class="pet-card" style="padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary);">
             <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                 <strong style="color: var(--primary);">{{ reg.data }}</strong>
                 <span style="background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">{{ reg.humor }}</span>
             </div>
             <p style="margin: 0; color: #555;">{{ reg.nota }}</p>
             {% if reg.latindo or reg.mordeu_carteiro %}
-                <div style="margin-top: 8px; font-size: 0.8rem; color: #d63031;">
+                <div style="margin-top: 8px; font-size: 0.8rem; color: #c0392b;">
                     {% if reg.latindo %}🔊 Latiu muito {% endif %}
                     {% if reg.mordeu_carteiro %}😈 Aprontou {% endif %}
                 </div>

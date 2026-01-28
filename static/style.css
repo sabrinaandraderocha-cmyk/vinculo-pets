@@ -225,3 +225,22 @@ input[type="checkbox"] {
   h1 { font-size: 24px; }
   .checkbox-group { flex-direction: column; align-items: flex-start; }
 }
+
+/* --- CORREÇÃO: NOME DO SITE GRANDE E COM OUTRA COR --- */
+.top-header, header { padding: 15px 0; }
+
+.top-header a, header a, .top-header h1 {
+     font-size: 36px !important;
+     font-weight: 900;
+     /* MUDE A COR AQUI */
+     color: #2a1b3d !important; /* <-- Roxo quase preto */
+     text-decoration: none;
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+}
+
+.top-header img, .top-header svg {
+    width: 32px; height: 32px;
+    fill: #2a1b3d !important;
+}

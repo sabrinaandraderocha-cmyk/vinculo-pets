@@ -4,12 +4,57 @@
   <meta charset="UTF-8">
   <title>Vínculo - Início</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    /* Estilos rápidos para o menu e alertas, caso não tenha no CSS */
+    .top-nav {
+      background: #ffffff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-nav a { text-decoration: none; font-weight: bold; }
+    .btn-logout { color: #dc3545; }
+    
+    .flash-msg {
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 0.9em;
+    }
+    .flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .flash-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .flash-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+    .flash-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+  </style>
 </head>
 <body>
   <div class="container">
 
+    <nav class="top-nav">
+      <span style="font-size: 1.2em;">🐾 Vínculo</span>
+      <div>
+        <a href="{{ url_for('logout') }}" class="btn-logout">🚪 Sair</a>
+      </div>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for category, message in messages %}
+            <div class="flash-msg flash-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
     <header>
-      <h1>🐾 Vínculo</h1>
+      <h1>Bem-vinda de volta!</h1>
       <p><strong>Registrar é cuidar.</strong> (E sim, quem ama pet entende.)</p>
       <p class="muted" style="margin-top:6px;">
         Bem-vinda ao clube das pessoas que falam “olha que fofinho” 37 vezes por dia.
@@ -21,7 +66,6 @@
       <a href="/curiosidades" class="btn-primary btn-export" style="margin-left:10px;">💡 Curiosidades</a>
     </div>
 
-    <!-- Curiosidade do dia -->
     <div class="pet-card">
       <h2 style="margin-top:0;">💡 Curiosidade do dia</h2>
       <p style="margin:0;">{{ curiosidade_home }}</p>
@@ -64,6 +108,8 @@
           <a href="/pet/{{ pet.id }}" class="btn-primary btn-export">Abrir Diário →</a>
           <a href="/pet/{{ pet.id }}/eventos" class="btn-primary btn-export">Eventos 🧰</a>
           <a href="/pet/{{ pet.id }}/modo-vet" class="btn-primary btn-export">Modo Vet 🩺</a>
+          
+          <a href="/pet/{{ pet.id }}/editar" style="font-size:0.9em; align-self:center; color:#666;">✏️ Editar</a>
         </div>
 
         <p class="muted" style="margin:12px 0 0;">

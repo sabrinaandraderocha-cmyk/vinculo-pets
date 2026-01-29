@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
-
     <div class="page-bg">
         <div class="container {% if narrow %}narrow{% endif %}">
             
@@ -21,9 +20,9 @@
                 </a>
 
                 {% if session.get('user_id') %}
-                <a href="{{ url_for('logout') }}" class="btn outline small">
-                    Sair
-                </a>
+                <div class="logout-btn-container">
+                    <a href="{{ url_for('logout') }}" class="btn outline">Sair</a>
+                </div>
                 {% endif %}
             </header>
 
@@ -38,9 +37,7 @@
             {% endwith %}
 
             {% block content %}{% endblock %}
-
         </div>
     </div>
-
 </body>
 </html>

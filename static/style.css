@@ -91,3 +91,32 @@ input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent);
     .pet-card-visual { padding: 15px 10px; }
     .pet-icon { font-size: 32px; }
 }
+
+/* --- ESTILO ESPECIAL PARA LOGIN E CADASTRO --- */
+
+.auth-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa a tela inteira */
+    padding: 20px;
+    margin-top: -40px; /* Compensa um pouco o padding do topo */
+}
+
+.auth-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(111, 66, 193, 0.1);
+    border: 1px solid #f0ebf8;
+    text-align: center;
+}
+
+/* Resto do CSS igual ao anterior... */
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { font-size: 14px; margin-left: 5px; color: var(--brand); font-weight: 700; }
+.input-modern { background: #fbfaff; border: 2px solid #e2d9f3; transition: all 0.3s ease; }
+.input-modern:focus { background: #fff; transform: translateY(-2px); border-color: var(--accent); }
+.switch-auth { margin-top: 25px; font-size: 14px; color: var(--muted); }

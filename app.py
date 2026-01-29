@@ -393,6 +393,25 @@ def agenda_done(agenda_id):
              db.session.commit()
     return redirect(request.referrer or url_for("index"))
 
+@app.post("/ai/ask")
+def ai_ask():
+    data = request.get_json(silent=True) or {}
+    text = (data.get("text") or "").strip()
+
+    if not text:
+        return jsonify({
+            "ok": False,
+            "error": "Envie um texto em 'text'."
+        }), 400
+
+    answer = call_ai(VINCULO_SYSTEM_PROMPT, text)
+
+    return jsonify({
+        "ok": True,
+        "answer": answer
+    })
+
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)

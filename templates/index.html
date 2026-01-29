@@ -4,7 +4,7 @@
 
 <div style="text-align: center; margin-bottom: 25px;">
     <h2 style="color: var(--brand); font-weight: 800; font-size: 26px; margin: 0;">
-        Olá, Tutor(a)! 👋
+        Olá, Tutora! 👋
     </h2>
     <p class="muted" style="margin-top: 5px;">Tudo sob controle hoje?</p>
 </div>
@@ -26,11 +26,6 @@
         <div class="pets-grid">
             {% for pet in pets %}
             <a href="{{ url_for('detalhes_pet', pet_id=pet.id) }}" class="pet-item-card">
-                <div class="pet-emoji">
-                    {% if 'gat' in pet.especie.lower() %}🐱
-                    {% elif 'cão' in pet.especie.lower() or 'cao' in pet.especie.lower() %}🐶
-                    {% else %}🐾{% endif %}
-                </div>
                 <div class="pet-name">{{ pet.nome }}</div>
                 <div class="pet-desc">{{ pet.especie|capitalize }}</div>
             </a>

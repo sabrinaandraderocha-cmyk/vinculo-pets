@@ -11,6 +11,7 @@
     <div class="page-bg">
         <div class="container {% if narrow %}narrow{% endif %}">
             
+            {% if request.endpoint not in ['login', 'signup'] %}
             <header class="top-header">
                 <a href="{{ url_for('index') }}" class="brand">
                     <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -27,6 +28,7 @@
                 </div>
                 {% endif %}
             </header>
+            {% endif %}
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}

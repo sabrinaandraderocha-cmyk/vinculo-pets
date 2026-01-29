@@ -5,18 +5,18 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         
-        <div style="margin-bottom: 10px; display: flex; justify-content: center; align-items: center; gap: 10px;">
-            <svg width="45" height="45" viewBox="0 0 512 512" style="fill: var(--brand); filter: drop-shadow(2px 3px 2px rgba(75, 44, 104, 0.2));">
-                 <path d="M226.5 69c35.6 0 64.5-28.9 64.5-64.5S262.1 4.5 226.5 4.5 162 33.4 162 69s28.9 64.5 64.5 64.5zm-145 77c35.6 0 64.5-28.9 64.5-64.5S117.1 81.5 81.5 81.5 17 110.4 17 146s28.9 64.5 64.5 64.5zM430.5 81.5c-35.6 0-64.5 28.9-64.5 64.5s28.9 64.5 64.5 64.5 64.5-28.9 64.5-64.5-28.9-64.5-64.5-64.5zm-33 133c-38.3 0-70.9 23.6-83.3 56.4-15.6-7.8-33.7-7.6-48.4.1-12.3-32.9-44.9-56.5-83.3-56.5-49.3 0-89.4 40-89.4 89.4 0 35.1 19.8 65.6 49.3 80.3v26.6c0 51.3 41.6 93.3 92.9 93.3s92.9-42 92.9-93.3v-26.6c29.5-14.7 49.3-45.2 49.3-80.3 0-49.4-40-89.4-89.4-89.4z"/>
-            </svg>
-            <span style="font-size: 32px; font-weight: 800; color: var(--brand); letter-spacing: -1px;">Vínculo</span>
+        <div style="margin-bottom: 25px; text-align: center;">
+            <span style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 38px; font-weight: 800; color: var(--accent); letter-spacing: -1.5px;">
+                Vínculo
+            </span>
         </div>
         
-        <p style="color: var(--muted); margin-top: 0; margin-bottom: 30px; font-size: 14px;">
-            um diário cheio de personalidade para o seu pet
+        <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--text); font-weight: 700;">
+            Bem-vinda de volta! 👋
+        </h2>
+        <p style="color: var(--muted); margin-top: 0; margin-bottom: 30px; font-size: 15px;">
+            Entre para cuidar de quem você ama.
         </p>
-
-        <h2 style="font-size: 22px; margin-bottom: 20px; color: var(--text);">Bem-vinda de volta! 👋</h2>
 
         <form method="POST">
             <div class="input-group">
@@ -29,14 +29,14 @@
                 <input type="password" name="password" id="password" class="input-modern" placeholder="Sua senha secreta" required>
             </div>
 
-            <button type="submit" class="btn full">
+            <button type="submit" class="btn full" style="margin-top: 10px;">
                 Entrar no Diário
             </button>
         </form>
 
         <div class="switch-auth">
             Ainda não tem conta? 
-            <a href="{{ url_for('signup') }}" class="link">Criar agora</a>
+            <a href="{{ url_for('signup') }}" class="link" style="color: var(--accent);">Criar agora</a>
         </div>
 
     </div>

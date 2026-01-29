@@ -3,7 +3,6 @@ import random
 import string
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import jsonify
 from ai_rules import VINCULO_SYSTEM_PROMPT
 from ai_provider import call_ai
 

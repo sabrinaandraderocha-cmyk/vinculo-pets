@@ -28,7 +28,7 @@ body {
 a { color: inherit; text-decoration: none; transition: 0.2s; }
 .muted { color: var(--muted); font-size: 0.9em; }
 
-/* --- FUNDO COM PATINHAS (Intacto) --- */
+/* --- FUNDO COM PATINHAS (Intacto e Visível) --- */
 .page-bg { 
     min-height: 100vh; 
     position: relative; 
@@ -41,7 +41,7 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
     inset: 0; 
     background-repeat: repeat; 
     background-size: 160px; 
-    opacity: 0.12; 
+    opacity: 0.12; /* Patinhas visíveis */
     pointer-events: none; 
     filter: hue-rotate(260deg) saturate(0.8) brightness(0.8); 
     background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%20viewBox='0%200%20160%20160'%3E%3Cg%20fill='%236f42c1'%20fill-opacity='1'%3E%3Ccircle%20cx='44'%20cy='44'%20r='7'/%3E%3Ccircle%20cx='62'%20cy='36'%20r='7'/%3E%3Ccircle%20cx='74'%20cy='52'%20r='7'/%3E%3Ccircle%20cx='54'%20cy='60'%20r='7'/%3E%3Cpath%20d='M58%2078c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3Cg%20transform='translate(80,80)%20rotate(-12)'%3E%3Ccircle%20cx='10'%20cy='10'%20r='7'/%3E%3Ccircle%20cx='28'%20cy='2'%20r='7'/%3E%3Ccircle%20cx='40'%20cy='18'%20r='7'/%3E%3Ccircle%20cx='20'%20cy='26'%20r='7'/%3E%3Cpath%20d='M24%2044c-10%200-18%207-18%2016%200%2010%2010%2018%2018%2018s18-8%2018-18c0-9-8-16-18-16z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); 
@@ -57,13 +57,13 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
 .subtitle { margin: 5px 0 10px 0; font-size: 15px; color: var(--muted); font-weight: 500; text-align: center; }
 .logout-btn-container { margin-top: 5px; }
 
-/* --- CARDS SÓLIDOS (CORREÇÃO DA TRANSPARÊNCIA) --- */
+/* --- CARDS SÓLIDOS (CORRIGIDO) --- */
 .card, .auth-card, .pet-item-card { 
-    /* O !important FORÇA o fundo branco sólido */
+    /* Força o fundo branco e opacidade total */
     background-color: #ffffff !important;
     opacity: 1 !important;
     
-    /* Garante que fique numa camada acima do fundo */
+    /* Garante que fique acima do fundo */
     position: relative;
     z-index: 10;
 
@@ -75,8 +75,7 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
 .card, .auth-card { padding: 30px; }
 .pet-item-card { padding: 20px; }
 
-
-/* --- GRID DE PETS (LADO A LADO) --- */
+/* --- GRID DE PETS --- */
 .pets-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -99,8 +98,6 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(111, 66, 193, 0.15);
 }
-
-/* (Removi o estilo .pet-emoji pois não vamos mais usar no index) */
 
 .pet-name { 
     font-size: 18px; 
@@ -131,7 +128,7 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
     margin: 10px 0;
 }
 
-/* --- FORMULÁRIOS & BOTÕES --- */
+/* --- BOTÕES & INPUTS --- */
 .btn { 
     display: inline-flex; align-items: center; justify-content: center; gap: 8px; 
     padding: 12px 24px; border-radius: 50px; border: none; cursor: pointer; 
@@ -148,19 +145,18 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
 
 .btn.full { width: 100%; }
 
-/* Inputs Modernos (Também forçados a serem sólidos) */
+/* Inputs Sólidos */
 .input-group { text-align: left; margin-bottom: 20px; }
 .input-group label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 14px; color: var(--brand); }
 
 .input-modern { 
     width: 100%; padding: 14px; border-radius: 12px; 
     border: 2px solid #e2d9f3; 
-    background: #ffffff !important; /* Fundo BRANCO SÓLIDO */
+    background: #ffffff !important; /* Branco Sólido */
     font-size: 16px; transition: 0.2s; font-family: inherit; color: var(--text);
 }
 .input-modern:focus { border-color: var(--accent); background: #fff; outline: none; }
 
-/* Wrapper específico para Login/Signup */
 .auth-wrapper { 
     display: flex; justify-content: center; align-items: center; 
     min-height: 90vh; padding: 20px; 
@@ -169,7 +165,6 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
 .switch-auth { margin-top: 25px; font-size: 14px; color: var(--muted); }
 .link { color: var(--accent); font-weight: bold; }
 
-/* Espaçamento dos botões do topo (Index) */
 .actions-container {
     display: flex;
     gap: 15px;
@@ -177,7 +172,6 @@ a { color: inherit; text-decoration: none; transition: 0.2s; }
     margin-bottom: 25px; 
 }
 
-/* Alertas */
 .flashes { list-style: none; padding: 0; margin: 0 0 20px 0; }
 .alert { padding: 15px; border-radius: 12px; margin-bottom: 10px; text-align: center; background: #fff; border: 1px solid #e2d9f3; }
 .alert.success { color: #155724; background: #d4edda; border-color: #c3e6cb; }

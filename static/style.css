@@ -78,3 +78,23 @@ input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px 
 .alert.info { background-color: #d1ecf1; color: #0c5460; }
 .auth-footer { text-align: center; margin-top: 25px; color: var(--muted); }
 .link { color: var(--accent); font-weight: bold; }
+
+/* --- ESTILO DO SUBTÍTULO --- */
+.subtitle {
+    margin: 5px 0 0 0;          /* Um pouco de espaço em cima */
+    font-size: 16px;            /* Tamanho legível */
+    color: var(--muted);        /* Cinza suave para não brigar com o logo */
+    font-weight: 500;           /* Levemente destacado */
+    text-align: center;         /* Centralizado */
+    letter-spacing: 0.5px;      /* Letras um pouco espaçadas para elegância */
+    max-width: 300px;           /* Garante que quebre linha bonito no celular */
+    line-height: 1.4;
+}
+
+/* Ajuste fino para o celular */
+@media (max-width: 600px) {
+    .subtitle {
+        font-size: 14px;        /* Um pouquinho menor no mobile */
+        max-width: 250px;
+    }
+}

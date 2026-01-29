@@ -1,45 +1,64 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Vínculo - Curiosidades</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <div class="container">
-    <a href="/" class="btn-voltar">← Voltar</a>
+{% extends "base.html" %}
 
-    <header>
-      <h1>💡 Curiosidades</h1>
-      <p class="muted">Pistas úteis, sem “Google do pânico”.</p>
-    </header>
+{% block content %}
 
-    <div class="pet-card">
-      <h2 style="margin-top:0;">🐱 Gatos</h2>
-      <ul>
-        {% for c in curiosidades["gato"] %}
-          <li style="margin:10px 0;">{{ c }}</li>
-        {% endfor %}
-      </ul>
+<div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="color: var(--brand); font-weight: 800; font-size: 28px; margin-bottom: 5px;">
+        💡 Curiosidades
+    </h2>
+    <p class="muted">Pistas úteis, sem o "Google do pânico".</p>
+</div>
+
+<div style="margin-bottom: 25px;">
+    <a href="{{ url_for('index') }}" class="btn outline" style="display: inline-flex; align-items: center; gap: 5px; padding: 8px 20px;">
+        <span>←</span> Voltar para o Diário
+    </a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+
+    <div class="card" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 2px dashed #f0ebf8; padding-bottom: 15px;">
+            <span style="font-size: 28px; background: #fdfdfd; padding: 8px; border-radius: 12px; border: 1px solid #f0ebf8;">🐱</span>
+            <h3 style="margin: 0; color: var(--accent);">Gatos</h3>
+        </div>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            {% for c in curiosidades["gato"] %}
+                <li style="padding: 12px 0; border-bottom: 1px solid #f8f6fc; color: var(--text); font-size: 15px; display: flex; gap: 10px;">
+                    <span style="color: var(--accent);">•</span> {{ c }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
-    <div class="pet-card">
-      <h2 style="margin-top:0;">🐶 Cães</h2>
-      <ul>
-        {% for c in curiosidades["cão"] %}
-          <li style="margin:10px 0;">{{ c }}</li>
-        {% endfor %}
-      </ul>
+    <div class="card" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 2px dashed #f0ebf8; padding-bottom: 15px;">
+            <span style="font-size: 28px; background: #fdfdfd; padding: 8px; border-radius: 12px; border: 1px solid #f0ebf8;">🐶</span>
+            <h3 style="margin: 0; color: var(--accent);">Cães</h3>
+        </div>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            {% for c in curiosidades["cão"] %}
+                <li style="padding: 12px 0; border-bottom: 1px solid #f8f6fc; color: var(--text); font-size: 15px; display: flex; gap: 10px;">
+                    <span style="color: var(--accent);">•</span> {{ c }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 
-    <div class="pet-card">
-      <h2 style="margin-top:0;">🐾 Outros</h2>
-      <ul>
-        {% for c in curiosidades["outro"] %}
-          <li style="margin:10px 0;">{{ c }}</li>
-        {% endfor %}
-      </ul>
+    <div class="card" style="height: 100%;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 2px dashed #f0ebf8; padding-bottom: 15px;">
+            <span style="font-size: 28px; background: #fdfdfd; padding: 8px; border-radius: 12px; border: 1px solid #f0ebf8;">🐾</span>
+            <h3 style="margin: 0; color: var(--accent);">Outros</h3>
+        </div>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            {% for c in curiosidades["outro"] %}
+                <li style="padding: 12px 0; border-bottom: 1px solid #f8f6fc; color: var(--text); font-size: 15px; display: flex; gap: 10px;">
+                    <span style="color: var(--accent);">•</span> {{ c }}
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-  </div>
-</body>
-</html>
+
+</div>
+
+{% endblock %}

@@ -1,119 +1,120 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Pet</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=7">
-</head>
-<body>
-<div class="container">
-    <nav class="top-nav">
-        <a href="/" class="logo-text">⬅ Voltar</a>
-        <span style="font-weight:bold; color:#888;">
-            {% if edit_mode %}Editar{% else %}Novo{% endif %}
-        </span>
-    </nav>
+{% extends "base.html" %}
 
-    <div class="auth-container" style="max-width: 100%; text-align: left;">
-        <h2 style="text-align: center; margin-bottom: 25px;">
-            {% if edit_mode %}Atualizando o Perfil 💅{% else %}Quem é o novo membro? 🐶🐱{% endif %}
-        </h2>
+{% block content %}
 
-        <form method="post">
-            <div class="form-group">
-                <label class="form-label">Nome do Pet</label>
-                <input type="text" name="nome" value="{{ pet.nome if pet else '' }}" placeholder="Ex: Thor, Luna..." required>
+<div class="container narrow">
+    
+    <div class="card">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: var(--brand); font-weight: 800; margin-bottom: 5px;">
+                {% if edit_mode %}Editar Perfil ✏️{% else %}Quem é o novo membro? 🐾{% endif %}
+            </h2>
+            <p class="muted">Preencha com carinho as informações.</p>
+        </div>
+
+        <form method="POST">
+            
+            <h4 style="color: var(--accent); border-bottom: 2px dashed #f0ebf8; padding-bottom: 10px; margin-bottom: 20px;">
+                🆔 Identidade
+            </h4>
+
+            <div class="input-group">
+                <label>Nome do Pet</label>
+                <input type="text" name="nome" class="input-modern" value="{{ pet.nome if pet else '' }}" required placeholder="Ex: Thor, Luna...">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-group">
-                    <label class="form-label">Espécie</label>
-                    <select name="especie">
-                        <option value="Cão" {% if pet and pet.especie == 'Cão' %}selected{% endif %}>Cão 🐶</option>
-                        <option value="Gato" {% if pet and pet.especie == 'Gato' %}selected{% endif %}>Gato 🐱</option>
-                        <option value="Outro" {% if pet and pet.especie == 'Outro' %}selected{% endif %}>Outro 🐹</option>
+                <div class="input-group">
+                    <label>Espécie</label>
+                    <select name="especie" class="input-modern">
+                        <option value="cão" {% if pet and 'cão' in pet.especie|lower %}selected{% endif %}>Cão 🐶</option>
+                        <option value="gato" {% if pet and 'gato' in pet.especie|lower %}selected{% endif %}>Gato 🐱</option>
+                        <option value="ave" {% if pet and 'ave' in pet.especie|lower %}selected{% endif %}>Ave 🐦</option>
+                        <option value="outro" {% if pet and 'outro' in pet.especie|lower %}selected{% endif %}>Outro 🐾</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Nascimento (aprox)</label>
-                    <input type="text" name="nascimento" value="{{ pet.nascimento if pet else '' }}" placeholder="Ex: 10/2023">
+                <div class="input-group">
+                    <label>Nascimento (aprox)</label>
+                    <input type="text" name="nascimento" class="input-modern" value="{{ pet.nascimento if pet else '' }}" placeholder="Ex: 10/2023">
                 </div>
             </div>
 
-            <hr style="border:0; border-top: 2px dashed #eee; margin: 30px 0;">
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px; color: var(--secondary);">📜 Identidade & Histórias</h3>
+            <h4 style="color: var(--accent); border-bottom: 2px dashed #f0ebf8; padding-bottom: 10px; margin-top: 30px; margin-bottom: 20px;">
+                📖 Histórias & Detalhes
+            </h4>
 
-            <div class="form-group">
-                <label class="form-label">Por que escolheu esse nome?</label>
-                <input type="text" name="motivo_nome" value="{{ pet.motivo_nome if pet else '' }}" placeholder="Ex: Homenagem, cara de quem apronta...">
+            <div class="input-group">
+                <label>Por que escolheu esse nome?</label>
+                <input type="text" name="motivo_nome" class="input-modern" value="{{ pet.motivo_nome if pet else '' }}" placeholder="Ex: Homenagem, cara de quem apronta...">
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Ele(a) quase se chamou...</label>
-                <input type="text" name="quase_chamou" value="{{ pet.quase_chamou if pet else '' }}" placeholder="Ex: Rex, Godzila, Fifi...">
+            <div class="input-group">
+                <label>Ele(a) quase se chamou...</label>
+                <input type="text" name="quase_chamou" class="input-modern" value="{{ pet.quase_chamou if pet else '' }}" placeholder="Ex: Rex, Godzila, Fifi...">
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Como nos conhecemos (O Encontro)</label>
-                <textarea name="como_conhecemos" placeholder="Ex: Resgate dramático, amor à primeira vista...">{{ pet.como_conhecemos if pet else '' }}</textarea>
+            <div class="input-group">
+                <label>Como nos conhecemos (O Encontro)</label>
+                <textarea name="como_conhecemos" class="input-modern" rows="3" placeholder="Conte essa história...">{{ pet.como_conhecemos if pet else '' }}</textarea>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">Atividade preferida (Hobby)</label>
-                <input type="text" name="atividade_preferida" value="{{ pet.atividade_preferida if pet else '' }}" placeholder="Ex: Dormir, latir pro nada...">
+            <div class="input-group">
+                <label>Atividade preferida (Hobby)</label>
+                <input type="text" name="atividade_preferida" class="input-modern" value="{{ pet.atividade_preferida if pet else '' }}" placeholder="Ex: Dormir, latir pro nada...">
             </div>
 
-            <div class="form-group">
-                <label class="form-label">Observações Gerais</label>
-                <textarea name="obs">{{ pet.obs if pet else '' }}</textarea>
+            <div class="input-group">
+                <label>Observações Gerais</label>
+                <textarea name="obs" class="input-modern" rows="2">{{ pet.obs if pet else '' }}</textarea>
             </div>
 
-            <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">👨‍👩‍👧‍👦 Responsáveis</h3>
+            <h4 style="color: var(--accent); border-bottom: 2px dashed #f0ebf8; padding-bottom: 10px; margin-top: 30px; margin-bottom: 20px;">
+                👥 Quem cuida?
+            </h4>
 
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-bottom: 15px;">
-                <select name="resp1_tipo">
-                    <option value="Tutor" {% if pet and pet.resp1_tipo == 'Tutor' %}selected{% endif %}>Tutor</option>
-                    <option value="Mãe" {% if pet and pet.resp1_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
-                    <option value="Pai" {% if pet and pet.resp1_tipo == 'Pai' %}selected{% endif %}>Papai</option>
+                <select name="resp1_tipo" class="input-modern">
+                    <option value="Tutor" {% if pet and pet.resp1_tipo == 'Tutor' %}selected{% endif %}>Tutor(a)</option>
+                    <option value="Mãe" {% if pet and pet.resp1_tipo == 'Mãe' %}selected{% endif %}>Mãe de Pet</option>
+                    <option value="Pai" {% if pet and pet.resp1_tipo == 'Pai' %}selected{% endif %}>Pai de Pet</option>
                 </select>
-                <input type="text" name="resp1_nome" value="{{ pet.resp1_nome if pet else '' }}" placeholder="Nome">
+                <input type="text" name="resp1_nome" class="input-modern" value="{{ pet.resp1_nome if pet else '' }}" placeholder="Nome do principal">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 10px;">
-                <select name="resp2_tipo">
-                    <option value="Tutor" {% if pet and pet.resp2_tipo == 'Tutor' %}selected{% endif %}>Tutor</option>
-                    <option value="Pai" {% if pet and pet.resp2_tipo == 'Pai' %}selected{% endif %}>Papai</option>
-                    <option value="Mãe" {% if pet and pet.resp2_tipo == 'Mãe' %}selected{% endif %}>Mamãe</option>
+                <select name="resp2_tipo" class="input-modern">
+                    <option value="Tutor" {% if pet and pet.resp2_tipo == 'Tutor' %}selected{% endif %}>Tutor(a)</option>
+                    <option value="Mãe" {% if pet and pet.resp2_tipo == 'Mãe' %}selected{% endif %}>Mãe de Pet</option>
+                    <option value="Pai" {% if pet and pet.resp2_tipo == 'Pai' %}selected{% endif %}>Pai de Pet</option>
                 </select>
-                <input type="text" name="resp2_nome" value="{{ pet.resp2_nome if pet else '' }}" placeholder="Nome">
+                <input type="text" name="resp2_nome" class="input-modern" value="{{ pet.resp2_nome if pet else '' }}" placeholder="Nome (opcional)">
             </div>
 
-            <hr style="border:0; border-top: 1px dashed #ddd; margin: 25px 0;">
-            <h3 style="font-size: 1.1rem; margin-bottom: 15px;">🍗 Preferências</h3>
+            <h4 style="color: var(--accent); border-bottom: 2px dashed #f0ebf8; padding-bottom: 10px; margin-top: 30px; margin-bottom: 20px;">
+                🍗 Preferências
+            </h4>
 
-            <div class="form-group">
-                <label class="form-label">Música Preferida</label>
-                <input type="text" name="musica_preferida" value="{{ pet.musica_preferida if pet else '' }}" placeholder="Ex: MPB...">
+            <div class="input-group">
+                <label>Música Preferida</label>
+                <input type="text" name="musica_preferida" class="input-modern" value="{{ pet.musica_preferida if pet else '' }}" placeholder="Ex: MPB, Rock, Latidos Lo-Fi...">
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                <div class="form-group">
-                    <label class="form-label" style="color: var(--secondary);">Gosta de...</label>
-                    <textarea name="alimentos_preferidos" style="height: 100px;">{{ pet.alimentos_preferidos if pet else '' }}</textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" style="color: #d63031;">🚫 Proibidos</label>
-                    <textarea name="alimentos_proibidos" style="height: 100px; border-color: #fab1a0; background: #fff5f5;">{{ pet.alimentos_proibidos if pet else '' }}</textarea>
-                </div>
+            <div class="input-group">
+                <label>Alimentos Preferidos</label>
+                <textarea name="alimentos_preferidos" class="input-modern" rows="2">{{ pet.alimentos_preferidos if pet else '' }}</textarea>
             </div>
 
-            <button type="submit" class="btn-primary" style="margin-top: 20px;">
-                {% if edit_mode %}Salvar Alterações ✨{% else %}Cadastrar Pet ✨{% endif %}
-            </button>
+
+            <div style="margin-top: 40px; display: flex; gap: 15px; padding-top: 20px; border-top: 1px solid #e2d9f3;">
+                <a href="{{ url_for('index') }}" class="btn outline" style="flex: 1;">Cancelar</a>
+                <button type="submit" class="btn full" style="flex: 2;">
+                    Salvar Perfil
+                </button>
+            </div>
+
         </form>
     </div>
 </div>
-</body>
-</html>
+
+{% endblock %}

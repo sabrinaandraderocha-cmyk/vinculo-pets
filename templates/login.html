@@ -5,17 +5,18 @@
 <div class="auth-wrapper">
     <div class="auth-card">
         
-        <div style="margin-bottom: 25px; text-align: center;">
-            <span style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 38px; font-weight: 800; color: var(--accent); letter-spacing: -1.5px;">
+        <div style="margin-bottom: 20px; text-align: center;">
+            <span style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 40px; font-weight: 800; color: var(--accent); letter-spacing: -1px;">
                 Vínculo
             </span>
         </div>
         
-        <h2 style="font-size: 22px; margin-bottom: 10px; color: var(--text); font-weight: 700;">
-            Bem-vinda de volta! 👋
+        <h2 style="font-size: 20px; margin-bottom: 10px; color: var(--text); font-weight: 700;">
+            Bem-vinda de volta!
         </h2>
+        
         <p style="color: var(--muted); margin-top: 0; margin-bottom: 30px; font-size: 15px;">
-            Entre para cuidar de quem você ama.
+            Acesse o diário dos seus pets 🐾
         </p>
 
         <form method="POST">
@@ -26,17 +27,17 @@
 
             <div class="input-group">
                 <label for="password">Senha</label>
-                <input type="password" name="password" id="password" class="input-modern" placeholder="Sua senha secreta" required>
+                <input type="password" name="password" id="password" class="input-modern" placeholder="Sua senha" required>
             </div>
 
-            <button type="submit" class="btn full" style="margin-top: 10px;">
-                Entrar no Diário
+            <button type="submit" class="btn full" style="margin-top: 10px; height: 50px; font-size: 16px;">
+                Entrar
             </button>
         </form>
 
         <div class="switch-auth">
             Ainda não tem conta? 
-            <a href="{{ url_for('signup') }}" class="link" style="color: var(--accent);">Criar agora</a>
+            <a href="{{ url_for('signup') }}" class="link">Criar agora</a>
         </div>
 
     </div>

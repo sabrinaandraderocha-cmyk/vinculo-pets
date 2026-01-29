@@ -1,90 +1,60 @@
 {% extends "base.html" %}
-{% block title %}Vínculo • Início{% endblock %}
 
 {% block content %}
-<section class="headline">
-  <div>
-    <h1>Olá, Tutora! 👋</h1>
-    <p class="muted">Tudo sob controle hoje?</p>
-  </div>
 
-  <div class="headline-actions">
-    <a class="btn primary" href="{{ url_for('cadastrar') }}">+ Novo Pet</a>
-    <a class="btn ghost" href="{{ url_for('curiosidades') }}">💡 Dicas</a>
-  </div>
-</section>
+<div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="color: var(--brand); font-weight: 800; font-size: 28px; margin-bottom: 5px;">
+        Olá, Tutora! 👋
+    </h2>
+    <p class="muted">Qual diário vamos abrir hoje?</p>
+</div>
 
-<section class="grid">
-  <div class="card">
-    <div class="card-top">
-      <div>
-        <h2 class="h2">Sua família</h2>
-        <p class="muted">Compartilhe este código com quem cuida junto.</p>
-      </div>
-      <button class="btn ghost" type="button" onclick="copyFamilyCode()">
-        📋 Copiar código
-      </button>
-    </div>
-
-    <div class="family-code">
-      <span class="badge">Código</span>
-      <strong id="familyCode">{{ my_code }}</strong>
-    </div>
-
-    <div class="divider"></div>
-
-    <h2 class="h2">Dica do dia</h2>
-    <p class="quote">“{{ curiosidade_home }}”</p>
-  </div>
-
-  <div class="card">
-    <div class="card-top">
-      <div>
-        <h2 class="h2">Seus pets</h2>
-        <p class="muted">Acesse o perfil para diário, agenda e modo vet.</p>
-      </div>
-    </div>
-
-    {% if not pets %}
-      <div class="empty">
-        <div class="empty-emoji">🐶🐱</div>
-        <p class="muted">Você ainda não cadastrou nenhum pet.</p>
-        <a class="btn primary" href="{{ url_for('cadastrar') }}">Cadastrar o primeiro</a>
-      </div>
-    {% else %}
-      <div class="pet-list">
-        {% for p in pets %}
-          <a class="pet-item" href="{{ url_for('detalhes_pet', pet_id=p.id) }}">
-            <div class="pet-avatar" aria-hidden="true">
-              {% set e = (p.especie or "").lower() %}
-              {% if "gat" in e %}🐱{% elif "cã" in e or "cao" in e or "dog" in e %}🐶{% else %}🐾{% endif %}
+{% if pets %}
+    <div class="pets-grid">
+        {% for pet in pets %}
+        <a href="{{ url_for('detalhes_pet', pet_id=pet.id) }}" class="pet-card-link">
+            <div class="pet-card-visual">
+                <div class="pet-icon">
+                    {% if 'gat' in pet.especie.lower() %}🐱
+                    {% elif 'cão' in pet.especie.lower() or 'cao' in pet.especie.lower() or 'dog' in pet.especie.lower() or 'cachorro' in pet.especie.lower() %}🐶
+                    {% elif 'ave' in pet.especie.lower() or 'passaro' in pet.especie.lower() %}🐦
+                    {% else %}🐾{% endif %}
+                </div>
+                <h3>{{ pet.nome }}</h3>
+                <span class="pet-type">{{ pet.especie|capitalize }}</span>
+                <div class="btn-visual">Abrir Diário</div>
             </div>
-
-            <div class="pet-info">
-              <div class="pet-name">{{ p.nome }}</div>
-              <div class="pet-meta">
-                {{ p.especie or "—" }}
-                {% if p.nascimento %} • nasc.: {{ p.nascimento }}{% endif %}
-              </div>
-              {% if p.obs %}
-                <div class="pet-notes">{{ p.obs }}</div>
-              {% endif %}
-            </div>
-
-            <div class="pet-go" aria-hidden="true">›</div>
-          </a>
+        </a>
         {% endfor %}
-      </div>
-    {% endif %}
-  </div>
-</section>
+        
+        <a href="{{ url_for('cadastrar') }}" class="pet-card-link add-new">
+            <div class="pet-card-visual dashed">
+                <div class="pet-icon">➕</div>
+                <h3>Novo Pet</h3>
+                <span class="pet-type">Cadastrar</span>
+            </div>
+        </a>
+    </div>
 
-<script>
-function copyFamilyCode(){
-  const txt = document.getElementById("familyCode").innerText.trim();
-  navigator.clipboard.writeText(txt).then(()=>{
-    alert("Código copiado: " + txt);
-  });
-}
-</script>
+{% else %}
+    <div class="card" style="text-align: center; padding: 40px;">
+        <h3>Nenhum pet ainda... 🐢</h3>
+        <p class="muted" style="margin-bottom: 20px;">Que tal começar agora?</p>
+        <a href="{{ url_for('cadastrar') }}" class="btn">Cadastrar o primeiro</a>
+    </div>
+{% endif %}
+
+<div class="family-section">
+    <h3>🏠 Sua Família</h3>
+    <p class="muted" style="margin-bottom: 10px;">Compartilhe este código com quem cuida junto:</p>
+    
+    <div class="code-display">
+        {{ my_code }}
+    </div>
+</div>
+
+<div style="text-align: center; margin-top: 40px; opacity: 0.8;">
+    <p class="muted" style="font-size: 0.85em;">💡 <strong>Dica do dia:</strong> {{ curiosidade_home }}</p>
+</div>
+
 {% endblock %}

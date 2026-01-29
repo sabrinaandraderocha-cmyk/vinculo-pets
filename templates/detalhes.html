@@ -1,95 +1,136 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diário - Vínculo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v=13">
-</head>
-<body>
-<div class="container">
-    <nav class="top-nav">
-        <a href="/" class="brand-title" style="font-size: 1.2rem; margin:0; color: var(--primary);">⬅ Voltar</a>
-        <div style="display:flex; gap:10px;">
-            <a href="{{ url_for('modo_vet', pet_id=pet.id) }}" class="btn-primary" style="background: white; color: var(--primary); border: 1px solid var(--primary); padding: 5px 15px; font-size: 0.8rem; margin:0;">🩺 Vet</a>
-            <a href="{{ url_for('editar_pet', pet_id=pet.id) }}" class="btn-primary" style="background: white; color: #f39c12; border: 1px solid #f39c12; padding: 5px 15px; font-size: 0.8rem; margin:0;">✏️ Editar</a>
-        </div>
-    </nav>
+{% extends "base.html" %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-      {% endif %}
-    {% endwith %}
+{% block content %}
 
-    <div class="pet-card" style="text-align: center; border-top: 5px solid var(--primary);">
-        <div style="font-size: 3rem; margin-bottom: 10px;">
-            {% if 'gat' in pet.especie|lower %}🐱{% elif 'cã' in pet.especie|lower %}🐶{% else %}🐹{% endif %}
-        </div>
-        <h1 style="margin-bottom: 5px;">{{ pet.nome }}</h1>
-        <p style="color: #666;">{{ pet.especie }} • {{ pet.nascimento or 'Idade n/a' }}</p>
-    </div>
+<div style="margin-bottom: 20px;">
+    <a href="{{ url_for('index') }}" class="btn outline" style="display: inline-flex; align-items: center; gap: 5px; padding: 8px 15px; font-size: 14px; border-radius: 12px;">
+        <span>←</span> Voltar
+    </a>
+</div>
 
-    {% if pet.motivo_nome or pet.quase_chamou or pet.como_conhecemos or pet.atividade_preferida %}
-    <div class="pet-card" style="background: #fffcf0; border: 1px solid #fcefdc;">
-        <h3 style="color: #f39c12; font-size: 1.1rem; margin-bottom: 15px; text-align: center;">✨ Identidade Secreta</h3>
-        <div style="display: grid; gap: 15px;">
-            {% if pet.motivo_nome %}<div><strong style="color: var(--primary);">Por que esse nome?</strong><br>{{ pet.motivo_nome }}</div>{% endif %}
-            {% if pet.quase_chamou %}<div><strong style="color: var(--primary);">Quase se chamou...</strong><br>{{ pet.quase_chamou }}</div>{% endif %}
-            {% if pet.atividade_preferida %}<div><strong style="color: var(--primary);">Hobby Favorito</strong><br>{{ pet.atividade_preferida }}</div>{% endif %}
-        </div>
-    </div>
-    {% endif %}
+<div class="container narrow" style="padding-top: 0;">
 
-    <div class="auth-box" style="max-width: 100%;">
-        <h3 style="text-align: center; margin-bottom: 15px;">✍️ Diário de Hoje</h3>
+    <div class="card" style="text-align: center; margin-bottom: 25px;">
         
-        <form action="{{ url_for('anotar', pet_id=pet.id) }}" method="post">
-            <div class="form-group">
-                <textarea name="nota" placeholder="Como ele(a) está hoje? Novidades?" style="height: 80px;" required></textarea>
-            </div>
+        <div style="font-size: 60px; margin-bottom: 10px; line-height: 1;">
+            {% if 'gat' in pet.especie.lower() %}🐱
+            {% elif 'cão' in pet.especie.lower() or 'cao' in pet.especie.lower() %}🐶
+            {% elif 'ave' in pet.especie.lower() %}🐦
+            {% else %}🐾{% endif %}
+        </div>
+
+        <h1 style="color: var(--brand); margin: 0; font-weight: 800;">{{ pet.nome }}</h1>
+        <p class="muted" style="margin-top: 5px; font-size: 15px;">
+            {{ pet.especie|capitalize }} 
+            {% if pet.nascimento %} • {{ pet.nascimento }}{% endif %}
+        </p>
+
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+            <a href="{{ url_for('modo_vet', pet_id=pet.id) }}" class="btn outline" style="flex: 1; max-width: 140px; border-color: var(--accent); color: var(--accent);">
+                🩺 Modo Vet
+            </a>
+            <a href="{{ url_for('editar_pet', pet_id=pet.id) }}" class="btn outline" style="flex: 1; max-width: 140px;">
+                ✏️ Editar
+            </a>
+        </div>
+    </div>
+
+    <div class="card" style="margin-bottom: 25px;">
+        <h3 style="margin-top: 0; color: var(--text); border-bottom: 2px dashed #f0ebf8; padding-bottom: 15px; margin-bottom: 20px;">
+            📝 Diário de Hoje
+        </h3>
+
+        <form action="{{ url_for('anotar', pet_id=pet.id) }}" method="POST">
             
-            <div class="grid-2" style="margin-bottom: 15px;">
-                <select name="humor">
-                    <option value="Feliz">😄 Feliz</option>
-                    <option value="Animado">⚡ Animado</option>
-                    <option value="Preguiçoso">😴 Preguiçoso</option>
-                    <option value="Bravo">😡 Bravo</option>
-                    <option value="Doente">🤒 Doentinho</option>
-                </select>
-                <select name="categoria">
-                    <option value="Rotina">📅 Rotina</option>
-                    <option value="Saúde">💊 Saúde</option>
-                    <option value="Engraçado">😂 Engraçado</option>
-                    <option value="Bagunça">u_u Bagunça</option>
-                </select>
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: 700; color: var(--brand); margin-bottom: 8px; display: block;">Como ele(a) está?</label>
+                <textarea name="nota" class="input-modern" rows="3" placeholder="Escreva aqui as novidades..." required></textarea>
             </div>
 
-            <div style="display: flex; gap: 15px; margin-bottom: 15px; justify-content: center;">
-                <label style="cursor: pointer;"><input type="checkbox" name="latindo"> 🐕 Latiu</label>
-                <label style="cursor: pointer;"><input type="checkbox" name="mordeu_carteiro"> 📬 Aprontou</label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <label style="font-size: 13px; font-weight: bold; color: var(--muted);">Humor</label>
+                    <select name="humor" class="input-modern" style="padding: 10px;">
+                        <option value="Feliz">😊 Feliz</option>
+                        <option value="Animado">⚡ Animado</option>
+                        <option value="Preguiçoso">😴 Preguiça</option>
+                        <option value="Estressado">😤 Estressado</option>
+                        <option value="Doente">🤒 Doente</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 13px; font-weight: bold; color: var(--muted);">Categoria</label>
+                    <select name="categoria" class="input-modern" style="padding: 10px;">
+                        <option value="Rotina">📅 Rotina</option>
+                        <option value="Saúde">💊 Saúde</option>
+                        <option value="Bagunça">💥 Bagunça</option>
+                        <option value="Passeio">🌳 Passeio</option>
+                    </select>
+                </div>
             </div>
 
-            <button type="submit" class="btn-primary btn-block">Salvar Registro</button>
+            <div style="background: #fbfaff; padding: 15px; border-radius: 12px; border: 1px solid #e2d9f3; margin-bottom: 20px; display: flex; gap: 20px; justify-content: center;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" name="latindo" style="width: 18px; height: 18px; accent-color: var(--accent);">
+                    <span style="font-size: 14px; font-weight: 600; color: var(--text);">🐕 Latiu muito</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" name="mordeu_carteiro" style="width: 18px; height: 18px; accent-color: var(--accent);">
+                    <span style="font-size: 14px; font-weight: 600; color: var(--text);">🦷 Aprontou</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn full">
+                Salvar no Diário
+            </button>
         </form>
     </div>
 
-    <div style="margin-top: 30px;">
-        <h3 style="border-bottom: 2px solid #eee; padding-bottom: 10px;">📅 Histórico Recente</h3>
-        {% if registros|length == 0 %}
-            <p style="text-align: center; color: #999; margin-top: 20px;">Nenhuma anotação ainda.</p>
-        {% endif %}
+    <div class="card">
+        <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--text);">📅 Histórico Recente</h3>
 
-        {% for reg in registros %}
-        <div class="pet-card" style="padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong style="color: var(--primary);">{{ reg.data }}</strong>
-                <span style="background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">{{ reg.humor }}</span>
+        {% if registros %}
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                {% for reg in registros %}
+                <div style="border: 1px solid #f0ebf8; border-radius: 16px; padding: 15px; background: #fff; display: flex; gap: 15px; align-items: flex-start;">
+                    
+                    <div style="background: #f8f6fc; min-width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #e2d9f3;">
+                        {% if reg.humor == 'Feliz' %}😊
+                        {% elif reg.humor == 'Animado' %}⚡
+                        {% elif reg.humor == 'Doente' %}🤒
+                        {% elif reg.humor == 'Estressado' %}😤
+                        {% else %}📝{% endif %}
+                    </div>
+
+                    <div style="flex: 1;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <span style="font-weight: 700; color: var(--brand); font-size: 15px;">{{ reg.categoria }}</span>
+                            <span style="font-size: 12px; color: var(--muted); background: #fbfaff; padding: 2px 8px; border-radius: 10px; border: 1px solid #f0ebf8;">{{ reg.data }}</span>
+                        </div>
+                        
+                        <p style="margin: 0; font-size: 15px; color: var(--text); line-height: 1.4;">{{ reg.nota }}</p>
+
+                        {% if reg.latindo or reg.mordeu_carteiro %}
+                        <div style="margin-top: 8px; display: flex; gap: 5px;">
+                            {% if reg.latindo %}
+                            <span style="font-size: 11px; background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 6px; font-weight: bold;">🗣️ Latiu</span>
+                            {% endif %}
+                            {% if reg.mordeu_carteiro %}
+                            <span style="font-size: 11px; background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 6px; font-weight: bold;">⚠️ Aprontou</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            <p style="margin: 0;">{{ reg.nota }}</p>
-        </div>
-        {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 30px; opacity: 0.6;">
+                <p>Nenhum registro ainda. Escreva o primeiro acima! ☝️</p>
+            </div>
+        {% endif %}
     </div>
+
 </div>
-</body>
-</html>
+
+{% endblock %}
